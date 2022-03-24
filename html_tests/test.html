@@ -1,13 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('html_tests', filename='test.css')}}" />
     </head>
 
     <body>
-    
+        <p> THIS IS A TESTING PAGE</p>
         <div class="body-content">
             {% block content %}
             {% endblock %}

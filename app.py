@@ -22,7 +22,7 @@ def credits():
 
 @app.route("/tnslp")
 def tnslp():
-    return render_template("game_page.html")
+    return render_template("tnslp.html")
 
 @app.route("/hello/<name>")
 def hello_there(name):

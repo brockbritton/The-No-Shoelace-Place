@@ -1,33 +1,83 @@
 
-.message {
-    font-weight: 600;
-    color: blue;
+/* 
+.x is for class="x"
+#x is for id="x"
+
+1em = 16px
+
+white = #FFFFFF 
+black = #000000
+third color = #696969
+*/
+
+/* The Whole Page */
+html {
+    background-color: black
 }
 
-.navbar {
-    background-color: lightslategray;
-    font-size: 1em;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+/* All Elements */
+* {
+    background-color: black;
     color: white;
-    padding: 8px 5px 8px 5px;
+    font-family: 'Times New Roman', Times, serif;
 }
 
-.navbar a {
+.page_header {
+    height: auto;
+    background-color: black;
+    color: white;
+}
+
+#header_welcome {
+    padding: 1em 0 0 0;
+    font-size: 2.5em;
+    text-align: center;
+}
+
+#header_game_title {
+    font-size: 5em;
+    text-align: center;
+}
+
+.menu_buttons {
+    background-color: blue;
+    position: relative;
+    top: 50%;
+}
+
+.large_bordered_button {
+    background-color: black; 
+    border: 2px solid white;
+    color: white;
+    padding: 22px 42px;
+    border-radius: 12px;
+    text-align: center;
     text-decoration: none;
-    color: inherit;
+    display: block;
+    font-size: 1.5em;
+    margin: 15px auto;
 }
 
-.navbar-brand {
-    font-size: 1.2em;
-    font-weight: 600;
+.large_bordered_button:hover {
+    color: #696969;
+    border: 2px solid #696969;
 }
 
-.navbar-item {
-    font-variant: small-caps;
-    margin-left: 30px;
+.regular_bordered_button {
+    background-color: black; 
+    border: 2px solid white;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 1em;
+    margin: 10px auto;
 }
 
-.body-content {
-    padding: 5px;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.regular_bordered_button:hover {
+    color: #696969;
+    border: 2px solid #696969;
 }
+

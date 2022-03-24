@@ -5,9 +5,32 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css')}}">
     <title>Home</title>
 </head>
 <body>
+    <div class="page_header">
+        <h3 id="header_welcome"> 
+            Welcome To
+        </h3>
+        <h1 id="header_game_title">
+            The No-Shoelace Place
+        </h1>
+    </div>
+
+    <div id="menu_buttons">
+        <button class="large_bordered_button" 
+            type="button" 
+            onclick="location.href='/tnslp'">
+            Play Game
+        </button>
+        <button class="regular_bordered_button" type="button">
+            Load Game
+        </button>
+        <button class="regular_bordered_button" type="button">
+            How to Play
+        </button>
+    </div>
     
 </body>
 </html>
