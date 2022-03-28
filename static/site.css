@@ -20,6 +20,7 @@ html {
     background-color: black;
     color: white;
     font-family: 'Times New Roman', Times, serif;
+    font-size: 1em;
 }
 
 .page_header {
@@ -79,5 +80,60 @@ html {
 .regular_bordered_button:hover {
     color: #696969;
     border: 2px solid #696969;
+}
+
+/* Game Page */
+
+/* Full Game Gui */
+#game_gui {
+    padding: 0px 100px 0px 100px;
+}
+
+/* Left Side of Game Gui */
+/* text display and entry widgets */
+#text_and_entry_widgets {
+    width: 700px;
+    height: 700px;
+    border: 10px solid, white;
+}
+
+#game_text_display {
+    border: 3px solid white;
+    width: 100%;
+    height: 70%;
+    overflow: scroll;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 1.5em;
+}
+
+#entry_widgets {
+    height: 30%;
+}
+
+#command_label {
+    padding: 5px;
+}
+
+#command_input:focus {
+    outline: none;
+}
+
+#text_entry {
+    font-size: 1.5em;
+    padding: 10px;
+}
+
+.enter_button {
+    background-color: black; 
+    border: 2px solid white;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline;
+    font-size: 1em;
+    margin: 10px auto;
 }
 

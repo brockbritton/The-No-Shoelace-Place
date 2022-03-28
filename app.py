@@ -1,7 +1,6 @@
 
 
 from flask import Flask
-from datetime import datetime
 import re
 from flask import render_template
 
@@ -20,29 +19,18 @@ def quotes():
 def credits():
     return render_template("credits.html")
 
-@app.route("/tnslp")
+@app.route("/tnslp", methods=('GET', 'POST'))
 def tnslp():
     return render_template("game_page.html")
 
-@app.route("/hello/<name>")
-def hello_there(name):
-    now = datetime.now()
 
-    # Filter the name argument to letters only using regular expressions. URL arguments
-    # can contain arbitrary text, so we restrict to safe characters only.
-    match_object = re.match("[a-zA-Z]+", name)
 
-    if match_object:
-        clean_name = match_object.group(0)
-    else:
-        clean_name = "Friend"
 
-    return render_template(
-        "hello_there.html",
-        name=clean_name,
-        date=datetime.now()
-        )
 
 @app.route("/api/data")
 def get_data():
     return app.send_static_file("data.json")
+
+
+if __name__ == '__main__':
+    app.run(host="127.0.0.1", port=5000)

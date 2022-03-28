@@ -5,11 +5,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='site.css')}}">
-    <script type="text/javascript" src="static/site.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='site.js')}}"></script>
     <title>Text Adventure</title>
 </head>
 <body>
-    <p> Game Page </p>
-    
+    <div class="page_header">
+        <h1 id="header_game_title">
+            The No-Shoelace Place
+        </h1>
+    </div>
+    <div id="game_gui">
+        <div id="text_and_entry_widgets">
+            <div id="game_text_display">
+                <p class="command_input_text">
+                    This box has a height and a width. 
+                    This means that if there is too much content 
+                    to be displayed within the assigned height, 
+                    there will be an overflow situation. 
+                    If overflow is set to hidden then any overflow will not be visible.
+                </p>
+                
+            </div>
+            <div id="entry_widgets">
+                <div id="text_entry">
+                    <!-- method=? action=? return onsubmit? -->
+                    <form id="command_input_form" autocomplete="off">
+                        <label id="command_label" for="command_input"> <strong> > </strong> </label>
+
+                        <input id="command_input" 
+                            type="text" 
+                            name="command_input"
+                            placeholder="What should I do?"
+                            value="{{ request.form['command_input'] }}">
+                        </input>
+            
+                        <button class="enter_button" type="submit"> Enter </button>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+        <div id="right_side">
+
+        </div>
+
+    </div>
+    <script>
+        const form = document.getElementById('command_input_form');
+        const game_display_div = document.getElementById("game_text_display");
+
+        form.addEventListener('submit', accept_entry_input);
+
+    </script>
 </body>
 </html>
