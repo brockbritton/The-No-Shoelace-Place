@@ -15,7 +15,7 @@ def home():
 def quotes():
     return render_template("quotes.html")
 
-@app.route("/credits/")
+@app.route("/credits")
 def credits():
     return render_template("credits.html")
 
@@ -24,7 +24,11 @@ def tnslp():
     return render_template("game_page.html")
 
 
-
+@app.route("/accept-input_data")
+def accept_input_data():
+    # request.form
+    # request.method
+    ...
 
 
 @app.route("/api/data")
