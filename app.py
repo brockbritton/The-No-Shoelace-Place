@@ -1,8 +1,7 @@
 
 
-from flask import Flask
-import re
-from flask import render_template
+from flask import Flask, render_template, request
+import game_backend.test as test
 
 app = Flask(__name__)
 
@@ -24,11 +23,12 @@ def tnslp():
     return render_template("game_page.html")
 
 
-@app.route("/accept-input_data")
+@app.route("/accept-input_data", methods=['POST'])
 def accept_input_data():
     # request.form
     # request.method
-    ...
+    test.test_path(request.form)
+    return "test"
 
 
 @app.route("/api/data")

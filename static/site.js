@@ -1,5 +1,6 @@
 
-
+var master_return
+var master_helper
 
 function printtk(text) {
     var par = document.createElement("p");
@@ -13,9 +14,19 @@ function accept_entry_input(event) {
     /* is executing */
     event.preventDefault()
     var input_text = form.elements[0].value;
-    form.elements[0].value = "";
     printtk(">   " + input_text)
-  
+    $.ajax({
+        url: '/accept-input_data',
+        data: $('form').serialize(),
+        type: 'POST',
+        success: function(response){
+            console.log(response);
+        },
+        error: function(error){
+            console.log(error);
+        }
+    }); 
+    form.elements[0].value = "";
 }
 
 function accept_button_input(value, display) {
