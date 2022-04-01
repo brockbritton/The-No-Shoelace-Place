@@ -1,7 +1,8 @@
 
 
 from flask import Flask, render_template, request
-import game_backend.test as test
+import game_backend.input_organizer as input_organizer
+import js2py
 
 app = Flask(__name__)
 
@@ -25,10 +26,26 @@ def tnslp():
 
 @app.route("/accept-input_data", methods=['POST'])
 def accept_input_data():
-    # request.form
-    # request.method
-    test.test_path(request.form)
-    return "test"
+    data_dict = request.form.to_dict()
+    print(data_dict)
+    
+    #toggle_dynamic_input("unbind")
+
+    
+    print("orig dest ", data_dict.values()[1])
+
+    return_data_dict = {
+        'dest': None,
+        'helper': None
+    }
+
+
+    #return_data_dict['dict'], return_data_dict['helper'] = input_organizer.organize_raw_input(data_dict.values()[1], data_dict.values()[0].strip(), data_dict.values()[2])
+    
+    #if not self.multi_buttons_container.winfo_ismapped():
+    #    self.toggle_dynamic_input("bind")
+    #    self.game_input.configure(state='normal')
+    return return_data_dict
 
 
 @app.route("/api/data")

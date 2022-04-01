@@ -1,13 +1,13 @@
 
-var master_return
-var master_helper
+var master_return = null
+var master_helper = null
 
 function printtk(text) {
     var par = document.createElement("p");
     par.classList.add("command_input_text");
     par.innerHTML = text
     game_display_div.appendChild(par);
-    game_display_div.scrollTop = game_display_div.scrollHeight;
+    game_display_div. scrollTop = game_display_div.scrollHeight;
 }
 
 function accept_entry_input(event) {
@@ -15,9 +15,15 @@ function accept_entry_input(event) {
     event.preventDefault()
     var input_text = form.elements[0].value;
     printtk(">   " + input_text)
+    let data_values = {
+        'input' : input_text,
+        'dest' : master_return,
+        'helper' : master_helper
+    }
+
     $.ajax({
         url: '/accept-input_data',
-        data: $('form').serialize(),
+        data: data_values,
         type: 'POST',
         success: function(response){
             console.log(response);
