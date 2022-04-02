@@ -22,7 +22,7 @@ function accept_entry_input(event) {
     }
 
     $.ajax({
-        url: '/accept-input_data',
+        url: '/accept-input-data',
         data: data_values,
         type: 'POST',
         success: function(response){

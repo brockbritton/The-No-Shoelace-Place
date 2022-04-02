@@ -1,5 +1,5 @@
 
-import the_no_shoelace_place.classes.ability_class as ability_class
+import game_backend.classes.ability_class as ability_class
 
 #### Conditions for Abilities ####
 negate_stat_changes = 0

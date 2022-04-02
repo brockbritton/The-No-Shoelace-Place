@@ -1,5 +1,5 @@
 
-import the_no_shoelace_place.classes.item_class as item_class
+import game_backend.classes.item_class as item_class
 
 # Ward Items
 # name, desc, hidden_atr

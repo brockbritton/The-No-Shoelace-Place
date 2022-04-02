@@ -53,6 +53,22 @@
 
     </div>
     <script>
+        $.ajax({
+            url: '/tnslp/start-game',
+            data: null,
+            type: 'POST',
+            success: function(response){
+                master_return = response.dest
+                master_helper = response.helper
+                for (let i = 0; i < response.print.length; i++) { 
+                    printtk(response.print[i])
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        }); 
+
         const form = document.getElementById('command_input_form');
         const game_display_div = document.getElementById("game_text_display");
 

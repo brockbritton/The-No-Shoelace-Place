@@ -1,7 +1,7 @@
 
-import tkinter as tk
-import the_no_shoelace_place.objects.game_objects.items as item
-import the_no_shoelace_place.classes.item_class as item_class
+
+import game_backend.objects.items as item
+import game_backend.classes.item_class as item_class
 import num2words as n2w
 
 class Room:
@@ -67,10 +67,10 @@ class Room:
                 sc.items.remove(item)
 
     def print_room_name(self):
-        gui_room.printtk("You have now entered: " + self.name)
+        return ("You have now entered: " + self.name)
 
     def print_description(self):
-        gui_room.printtk("Room Description: " + self.description)
+        return ("Room Description: " + self.description)
 
     def switch_lights(self):
         if self.lights_on:

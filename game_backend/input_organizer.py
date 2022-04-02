@@ -1,27 +1,18 @@
 
+import js2py
+from game_backend.js_functions import js_functions as jsfunc
+import game_backend.classes.character_class as character_class
+import game_backend.classes.item_class as item_class
+import game_backend.classes.parser_class as parser_class
+import game_backend.objects.rooms as room
 
-import the_no_shoelace_place.classes.character_class as character_class
-import the_no_shoelace_place.classes.item_class as item_class
-import the_no_shoelace_place.classes.npc_class as npc_class
-import the_no_shoelace_place.classes.parser_class as parser_class
-import the_no_shoelace_place.classes.room_class as room_class
-import the_no_shoelace_place.classes.calendar_class as calendar_class
-import the_no_shoelace_place.objects.game_objects.rooms as room
-import the_no_shoelace_place.classes.event_class as event_class
 
 #start game and handle input
-def start_game(gui_master):
-    global gui
-    gui = gui_master
-    npc_class.set_npc_gui(gui)
-    room_class.set_rooms_gui(gui)
-    character_class.set_char_gui(gui)
-    item_class.set_item_gui(gui)
-    calendar_class.set_calendar_gui(gui)
-    event_class.set_event_gui(gui)
-    parser_class.set_parser_gui(gui)
+def start_game():
+    #global gui
+    #gui = gui_master
 
-    gui.set_all_values()
+    js2py.translate_file("static/site.js", "game_backend/js_functions.py")
 
     room.basement_stairs.set_coordinates(room.ward_stairs, 0, 0, room.basement_landing)
     room.ward_stairs.set_coordinates(room.basement_stairs, 0, 0, room.common_room)
@@ -29,36 +20,35 @@ def start_game(gui_master):
     room.basement_set_door_dictionaries()
     room.ward_set_door_dictionaries()
 
-    gui.printtk("")
-    gui.printtk("----Intro Paragraph----") 
-    gui.printtk("...")
-    gui.printtk("")
+    to_print = []
+
+    to_print.append("")
+    to_print.append("----Intro Paragraph----") 
+    to_print.append("...")
+    to_print.append("")
 
     global player1
     player1 = character_class.Character("Jay Doe")
-    gui.update_inv_visual(player1)
-    gui.input_parser = parser_class.Parser()  
+    #gui.update_inv_visual(player1)
+    global input_parser
+    input_parser = parser_class.Parser()
 
-    gui.printtk("Welcome " + player1.name + "!")
-    gui.printtk("")
+    to_print.append("Welcome " + player1.name + "!")
+    to_print.append("")
 
-    gui.printtk("----Secondary Intro Paragraph----")
-    gui.printtk("...")
+    to_print.append("----Secondary Intro Paragraph----")
+    to_print.append("...")
 
-    gui.printtk("")
-    gui.printtk("Enter 'commands' to display all commands or 'help' for more information: ")
+    to_print.append("")
+    to_print.append("Enter 'commands' to display all commands or 'help' for more information: ")
 
-    gui.printtk("")
-    dest, helper = player1.enter_room()
+    to_print.append("")
+    return_tuple = player1.enter_room()
+    for string in return_tuple[2]:
+        to_print.append(string)
+    return_tuple = (return_tuple[0], return_tuple[1], to_print)
     
-    # Starting Quote for Game
-    # gui.fade_down_gui("game_start")
-
-    gui.game_input.configure(state="normal")
-    gui.game_input.focus()
-
-    gui.main_dest, gui.main_helper = dest, helper
-
+    return return_tuple
 
 
 

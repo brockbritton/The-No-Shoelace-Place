@@ -1,6 +1,6 @@
 
 import random
-import the_no_shoelace_place.objects.game_objects.events as event
+import game_backend.objects.events as event
 
 
 class Calendar:
@@ -63,8 +63,8 @@ class _Day:
     def __init__(self, turns, day) -> None:
         self.day_number = day
         self.turns_left = turns
-        gui_cal.settk(gui_cal.day_value, day)
-        gui_cal.settk(gui_cal.turns_value, turns)
+        #gui_cal.settk(gui_cal.day_value, day)
+        #gui_cal.settk(gui_cal.turns_value, turns)
         self.activity1 = None
         self.activity2 = None
 

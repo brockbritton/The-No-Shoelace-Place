@@ -2,11 +2,11 @@
 
 import random
 
-import the_no_shoelace_place.classes.room_class as room_class
-import the_no_shoelace_place.classes.calendar_class as calendar_class
-import the_no_shoelace_place.objects.game_objects.items as item
-import the_no_shoelace_place.objects.game_objects.rooms as room
-import the_no_shoelace_place.objects.game_objects.abilities as ability
+import game_backend.classes.room_class as room_class
+import game_backend.classes.calendar_class as calendar_class
+import game_backend.objects.items as item
+import game_backend.objects.rooms as room
+import game_backend.objects.abilities as ability
 
 
 class Character:
@@ -25,8 +25,8 @@ class Character:
         self.full_health = 100 #starting player health
         self.condition = None
 
-        self.calendar = calendar_class.Calendar()
-        self.abilities = [ability.catharsis, ability.assertiveness, ability.pos_attitude, ability.meditation, ability.opposite_action]
+        #self.calendar = calendar_class.Calendar()
+        #self.abilities = [ability.catharsis, ability.assertiveness, ability.pos_attitude, ability.meditation, ability.opposite_action]
 
         self.guided = False #for outside time or from admissions to common room
 
@@ -95,19 +95,21 @@ class Character:
         return bool_list
                 
     def enter_room(self): #####
-        self.loc.print_room_name()
+        to_print = []
+        to_print.append(self.loc.print_room_name())
 
         # Setting gui current room
-        gui_char.settk(gui_char.ps_curr_room_value, self.loc.name)
+        #gui_char.settk(gui_char.ps_curr_room_value, self.loc.name)
 
         if not self.loc.visited:
             # Updating XP for gui 
-            gui_char.printtk(f"New Room Discovered! + {gui_char.xp_dict['new_room']}")
-            gui_char.settk(gui_char.xp_value, gui_char.gettk(gui_char.xp_value, 0) + gui_char.xp_dict['new_room'])
+            #to_print.append(f"New Room Discovered! + {gui_char.xp_dict['new_room']}")
+            to_print.append(f"New Room Discovered! + 10xp")
+            #gui_char.settk(gui_char.xp_value, gui_char.gettk(gui_char.xp_value, 0) + gui_char.xp_dict['new_room'])
             self.loc.visited = True
 
         if self.loc.lights_on:
-            gui_char.printtk("")
+            to_print.append("")
             self.loc.print_description()
 
         if not self.loc.lights_on:
@@ -116,40 +118,40 @@ class Character:
                 self.health -= 5
                 if self.health < 0:
                     self.health = 0
-                gui_char.printtk("In the dark, you stumbled and fell, scraping your hands on the rough ground.")
-                gui_char.printtk("Your health is now at: " + str(self.health)) 
+                to_print.append("In the dark, you stumbled and fell, scraping your hands on the rough ground.")
+                to_print.append("Your health is now at: " + str(self.health)) 
 
                 if self.health <= 0:
-                    gui_char.printtk("")
-                    return "main", "dead"
+                    to_print.append("")
+                    return None, "dead"
             
         if len(self.loc.monsters) != 0:
             
-            gui_char.printtk("Look out! There's a " + self.loc.monsters[0].species + "!")
-            dest, helper = self.fighting_menu(self.loc.monsters[0])
+            to_print.append("Look out! There's a " + self.loc.monsters[0].species + "!")
+            #dest, helper = self.fighting_menu(self.loc.monsters[0])
+            dest, helper = None, None
             return dest, helper
 
         if isinstance(self.loc, room_class.Basement_Room) and self.loc.lights_on and self.health != 0: 
             dest, helper = self.look_around()
             return dest, helper
 
-        return None, None
+        return (None, None, to_print)
 
     def look_around(self): #####
-
+        to_print = []
         if not self.loc.lights_on:
             self.loc.print_description()
-            gui_char.printtk("")
+            to_print.append("")
         else:
-            self.loc.print_items_loc_desc()
+            to_print.append(self.loc.print_items_loc_desc())
         
         if len(self.loc.storage_containers) == 0 and len(self.loc.interacts) == 0:
-            gui_char.printtk("There is nothing here...")
+            to_print.append("There is nothing here...")
             
-        
         self.loc.print_directions(self)
 
-        return None, None
+        return (None, None, to_print)
 
     def view_health(self):
         gui_char.printtk("")

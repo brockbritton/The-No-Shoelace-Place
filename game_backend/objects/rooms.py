@@ -1,7 +1,7 @@
 
-import the_no_shoelace_place.classes.room_class as room_class
-import the_no_shoelace_place.objects.game_objects.items as item
-import the_no_shoelace_place.objects.game_objects.npcs as npc
+import game_backend.classes.room_class as room_class
+import game_backend.objects.items as item
+import game_backend.objects.npcs as npc
 
 ### Ward Rooms ###
 

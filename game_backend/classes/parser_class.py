@@ -1,6 +1,6 @@
 
 import re
-import the_no_shoelace_place.classes.item_class as item_class
+import game_backend.classes.item_class as item_class
 
 class Parser:
     def __init__(self) -> None:
