@@ -31,27 +31,27 @@ class Parser:
     def parse_input(self, player, str_input):
         self.update_player(player)
 
-        if self.check_for_bans(str_input):
-            return False
-
-        return self.id_action_object(player, str_input)
+        print_list = self.check_for_bans(str_input)
+        if len(print_list) != 0:
+            return False, print_list
+        else:
+            tuples, print_list = self.id_action_object(player, str_input, print_list)
+            return tuples, print_list
 
     def update_player(self, player):
         self.player = player
 
     def check_for_bans(self, str):
-        # when ready switch print to printtk
+        to_print = []
         if ' and ' in str:
-            gui_parser.printtk("Please enter a single action at a time, avoiding using conjuntions.")
-            return True
+            to_print.append("Please enter a single action at a time, avoiding using conjuntions.")
         elif ' or ' in str:
-            gui_parser.printtk("Please enter specific commands, avoiding using conjuntions.")
-        
-        return False
+            to_print.append("Please enter specific commands, avoiding using conjuntions.")
+        return to_print
                 
-    def id_action_object(self, player, str_input):
+    def id_action_object(self, player, str_input, to_print):
+        
         str_input = " " + str_input 
-
         # Loop over actions and store matches in action_list
         actions_list = []
         for action in self.all_actions:
@@ -61,7 +61,7 @@ class Parser:
                         actions_list.append(key)
 
         if len(actions_list) > 1:
-            gui_parser.printtk("Please enter a single verb at a time.")
+            to_print.append("Please enter a single verb at a time.")
             return False
         else:
             if len(actions_list) == 1:
@@ -86,7 +86,7 @@ class Parser:
                 obj_loc_tuples.append((item, player.inv))
 
         if len(obj_loc_tuples) > 1:
-            gui_parser.printtk("Please include only one object at a time.")
+            to_print.append("Please include only one object at a time.")
             return False
         else:
             if len(obj_loc_tuples) == 1:
@@ -130,7 +130,6 @@ class Parser:
         if len(openable_items.keys()) == 0:
             openable_items = None
 
-        
         direction_tuple = None
         for key, val in self.movement_dict.items():
             for direction in val:
@@ -155,13 +154,13 @@ class Parser:
         return_tuple = (parsed_action, parsed_obj_loc, 
             item_storage_locations, openable_items, 
             direction_tuple, display_option_tuple)
-        return return_tuple
+        return return_tuple, to_print
 
 
 # General Function
 def organize_parsed_data(parsed_tuple, player): 
     dest, helper = None, None
-    
+    to_print = []
     #   actions_list (verbs), 
     action = parsed_tuple[0]
     #   obj_loc_tuples (objects and their current locations), 
@@ -184,7 +183,7 @@ def organize_parsed_data(parsed_tuple, player):
             #print contents of storage spot
             pass
         else:
-            gui_parser.printtk("This is an item.")
+            to_print.append("This is an item.")
 
     
     elif direction_tuple != None:
@@ -200,15 +199,15 @@ def organize_parsed_data(parsed_tuple, player):
         # Printing adjacent rooms for a certain direction
         # direction_tuple[0] == None
         else:
-            gui_parser.printtk("Print adjacent rooms in a direction")
+            to_print.append("Print adjacent rooms in a direction")
 
 
     elif display_option_tuple != None:
         if display_option_tuple[1] == 'items':
-            player.loc.print_items_loc_desc()
+            to_print.append(player.loc.print_items_loc_desc())
 
         elif display_option_tuple[1] == 'directions':
-            player.loc.print_all_directions(player, None)
+            to_print.append(player.loc.print_all_directions(player, None))
 
     # If there is one action and one object
     elif action != None and object_loc_tuple != None:
@@ -218,61 +217,61 @@ def organize_parsed_data(parsed_tuple, player):
                 if isinstance(object_loc_tuple[1], item_class.Storage_Unit):
                     dest, helper = player.pick_up_item(object_loc_tuple[0])
                 elif isinstance(object_loc_tuple[1], list):
-                    gui_parser.printtk("This item is already in your inventory.")
+                    to_print.append("This item is already in your inventory.")
             else:
-                gui_parser.printtk("You cannot pick up this item.")
+                to_print.append("You cannot pick up this item.")
 
         elif action == "drop":
             if object_loc_tuple[0] in player.inv:
                 if storage_locations == None or 'drop' not in storage_locations.keys():
                     dest, helper = player.drop_item(object_loc_tuple[0], None) 
-                    gui_parser.printtk(f"You have dropped the {object_loc_tuple[0].name} on the ground.")
+                    to_print.append(f"You have dropped the {object_loc_tuple[0].name} on the ground.")
                 else:
                     if 'drop' in storage_locations.keys():
                         dest, helper = player.drop_item(object_loc_tuple[0], storage_locations['drop'][0])
-                        gui_parser.printtk(f"You have dropped the {object_loc_tuple[0].name} to the {storage_locations['drop'][0].name}.")
+                        to_print.append(f"You have dropped the {object_loc_tuple[0].name} to the {storage_locations['drop'][0].name}.")
     
             else:
-                gui_parser.printtk("You cannot drop this item beacuse you are not holding it.")
+                to_print.append("You cannot drop this item beacuse you are not holding it.")
 
         elif action == "inspect":
             if object_loc_tuple[0].inspect_bool:
                 pass
             else:
-                gui_parser.printtk("You cannot inspect this item.")
+                to_print.append("You cannot inspect this item.")
 
         elif action == "open":
             if object_loc_tuple[0].openable_bool:
                 pass
             else:
-                gui_parser.printtk("You cannot open this item")
+                to_print.append("You cannot open this item")
 
         elif action == "unlock":
             if object_loc_tuple[0].lockable_bool:
                 pass
             else:
-                gui_parser.printtk("You cannot unlock this item")
+                to_print.append("You cannot unlock this item")
 
         elif action == "lock":
             if object_loc_tuple[0].lockable_bool:
                 pass
             else:
-                gui_parser.printtk("You cannot lock this item")
+                to_print.append("You cannot lock this item")
 
         elif action == "interact":
             if object_loc_tuple[0].interact_bool:
                 pass
             else:
-                gui_parser.printtk("You cannot interact with this item")
+                to_print.append("You cannot interact with this item")
 
         elif action == "break":
             if object_loc_tuple[0].breakable:
                 pass
             else:
-                gui_parser.printtk("You cannot break this item")
+                to_print.append("You cannot break this item")
     
     
-    return dest, helper
+    return (dest, helper, to_print)
     
 
 

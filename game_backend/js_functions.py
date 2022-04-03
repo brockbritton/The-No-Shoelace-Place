@@ -8,18 +8,37 @@ var = Scope( JS_BUILTINS )
 set_global_object(var)
 
 # Code follows:
-var.registers(['accept_entry_input', 'ask_y_n', 'display_quote', 'master_return', 'master_helper', 'accept_button_input', 'build_multiple_choice', 'printtk', 'toggle_dynamic_input'])
+var.registers(['print_all', 'accept_entry_input', 'ask_y_n', 'print_letter_by_letter', 'display_quote', 'master_return', 'master_helper', 'accept_button_input', 'build_multiple_choice', 'printtk', 'toggle_dynamic_input'])
 @Js
 def PyJsHoisted_printtk_(text, this, arguments, var=var):
     var = Scope({'text':text, 'this':this, 'arguments':arguments}, var)
     var.registers(['text', 'par'])
     var.put('par', var.get('document').callprop('createElement', Js('p')))
     var.get('par').get('classList').callprop('add', Js('command_input_text'))
-    var.get('par').put('innerHTML', var.get('text'))
     var.get('game_display_div').callprop('appendChild', var.get('par'))
-    var.get('game_display_div').put('scrollTop', var.get('game_display_div').get('scrollHeight'))
+    var.get('print_letter_by_letter')(var.get('text'), var.get('par'))
 PyJsHoisted_printtk_.func_name = 'printtk'
 var.put('printtk', PyJsHoisted_printtk_)
+@Js
+def PyJsHoisted_print_letter_by_letter_(text, par_element, this, arguments, var=var):
+    var = Scope({'text':text, 'par_element':par_element, 'this':this, 'arguments':arguments}, var)
+    var.registers(['text', 'par_element'])
+    if (var.get('text').get('length')==Js(1.0)):
+        var.get('par_element').put('innerHTML', var.get('text'), '+')
+    else:
+        var.get('par_element').put('innerHTML', var.get('text').get('0'))
+        var.get('setTimeout')(var.get('print_letter_by_letter').callprop('bind', var.get(u"null"), var.get('text').callprop('slice', Js(1.0)), var.get('par_element')), Js(100.0))
+    var.get('game_display_div').put('scrollTop', var.get('game_display_div').get('scrollHeight'))
+PyJsHoisted_print_letter_by_letter_.func_name = 'print_letter_by_letter'
+var.put('print_letter_by_letter', PyJsHoisted_print_letter_by_letter_)
+@Js
+def PyJsHoisted_print_all_(list, this, arguments, var=var):
+    var = Scope({'list':list, 'this':this, 'arguments':arguments}, var)
+    var.registers(['list'])
+    var.get('printtk')(var.get('list').get('0'))
+    var.get('setTimeout')(var.get('print_all').callprop('bind', var.get(u"null"), var.get('list').callprop('slice', Js(1.0))), (Js(100.0)*var.get('list').get('0').get('length')))
+PyJsHoisted_print_all_.func_name = 'print_all'
+var.put('print_all', PyJsHoisted_print_all_)
 @Js
 def PyJsHoisted_accept_entry_input_(event, this, arguments, var=var):
     var = Scope({'event':event, 'this':this, 'arguments':arguments}, var)
@@ -81,6 +100,8 @@ PyJsHoisted_display_quote_.func_name = 'display_quote'
 var.put('display_quote', PyJsHoisted_display_quote_)
 var.put('master_return', var.get(u"null"))
 var.put('master_helper', var.get(u"null"))
+pass
+pass
 pass
 pass
 pass

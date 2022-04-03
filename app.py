@@ -29,30 +29,33 @@ def tnslp():
 @app.route("/accept-input-data", methods=['POST'])
 def accept_input_data():
     data_dict = request.form.to_dict()
-    print(data_dict)
+    for key, value in data_dict.items():
+        if data_dict[key] == "":
+            data_dict[key] = None
     
     #toggle_dynamic_input("unbind")
 
     print("orig dest ", data_dict['dest'])
 
+    return_tuple = input_organizer.organize_raw_input(data_dict['dest'], data_dict['input'].strip(), data_dict['helper'])
     return_data_dict = {
-        'dest': None,
-        'helper': None
+        'dest': return_tuple[0],
+        'helper': return_tuple[1],
+        'print': return_tuple[2]
     }
 
-    return_data_dict['dest'], return_data_dict['helper'] = input_organizer.organize_raw_input(data_dict.values()[1], data_dict.values()[0].strip(), data_dict.values()[2])
-    
     #if not self.multi_buttons_container.winfo_ismapped():
     #    self.toggle_dynamic_input("bind")
     #    self.game_input.configure(state='normal')
-    return return_data_dict
+    print(return_data_dict)
+    return jsonify(return_data_dict)
 
 @app.route("/tnslp/start-game", methods=['POST'])
 def start_game():
     return_tuple = input_organizer.start_game()
     print(return_tuple)
     
-    return jsonify({'dest':return_tuple[0], 'helper':return_tuple[1], 'print':return_tuple[2]})
+    return jsonify({'dest': return_tuple[0], 'helper': return_tuple[1], 'print': return_tuple[2]})
 
 
 @app.route("/api/data")

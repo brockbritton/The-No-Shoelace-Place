@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='site.css')}}">
     <script type="text/javascript" src="{{url_for('static', filename='site.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-1.3.2.min.js"></script>
     <title>Text Adventure</title>
 </head>
 <body>
@@ -19,17 +20,11 @@
     <div id="game_gui">
         <div id="text_and_entry_widgets">
             <div id="game_text_display">
-                <p class="command_input_text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-                    laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
+                <!-- The game text paragraphs will be placed here -->
                 
             </div>
             <div id="entry_widgets">
                 <div id="text_entry">
-                    <!-- method=? action=? return onsubmit? -->
                     <form id="command_input_form" autocomplete="off">
                         <label id="command_label" for="command_input"> <strong> > </strong> </label>
 
@@ -42,9 +37,7 @@
             
                         <button class="enter_button" type="submit"> Enter </button>
                     </form>
-
                 </div>
-
             </div>
         </div>
         <div id="right_side">
@@ -53,6 +46,7 @@
 
     </div>
     <script>
+        
         $.ajax({
             url: '/tnslp/start-game',
             data: null,
@@ -60,9 +54,7 @@
             success: function(response){
                 master_return = response.dest
                 master_helper = response.helper
-                for (let i = 0; i < response.print.length; i++) { 
-                    printtk(response.print[i])
-                }
+                print_all(response.print)
             },
             error: function(error){
                 console.log(error);
