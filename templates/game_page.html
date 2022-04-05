@@ -24,7 +24,7 @@
                 
             </div>
             <div id="entry_widgets">
-                <div id="text_entry">
+                <div id="text_entry_div">
                     <form id="command_input_form" autocomplete="off">
                         <label id="command_label" for="command_input"> <strong> > </strong> </label>
 
@@ -37,6 +37,10 @@
             
                         <button class="enter_button" type="submit"> Enter </button>
                     </form>
+                </div>
+
+                <div id="button_entry_div">
+                    <!-- Button entry elements will be placed here -->
                 </div>
             </div>
         </div>
@@ -55,16 +59,25 @@
                 master_return = response.dest
                 master_helper = response.helper
                 print_all(response.print)
+                
             },
             error: function(error){
                 console.log(error);
             }
         }); 
-
+        
+        /*
+        window.onbeforeunload = function() {
+            return "The current game session will end if you leave this page. \n Are you sure you want to leave?";
+        };
+        */
+        
         const form = document.getElementById('command_input_form');
         const game_display_div = document.getElementById("game_text_display");
 
         form.addEventListener('submit', accept_entry_input);
+        document.getElementById('command_input').focus();
+
 
     </script>
 </body>

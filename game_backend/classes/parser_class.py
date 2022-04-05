@@ -195,11 +195,13 @@ def organize_parsed_data(parsed_tuple, player):
 
             next_rooms = [player.loc.north, player.loc.east, player.loc.south, player.loc.west]
             i = ['n', 'e', 's', 'w'].index(blrf_dict[direction_choice])
-            dest, helper = player.move_nesw(blrf_dict[direction_choice], next_rooms[i])
+            return_tuple = player.move_nesw(blrf_dict[direction_choice], next_rooms[i])
+            dest, helper, = return_tuple[0], return_tuple[1]
+            to_print.extend(return_tuple[2])
         # Printing adjacent rooms for a certain direction
         # direction_tuple[0] == None
         else:
-            to_print.append("Print adjacent rooms in a direction")
+            to_print.append(player.loc.print_directions(player, direction_tuple[1]))
 
 
     elif display_option_tuple != None:
@@ -207,7 +209,7 @@ def organize_parsed_data(parsed_tuple, player):
             to_print.append(player.loc.print_items_loc_desc())
 
         elif display_option_tuple[1] == 'directions':
-            to_print.append(player.loc.print_all_directions(player, None))
+            to_print.append(player.loc.print_directions(player, None))
 
     # If there is one action and one object
     elif action != None and object_loc_tuple != None:
@@ -215,7 +217,9 @@ def organize_parsed_data(parsed_tuple, player):
         if action == "pick up":
             if object_loc_tuple[0].pick_up_bool:
                 if isinstance(object_loc_tuple[1], item_class.Storage_Unit):
-                    dest, helper = player.pick_up_item(object_loc_tuple[0])
+                    return_tuple = player.pick_up_item(object_loc_tuple[0])
+                    dest, helper, = return_tuple[0], return_tuple[1]
+                    to_print.extend(return_tuple[2])
                 elif isinstance(object_loc_tuple[1], list):
                     to_print.append("This item is already in your inventory.")
             else:

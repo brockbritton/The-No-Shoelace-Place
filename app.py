@@ -3,7 +3,16 @@
 
 from flask import Flask, jsonify, render_template, request
 import game_backend.input_organizer as input_organizer
-import js2py
+import jsonpickle
+import game_backend.classes.ability_class as ability_class
+import game_backend.classes.character_class as character_class
+import game_backend.classes.item_class as item_class
+import game_backend.classes.calendar_class as calendar_class
+import game_backend.classes.condition_class as condition_class
+import game_backend.classes.room_class as room_class
+import game_backend.classes.npc_class as npc_class
+
+
 
 app = Flask(__name__)
 
@@ -43,6 +52,23 @@ def accept_input_data():
         'helper': return_tuple[1],
         'print': return_tuple[2]
     }
+    print()
+    print(return_data_dict)
+    classes_tuple = (ability_class.Ability, character_class.Character, item_class.Item, calendar_class.Calendar, condition_class.Condition, room_class.Room, npc_class.NPC)
+    for key, value in return_data_dict.items():
+        if isinstance(value, list):
+            for element in value:
+                if isinstance(element, list):
+                    for sub_element in element:
+                        if isinstance(sub_element, classes_tuple):
+                            return_data_dict[key] = jsonpickle.encode(sub_element)
+                else:
+                    if type(element) in classes_tuple:
+                        return_data_dict[key] = jsonpickle.encode(element, unpicklable=True)
+        else:
+            if type(value) in classes_tuple:
+                return_data_dict[key] = jsonpickle.encode(value, unpicklable=True)
+            
 
     #if not self.multi_buttons_container.winfo_ismapped():
     #    self.toggle_dynamic_input("bind")

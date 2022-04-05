@@ -57,10 +57,9 @@ def organize_raw_input(dest, line_input, help_var):
             for value in parsed_values:
                 if value != None:
                     parsed = True
-                    print("parser found data")
+                    #print("parser found data")
                     return_tuple = parser_class.organize_parsed_data(parsed_values, player1)
                     to_print.extend(return_tuple[2])
-                    print(to_print)
                     return_tuple = (return_tuple[0], return_tuple[1], to_print)
                     break
         else:

@@ -82,7 +82,7 @@ class Room:
         for sc in self.storage_containers:
             self.storage_dict[sc] = sc.items
             
-    def print_directions(self, player, one_or_all):
+    def print_directions(self, player, none_or_one):
         direct_list = ["n", "e", "s", "w"]
         
         blrf_rooms_list = [self.north, self.east, self.south, self.west]
@@ -206,10 +206,20 @@ class Room:
                 sentences.append(blrf_directions[i] + " there is a wall")
         
         paragraph_parts = self.build_complicated_adjacent_rooms_sentence(sentences, blrf_rooms)
-        full_paragraph = " ".join(paragraph_parts)
-        
-        return full_paragraph
+        if none_or_one == None:
+            full_paragraph = " ".join(paragraph_parts)
+            return full_paragraph
+        elif none_or_one == "backward":
+            return paragraph_parts[0]
+        elif none_or_one == "left":
+            return paragraph_parts[1]
+        elif none_or_one == "right":
+            return paragraph_parts[2]
+        elif none_or_one == "forward":
+            return paragraph_parts[3]
 
+        
+        
 
     def build_complicated_adjacent_rooms_sentence(self, room_states, actual_rooms):
         blrf_directions = ["Behind you", "To your left", "To your right", "In front of you"]

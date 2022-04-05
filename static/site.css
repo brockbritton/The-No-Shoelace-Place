@@ -19,7 +19,14 @@ html {
 * {
     background-color: black;
     color: white;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Georgia, serif;
+    font-size: 1em;
+}
+
+#game_gui > * {
+    background-color: black;
+    color: white;
+    font-family: 'Courier New', monospace !important;
     font-size: 1em;
 }
 
@@ -37,6 +44,12 @@ html {
 
 #header_game_title {
     font-size: 5em;
+    text-align: center;
+}
+
+#blurb_quote {
+    font-family: 'Alegreya'; /* blurb quote font */
+    font-size: 2em;
     text-align: center;
 }
 
@@ -107,25 +120,42 @@ html {
     font-size: 1.5em;
 }
 
+.command_input_text {
+    font-size: 1em;
+    font-family: 'Courier New', monospace !important; 
+}
+
 #entry_widgets {
     height: 30%;
 }
 
+#text_entry_div {
+    display: block;
+    font-size: 1.5em;
+    padding: 10px;
+}
+
+#button_entry_div {
+    display: none;
+}
+
 #command_label {
     padding: 5px;
+    font-family: 'Courier New', monospace !important; 
+}
+
+#command_input {
+    font-family: 'Courier New', monospace !important; 
+    font-size: 1em;
 }
 
 #command_input:focus {
     outline: none;
 }
 
-#text_entry {
-    font-size: 1.5em;
-    padding: 10px;
-}
-
 .enter_button {
     background-color: black; 
+    font-family: 'Courier New', monospace !important; 
     border: 2px solid white;
     color: white;
     padding: 5px 10px;
@@ -136,4 +166,5 @@ html {
     font-size: 1em;
     margin: 10px auto;
 }
+
 

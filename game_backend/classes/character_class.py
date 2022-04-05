@@ -136,7 +136,7 @@ class Character:
         if len(self.loc.storage_containers) == 0 and len(self.loc.interacts) == 0:
             to_print.append("There is nothing here...")
             
-        to_print.append(self.loc.print_directions(self, "all"))
+        to_print.append(self.loc.print_directions(self, None))
 
         return (None, None, to_print)
 
