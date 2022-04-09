@@ -33,24 +33,31 @@ class Inv_Item(Item):
         return f'{self.name}(inv item)'
 
     def select_inv_item(self):
-        
-        gui_item.printtk("")
-        gui_item.printtk(f"You have selected the {self.name} from your inventory.")
-        gui_item.printtk("What would you like to do with it?")
-        gui_item.build_multiple_choice(["Inspect it", "Drop it"],[["inspect item", self], ["drop item", self]])
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': None,
+            'ask_y_or_n': False
+        }
+        actions['print_all'].append(f"You have selected the {self.name} from your inventory.")
+        actions['print_all'].append("What would you like to do with it?")
+        actions['build_multiple_choice'] = ["Inspect it", "Drop it"],[["inspect item", self], ["drop item", self]]
+        return (None, None, actions)
 
     def inspect_item(self): 
-
-        gui_item.printtk(self.desc)
-        gui_item.printtk("Item Description")
-        gui_item.printtk("")
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': [],
+            'ask_y_or_n': False
+        }
+        actions['print_all'].append(self.desc)
+        actions['print_all'].append("Item Description")
 
         if self.hidden_atr != None:
             pass # Edit for how the items have hidden attributes
         else:
-            gui_item.printtk("There does not seem to be anything special about this item.")
+            actions['print_all'].append("There does not seem to be anything special about this item.")
 
-        return None, None 
+        return (None, None, actions)
 
 class Key(Inv_Item):
     def __init__(self, name, gen_name , desc, hidden_atr):
@@ -152,62 +159,73 @@ class Openable_Interact(Interact):
 
     def open_interact(self, player, gen_str):
         # When door is open (and unlocked)
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': [],
+            'ask_y_or_n': False
+        }
         if self.open:
-            gui_item.printtk(f"The {gen_str} here has already been opened")
-            return "open_door"
+            actions['print_all'].append(f"The {gen_str} here has already been opened")
+            return ("open_door", actions)
 
         # When door is closed
         else:
             # When door is closed and locked
             if not self.open and self.locked:
                 if self.keyable and self.locked:
-                    gui_item.printtk(f"There is a locked {gen_str} here.")
+                    actions['print_all'].append(f"There is a locked {gen_str} here.")
                     for k in self.compatible_keys:
                         if k in player.inv:
-                            gui_item.printtk(f"Would you like to open the {gen_str} with your key?")
-                            gui_item.ask_y_n() 
-                            return "open_door_key"
+                            actions['print_all'].append(f"Would you like to open the {gen_str} with your key?")
+                            actions['ask_y_or_n'] = True
+                            return ("open_door_key", actions)
                 if item.crowbar in player.inv and self.crowbar_open:
-                    gui_item.printtk(f"Would you like to open the {gen_str} with your crowbar?")
-                    gui_item.ask_y_n()
-                    return "open_door_crowbar"
+                    actions['print_all'].append(f"Would you like to open the {gen_str} with your crowbar?")
+                    actions['ask_y_or_n'] = True
+                    return ("open_door_crowbar", actions)
                 if not self.keyable and self.locked and self.crowbar_open:
-                    gui_item.printtk(f"The {gen_str} is locked, but the lock is broken.")
+                    actions['print_all'].append(f"The {gen_str} is locked, but the lock is broken.")
                     if item.crowbar in player.inv:
-                        gui_item.printtk(f"Would you like to open the {gen_str} with your crowbar?")
-                        gui_item.ask_y_n()
-                        return "open_door_crowbar"
+                        actions['print_all'].append(f"Would you like to open the {gen_str} with your crowbar?")
+                        actions['ask_y_or_n'] = True
+                        return ("open_door_crowbar", actions)
                 if self.locked and self.electronic_open:
-                    gui_item.printtk(f"There is a {gen_str} locked with an electronic pad here.")
-                    gui_item.printtk("It appears to need a keycard or code to open.")
-                    gui_item.printtk("")
+                    actions['print_all'].append(f"There is a {gen_str} locked with an electronic pad here.")
+                    actions['print_all'].append("It appears to need a keycard or code to open.")
+                    actions['print_all'].append("")
                     if player.loc.lights_on:
 
                         if item.keycard in player.inv:
-                            gui_item.printtk("With the power restored, you can now try entering a code, or a use your keycard.")
-                            gui_item.printtk("What would you like to do?")
-                            gui_item.build_multiple_choice(["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1])
+                            actions['print_all'].append("With the power restored, you can now try entering a code, or a use your keycard.")
+                            actions['print_all'].append("What would you like to do?")
+                            actions['build_multiple_choice'] = ["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1]
                             
                         else: 
-                            gui_item.printtk("With the power restored, you can now try entering a code.")
-                            gui_item.printtk("What would you like to do?")
-                            gui_item.build_multiple_choice(["Enter a Code", "Cancel"], [1, -1])
+                            actions['print_all'].append("With the power restored, you can now try entering a code.")
+                            actions['print_all'].append("What would you like to do?")
+                            actions['build_multiple_choice'] = ["Enter a Code", "Cancel"], [1, -1]
 
-                        return "open_electronic_door"
+                        return ("open_electronic_door", actions)
                     else:
-                        gui_item.printtk("With no power, the keypad is useless")
+                        actions['print_all'].append("With no power, the keypad is useless")
                         if item.crowbar in player.inv:
-                            gui_item.printtk(f"There does not appear to be any way to open the {gen_str} with a crowbar")
-                        return "main"
+                            actions['print_all'].append(f"There does not appear to be any way to open the {gen_str} with a crowbar")
+                        return (None, actions)
                 
             # When door is closed and unlocked
             if not self.open and not self.locked:
-                gui_item.printtk(f"The {gen_str} is not locked.")
-                gui_item.printtk("Would you like to open it?")
-                gui_item.ask_y_n()
-                return "open_door" 
+                actions['print_all'].append(f"The {gen_str} is not locked.")
+                actions['print_all'].append("Would you like to open it?")
+                actions['ask_y_or_n'] = True
+                return ("open_door", actions)
 
     def close_interact(self, player, gen_str): ######## NEED WORK
+        
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': [],
+            'ask_y_or_n': False
+        }
         # When door is open (and unlocked)
         if self.open:
             # Write something different
@@ -218,50 +236,50 @@ class Openable_Interact(Interact):
             # When door is closed and locked
             if not self.open and self.locked:
                 if self.keyable and self.locked:
-                    gui_item.printtk(f"There is a locked {gen_str} here.")
+                    actions['print_all'].append(f"There is a locked {gen_str} here.")
                     for k in self.compatible_keys:
                         if k in player.inv:
                             
-                            return ""
+                            return ("dest", actions)
                 if item.crowbar in player.inv and self.crowbar_open:
                     
-                    gui_item.ask_y_n()
-                    return ""
+                    actions['ask_y_or_n'] = True
+                    return ("dest", actions)
                 if not self.keyable and self.locked and self.crowbar_open:
-                    gui_item.printtk(f"The {gen_str} is locked, but the lock is broken.")
+                    actions['print_all'].append(f"The {gen_str} is locked, but the lock is broken.")
                     if item.crowbar in player.inv:
                         
-                        gui_item.ask_y_n()
-                        return ""
+                        actions['ask_y_or_n'] = True
+                        return ("dest", actions)
                 if self.locked and self.electronic_open:
-                    gui_item.printtk(f"There is a {gen_str} locked with an electronic pad here.")
-                    gui_item.printtk("It appears to need a keycard or code to open.")
-                    gui_item.printtk("")
+                    actions['print_all'].append(f"There is a {gen_str} locked with an electronic pad here.")
+                    actions['print_all'].append("It appears to need a keycard or code to open.")
+                    actions['print_all'].append("")
                     if player.loc.lights_on:
 
                         if item.keycard in player.inv:
-                            gui_item.printtk("With the power restored, you can now try entering a code, or a use your keycard.")
-                            gui_item.printtk("What would you like to do?")
-                            gui_item.build_multiple_choice(["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1])
+                            actions['print_all'].append("With the power restored, you can now try entering a code, or a use your keycard.")
+                            actions['print_all'].append("What would you like to do?")
+                            actions['build_multiple_choice'] = ["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1]
                             
                         else: 
-                            gui_item.printtk("With the power restored, you can now try entering a code.")
-                            gui_item.printtk("What would you like to do?")
-                            gui_item.build_multiple_choice(["Enter a Code", "Cancel"], [1, -1])
+                            actions['print_all'].append("With the power restored, you can now try entering a code.")
+                            actions['print_all'].append("What would you like to do?")
+                            actions['build_multiple_choice'] = ["Enter a Code", "Cancel"], [1, -1]
 
-                        return ""
+                        return ("dest", actions)
                     else:
-                        gui_item.printtk("With no power, the keypad is useless")
+                        actions['print_all'].append("With no power, the keypad is useless")
                         if item.crowbar in player.inv:
-                            gui_item.printtk(f"There does not appear to be any way to open the {gen_str} with a crowbar")
-                        return ""
+                            actions['print_all'].append(f"There does not appear to be any way to open the {gen_str} with a crowbar")
+                        return ("dest", actions)
                 
             # When door is closed and unlocked
             if not self.open and not self.locked:
-                gui_item.printtk(f"The {gen_str} is not locked.")
-                gui_item.printtk("Would you like to open it?")
-                gui_item.ask_y_n()
-                return "" 
+                actions['print_all'].append(f"The {gen_str} is not locked.")
+                actions['print_all'].append("Would you like to open it?")
+                actions['ask_y_or_n'] = True
+                return ("dest", actions)
 
 class Storage_Unit(Interact):
     def __init__(self, name, gen_name) -> None:
@@ -322,34 +340,35 @@ class Electronic_Door(Door):
 
     def enter_code(self, choice, list): #should be accept code but whatever
         #list: next_room, direction choice, door, player
-        gui_item.printtk("")
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': [],
+            'ask_y_or_n': False
+        }
         
         if choice == 'q':
-            gui_item.printtk("You are no longer attempting codes. ")
-            return "main", None
+            actions['print_all'].append("You are no longer attempting codes. ")
+            return (None, None, actions)
         elif not choice.isnumeric(): #make it so it can only enter numbers? using tkinter validate
-            gui_item.printtk("Please enter only numbers")
-            return "enter_code", list
+            actions['print_all'].append("Please enter only numbers")
+            return ("enter_code", list, actions)
         elif len(choice) < 1:
-            gui_item.printtk("Please enter a code before submitting!")
-            return "enter_code", list
+            actions['print_all'].append("Please enter a code before submitting!")
+            return ("enter_code", list, actions)
 
         elif len(choice) > 6:
-            gui_item.printtk("Please enter a code no longer than 6 numbers!")
-            return "enter_code", list
+            actions['print_all'].append("Please enter a code no longer than 6 numbers!")
+            return ("enter_code", list, actions)
 
         if self.code == choice:
             self.open = True
-            gui_item.printtk("The door hisses, sliding into the wall revealing the Control Room!")
+            actions['print_all'].append("The door hisses, sliding into the wall revealing the Control Room!")
             list[2].locked = False
             list[2].open = True
-            return "main", None
+            return (None, None, actions)
     
         else:
-            gui_item.printtk("The code did not open the door.")
-            gui_item.printtk("Continue trying or enter 'q' to quit:")
-            return "enter_code", list
+            actions['print_all'].append("The code did not open the door.")
+            actions['print_all'].append("Continue trying or enter 'q' to quit:")
+            return ("enter_code", list, actions)
 
-def set_item_gui(gui_window):
-    global gui_item
-    gui_item = gui_window

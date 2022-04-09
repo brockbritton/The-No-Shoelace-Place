@@ -6,12 +6,17 @@ class Event:
         self.turns = turns
 
     def execute_event(self, y_or_n):
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': [],
+            'ask_y_or_n': False
+        }
         if y_or_n == "y":
             self.describe_event()
             return None, self.turns
         else:
-            gui_event.printtk("You did not attend this event")
-            return None, None
+            actions['print_all'].append("You did not attend this event")
+            return (None, None, actions)
         
         
 class Coping_Skill_Group(Event):
@@ -24,10 +29,15 @@ class Coping_Skill_Group(Event):
 
 
     def ask_event(self):
-        gui_event.printtk("")
-        gui_event.printtk(f"There is a {self.name} coping skills group starting soon. Would you like to attend?")
-        gui_event.ask_y_n()
-        return "execute_event", self
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': [],
+            'ask_y_or_n': False
+        }
+
+        actions['print_all'].append(f"There is a {self.name} coping skills group starting soon. Would you like to attend?")
+        actions['ask_y_or_n'] = True
+        return ("execute_event", self, actions)
 
     def describe_event(self):
         phrases = []
@@ -43,7 +53,7 @@ class Coping_Skill_Group(Event):
             else:
                 phrases.append(f"you have learned more about the skill of {self.affected_ability.name}.")
         
-        gui_event.printtk(" ".join(phrases))
+        return (" ".join(phrases))
             
 
 class Guided_Path(Event):
@@ -57,7 +67,6 @@ class Guided_Path(Event):
     def __repr__(self) -> str:
         return f'{self.name}(guided path)'
 
-
     def ask_event(self):
         # to be built later
         pass
@@ -69,6 +78,4 @@ class Guided_Path(Event):
 
 
     
-def set_event_gui(gui_window):
-    global gui_event
-    gui_event = gui_window
+

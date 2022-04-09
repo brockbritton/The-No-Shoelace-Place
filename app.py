@@ -39,49 +39,56 @@ def tnslp():
 def accept_input_data():
     data_dict = request.form.to_dict()
     for key, value in data_dict.items():
-        if data_dict[key] == "":
+        if data_dict[key] == 'null':
             data_dict[key] = None
     
     #toggle_dynamic_input("unbind")
 
     print("orig dest ", data_dict['dest'])
+    print(data_dict)
 
     return_tuple = input_organizer.organize_raw_input(data_dict['dest'], data_dict['input'].strip(), data_dict['helper'])
     return_data_dict = {
         'dest': return_tuple[0],
         'helper': return_tuple[1],
-        'print': return_tuple[2]
+        'actions': return_tuple[2]
     }
-    print()
-    print(return_data_dict)
-    classes_tuple = (ability_class.Ability, character_class.Character, item_class.Item, calendar_class.Calendar, condition_class.Condition, room_class.Room, npc_class.NPC)
-    for key, value in return_data_dict.items():
-        if isinstance(value, list):
-            for element in value:
-                if isinstance(element, list):
-                    for sub_element in element:
-                        if isinstance(sub_element, classes_tuple):
-                            return_data_dict[key] = jsonpickle.encode(sub_element)
-                else:
-                    if type(element) in classes_tuple:
-                        return_data_dict[key] = jsonpickle.encode(element, unpicklable=True)
-        else:
-            if type(value) in classes_tuple:
-                return_data_dict[key] = jsonpickle.encode(value, unpicklable=True)
-            
+    print("return data dict 1: ", return_data_dict)
 
+    #classes_tuple = (ability_class.Ability, character_class.Character, item_class.Item, calendar_class.Calendar, condition_class.Condition, room_class.Room, npc_class.NPC)
+    for key, value in return_data_dict.items():
+        if key != 'actions':
+            return_data_dict[key] = jsonpickle.encode(value, unpicklable=True)
+        else:
+            for key, value in return_data_dict['actions'].items():
+                if key != 'print_all':
+                    return_data_dict['actions'][key] = jsonpickle.encode(value, unpicklable=True)
+            
+    print("return data dict 2: ", return_data_dict)
     #if not self.multi_buttons_container.winfo_ismapped():
     #    self.toggle_dynamic_input("bind")
     #    self.game_input.configure(state='normal')
-    print(return_data_dict)
-    return jsonify(return_data_dict)
+    
+    return return_data_dict
+
 
 @app.route("/tnslp/start-game", methods=['POST'])
 def start_game():
+    print("start game start")
     return_tuple = input_organizer.start_game()
-    print(return_tuple)
-    
-    return jsonify({'dest': return_tuple[0], 'helper': return_tuple[1], 'print': return_tuple[2]})
+    return_data_dict = {
+        'dest': return_tuple[0],
+        'helper': return_tuple[1],
+        'actions': return_tuple[2]
+    }
+    print(return_data_dict)
+    for key, value in return_data_dict.items():
+        if key != 'actions':
+            return_data_dict[key] = jsonpickle.encode(value, unpicklable=True)
+    print(return_data_dict)
+    print("start game end")
+    print()
+    return return_data_dict
 
 
 @app.route("/api/data")
@@ -90,4 +97,4 @@ def get_data():
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=5000)
+    app.run(host="localhost", port=5000, debug=False)

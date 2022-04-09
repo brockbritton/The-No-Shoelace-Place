@@ -1,6 +1,7 @@
 
 import re
 import game_backend.classes.item_class as item_class
+import game_backend.gl_backend_functions as gl
 
 class Parser:
     def __init__(self) -> None:
@@ -62,7 +63,7 @@ class Parser:
 
         if len(actions_list) > 1:
             to_print.append("Please enter a single verb at a time.")
-            return False
+            return False, to_print
         else:
             if len(actions_list) == 1:
                 parsed_action = actions_list[0]
@@ -87,7 +88,7 @@ class Parser:
 
         if len(obj_loc_tuples) > 1:
             to_print.append("Please include only one object at a time.")
-            return False
+            return False, to_print
         else:
             if len(obj_loc_tuples) == 1:
                 parsed_obj_loc = obj_loc_tuples[0]
@@ -160,7 +161,11 @@ class Parser:
 # General Function
 def organize_parsed_data(parsed_tuple, player): 
     dest, helper = None, None
-    to_print = []
+    actions = {
+        'print_all': [],
+        'ask_y_or_n': False,
+        'build_multiple_choice': []
+    }
     #   actions_list (verbs), 
     action = parsed_tuple[0]
     #   obj_loc_tuples (objects and their current locations), 
@@ -178,12 +183,13 @@ def organize_parsed_data(parsed_tuple, player):
     # If there is no verb and one object - inspect object
     if action == None and object_loc_tuple != None:
         if isinstance(object_loc_tuple[0], item_class.Inv_Item):
-            dest, helper = object_loc_tuple[0].inspect_item()
+            dest, helper, actions = object_loc_tuple[0].inspect_item()
+
         elif isinstance(object_loc_tuple[0], item_class.Storage_Unit):
             #print contents of storage spot
             pass
         else:
-            to_print.append("This is an item.")
+            actions['print_all'].append("This is an item.")
 
     
     elif direction_tuple != None:
@@ -196,20 +202,21 @@ def organize_parsed_data(parsed_tuple, player):
             next_rooms = [player.loc.north, player.loc.east, player.loc.south, player.loc.west]
             i = ['n', 'e', 's', 'w'].index(blrf_dict[direction_choice])
             return_tuple = player.move_nesw(blrf_dict[direction_choice], next_rooms[i])
-            dest, helper, = return_tuple[0], return_tuple[1]
-            to_print.extend(return_tuple[2])
+            dest, helper = return_tuple[0], return_tuple[1]
+            actions = gl.combine_dicts(actions, return_tuple[2])
+
         # Printing adjacent rooms for a certain direction
         # direction_tuple[0] == None
         else:
-            to_print.append(player.loc.print_directions(player, direction_tuple[1]))
+            actions['print_all'].append(player.loc.print_directions(player, direction_tuple[1]))
 
 
     elif display_option_tuple != None:
         if display_option_tuple[1] == 'items':
-            to_print.append(player.loc.print_items_loc_desc())
+            actions['print_all'].append(player.loc.print_items_loc_desc())
 
         elif display_option_tuple[1] == 'directions':
-            to_print.append(player.loc.print_directions(player, None))
+            actions['print_all'].append(player.loc.print_directions(player, None))
 
     # If there is one action and one object
     elif action != None and object_loc_tuple != None:
@@ -219,67 +226,61 @@ def organize_parsed_data(parsed_tuple, player):
                 if isinstance(object_loc_tuple[1], item_class.Storage_Unit):
                     return_tuple = player.pick_up_item(object_loc_tuple[0])
                     dest, helper, = return_tuple[0], return_tuple[1]
-                    to_print.extend(return_tuple[2])
+                    actions = gl.combine_dicts(actions, return_tuple[2])
                 elif isinstance(object_loc_tuple[1], list):
-                    to_print.append("This item is already in your inventory.")
+                    actions['print_all'].append("This item is already in your inventory.")
             else:
-                to_print.append("You cannot pick up this item.")
+                actions['print_all'].append("You cannot pick up this item.")
 
         elif action == "drop":
             if object_loc_tuple[0] in player.inv:
                 if storage_locations == None or 'drop' not in storage_locations.keys():
                     dest, helper = player.drop_item(object_loc_tuple[0], None) 
-                    to_print.append(f"You have dropped the {object_loc_tuple[0].name} on the ground.")
+                    actions['print_all'].append(f"You have dropped the {object_loc_tuple[0].name} on the ground.")
                 else:
                     if 'drop' in storage_locations.keys():
                         dest, helper = player.drop_item(object_loc_tuple[0], storage_locations['drop'][0])
-                        to_print.append(f"You have dropped the {object_loc_tuple[0].name} to the {storage_locations['drop'][0].name}.")
+                        actions['print_all'].append(f"You have dropped the {object_loc_tuple[0].name} to the {storage_locations['drop'][0].name}.")
     
             else:
-                to_print.append("You cannot drop this item beacuse you are not holding it.")
+                actions['print_all'].append("You cannot drop this item beacuse you are not holding it.")
 
         elif action == "inspect":
             if object_loc_tuple[0].inspect_bool:
                 pass
             else:
-                to_print.append("You cannot inspect this item.")
+                actions['print_all'].append("You cannot inspect this item.")
 
         elif action == "open":
             if object_loc_tuple[0].openable_bool:
                 pass
             else:
-                to_print.append("You cannot open this item")
+                actions['print_all'].append("You cannot open this item")
 
         elif action == "unlock":
             if object_loc_tuple[0].lockable_bool:
                 pass
             else:
-                to_print.append("You cannot unlock this item")
+                actions['print_all'].append("You cannot unlock this item")
 
         elif action == "lock":
             if object_loc_tuple[0].lockable_bool:
                 pass
             else:
-                to_print.append("You cannot lock this item")
+                actions['print_all'].append("You cannot lock this item")
 
         elif action == "interact":
             if object_loc_tuple[0].interact_bool:
                 pass
             else:
-                to_print.append("You cannot interact with this item")
+                actions['print_all'].append("You cannot interact with this item")
 
         elif action == "break":
             if object_loc_tuple[0].breakable:
                 pass
             else:
-                to_print.append("You cannot break this item")
+                actions['print_all'].append("You cannot break this item")
     
     
-    return (dest, helper, to_print)
+    return (dest, helper, actions)
     
-
-
-def set_parser_gui(gui_window):
-    global gui_parser
-    gui_parser = gui_window
-

@@ -141,6 +141,7 @@ html {
 
 #command_label {
     padding: 5px;
+    font-size: 1em;
     font-family: 'Courier New', monospace !important; 
 }
 

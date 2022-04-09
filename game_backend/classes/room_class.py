@@ -389,7 +389,6 @@ class Basement_Room(Room):
     def __repr__(self) -> str:
         return f'{self.name}(basement room)'
 
-
 class Maze_Room(Room):
     def __init__(self, name, description) -> None:
         super().__init__(name, description)
@@ -398,18 +397,19 @@ class Maze_Room(Room):
     def __repr__(self) -> str:
         return f'{self.name}(maze room)'
 
-
-    def print_directions(self, player):
+    def print_directions(self, player, none_or_one):
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': [],
+            'ask_y_or_n': False
+        }
         if item.flashlight in player.inv:
             if item.flashlight.full_power:
-                super().print_directions(player)
+                super().print_directions(player, none_or_one)
             else:
-                gui_room.printtk("The flashlight's weak light does not reach far enough to show")
+                actions['print_all'].append("The flashlight's weak light does not reach far enough to show")
         else:
-            gui_room.printtk("It is completely dark here. There is no light to see by")
+            actions['print_all'].append("It is completely dark here. There is no light to see by")
         
         
 
-def set_rooms_gui(gui_window):
-    global gui_room
-    gui_room = gui_window

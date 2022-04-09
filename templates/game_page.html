@@ -51,20 +51,8 @@
     </div>
     <script>
         
-        $.ajax({
-            url: '/tnslp/start-game',
-            data: null,
-            type: 'POST',
-            success: function(response){
-                master_return = response.dest
-                master_helper = response.helper
-                print_all(response.print)
-                
-            },
-            error: function(error){
-                console.log(error);
-            }
-        }); 
+        /* Start Game Function */
+        accept_input_ajax(null, '/tnslp/start-game')
         
         /*
         window.onbeforeunload = function() {

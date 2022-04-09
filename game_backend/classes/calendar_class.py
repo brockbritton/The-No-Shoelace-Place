@@ -20,14 +20,22 @@ class Calendar:
         self.days_list.append(new_day)
 
     def use_turns(self, num):
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': [],
+            'ask_y_or_n': False
+        }
         self.days_list[-1].turns_left -= num
         if self.days_list[-1].turns_left == 0:
-            gui_cal.printtk("The old day is ending...")
+            actions['print_all'].append("The old day is ending...")
             self.next_day()
-            gui_cal.printtk("The new day is beginning...")
+            actions['print_all'].append("The new day is beginning...")
 
         else:
-            gui_cal.settk(gui_cal.turns_value, gui_cal.gettk(gui_cal.turns_value, 0) - num)
+            #gui_cal.settk(gui_cal.turns_value, gui_cal.gettk(gui_cal.turns_value, 0) - num)
+            pass
+
+        return actions
 
 
     def calculate_next_activity(self):
@@ -69,6 +77,3 @@ class _Day:
         self.activity2 = None
 
 
-def set_calendar_gui(gui_window):
-    global gui_cal
-    gui_cal = gui_window

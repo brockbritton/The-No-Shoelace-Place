@@ -1,9 +1,37 @@
 
-var master_return = null;
-var master_helper = null;
+var master_return = '';
+var master_helper = '';
 
 var rate_of_letters = 5;
 
+function accept_input_ajax(data_values, route) {
+    $.ajax({
+        url: route,
+        data: data_values,
+        type: 'POST',
+        success: function(response){
+            master_return = response.dest;
+            master_helper = response.helper;
+            print_all(response.actions['print_all']);
+        },
+        error: function(error){
+            print_all(["Error: " + error]);
+        }
+    }); 
+}
+
+function accept_entry_input(event) {
+    event.preventDefault()
+    var input_text = form.elements[0].value;
+    printtk(">   " + input_text)
+    let data_values = {
+        'input' : input_text,
+        'dest' : master_return,
+        'helper' : master_helper
+    }
+    accept_input_ajax(data_values, '/accept-input-data');
+    form.elements[0].value = "";
+}
 
 function print_all(list){
     if (list.length == 1) {
@@ -16,7 +44,6 @@ function print_all(list){
 }
 
 function printtk(text) {
-
     var par = document.createElement("p");
     par.classList.add("command_input_text");
     game_display_div.appendChild(par);
@@ -34,31 +61,7 @@ function print_letter_by_letter(text, par_element) {
     game_display_div.scrollTop = game_display_div.scrollHeight;
 }
 
-function accept_entry_input(event) {
-    event.preventDefault()
-    var input_text = form.elements[0].value;
-    printtk(">   " + input_text)
-    let data_values = {
-        'input' : input_text,
-        'dest' : master_return,
-        'helper' : master_helper
-    }
 
-    $.ajax({
-        url: '/accept-input-data',
-        data: data_values,
-        type: 'POST',
-        success: function(response){
-            master_return = response.dest;
-            master_helper = response.helper;
-            print_all(response.print);
-        },
-        error: function(error){
-            console.log(error);
-        }
-    }); 
-    form.elements[0].value = "";
-}
 
 function build_multiple_choice(display_strings, values) {
     let buttons_div = domument.getElementById("button_entry_div");
