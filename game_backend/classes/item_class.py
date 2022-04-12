@@ -144,7 +144,6 @@ class Openable_Interact(Interact):
 
     def open_close_interact(self, player, act):
         # act: "open" or "close"
-        
         if isinstance(self, Door):
             interact_str = "door"
         elif isinstance(self, Cabinet):
@@ -153,9 +152,9 @@ class Openable_Interact(Interact):
             interact_str = "drawer"
 
         if act == "open":
-            return(self.open_interact(player, interact_str))
+            return self.open_interact(player, interact_str)
         elif act == "close":
-            return(self.close_interact(player, interact_str))
+            return self.close_interact(player, interact_str)
 
     def open_interact(self, player, gen_str):
         # When door is open (and unlocked)
@@ -198,12 +197,12 @@ class Openable_Interact(Interact):
                         if item.keycard in player.inv:
                             actions['print_all'].append("With the power restored, you can now try entering a code, or a use your keycard.")
                             actions['print_all'].append("What would you like to do?")
-                            actions['build_multiple_choice'] = ["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1]
+                            actions['build_multiple_choice'] = [["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1]]
                             
                         else: 
                             actions['print_all'].append("With the power restored, you can now try entering a code.")
                             actions['print_all'].append("What would you like to do?")
-                            actions['build_multiple_choice'] = ["Enter a Code", "Cancel"], [1, -1]
+                            actions['build_multiple_choice'] = [["Enter a Code", "Cancel"], [1, -1]]
 
                         return ("open_electronic_door", actions)
                     else:
@@ -260,12 +259,12 @@ class Openable_Interact(Interact):
                         if item.keycard in player.inv:
                             actions['print_all'].append("With the power restored, you can now try entering a code, or a use your keycard.")
                             actions['print_all'].append("What would you like to do?")
-                            actions['build_multiple_choice'] = ["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1]
+                            actions['build_multiple_choice'] = [["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1]]
                             
                         else: 
                             actions['print_all'].append("With the power restored, you can now try entering a code.")
                             actions['print_all'].append("What would you like to do?")
-                            actions['build_multiple_choice'] = ["Enter a Code", "Cancel"], [1, -1]
+                            actions['build_multiple_choice'] = [["Enter a Code", "Cancel"], [1, -1]]
 
                         return ("dest", actions)
                     else:

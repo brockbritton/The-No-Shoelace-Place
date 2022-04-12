@@ -132,11 +132,14 @@ html {
 #text_entry_div {
     display: block;
     font-size: 1.5em;
-    padding: 10px;
+    margin: 10px;
 }
 
 #button_entry_div {
     display: none;
+    font-size: 1.5em;
+    margin: 10px;
+
 }
 
 #command_label {
@@ -165,7 +168,9 @@ html {
     text-decoration: none;
     display: inline;
     font-size: 1em;
-    margin: 10px auto;
+    margin: 5px 10px 5px 0px;
 }
 
-
+.enter_button:hover {
+    cursor: pointer;
+}

@@ -223,15 +223,16 @@ class Character:
         #list: d_choice, next_rooms (plural)
         room_index = list[1].index(choice)
 
-        dest, helper = self.move_nesw(list[0], list[1][room_index])
-        return dest, helper
+        return_tuple = self.move_nesw(list[0], list[1][room_index])
+        return return_tuple
 
     def move_nesw(self, d_choice, next_room):
         #from main - choice: 'n', 's', 'e', 'w'
         #next_room can be list
         actions = {
             'print_all': [],
-            'ask_y_or_n': False
+            'ask_y_or_n': False,
+            'build_multiple_choice': []
         }
         invalid_direction = ["You cannot go that way", "There is a wall in that direction", "It is not possible to go that way"]  
         
@@ -255,15 +256,16 @@ class Character:
                 else:
                     display_rooms.append("Unknown Room")
 
-            actions['build_multiple_choice'] = (display_rooms, next_room)
+            actions['build_multiple_choice'] = [display_rooms, next_room]
             return ("choose_room", [d_choice, next_room], actions)
 
-        if self.loc.has_doors: #check where doors have already been unlocked
+        if self.loc.has_doors: #also check where doors have already been unlocked
             
             if not isinstance(self.loc.doors[d_choice], list): 
                 if self.loc.doors[d_choice] != None: 
                     
-                    dest = self.loc.doors[d_choice].open_close_interact(self, "open")
+                    (dest, actions_open_close) = self.loc.doors[d_choice].open_close_interact(self, "open")
+                    actions = gl.combine_dicts(actions, actions_open_close)
                     if dest == "open_door":
                         self.last_loc = self.loc
                         self.loc = next_room
@@ -286,7 +288,8 @@ class Character:
                 next_room_index = possible_rooms.index(next_room)
                 if self.loc.doors[d_choice][next_room_index] != None: 
                     
-                    dest = self.loc.doors[d_choice][next_room_index].open_close_interact(self, "open")
+                    (dest, actions_open_close) = self.loc.doors[d_choice][next_room_index].open_close_interact(self, "open")
+                    actions = gl.combine_dicts(actions, actions_open_close)
                     if dest == "open_door":
                         self.loc = next_room
                         enter_room_tuple = self.enter_room()

@@ -4,15 +4,29 @@ var master_helper = '';
 
 var rate_of_letters = 5;
 
-function accept_input_ajax(data_values, route) {
+function ajax_accept_input(data_values, route) {
     $.ajax({
         url: route,
         data: data_values,
         type: 'POST',
         success: function(response){
-            master_return = response.dest;
-            master_helper = response.helper;
-            print_all(response.actions['print_all']);
+        
+            if (response['print_all'] != 'null_data') {
+                print_all(response['print_all']);
+                printtk(typeof response['print_all'])
+            } else {
+                printtk("Excuse me?")
+            }
+
+            if (response['build_multiple_choice'].length != 0) {
+                build_multiple_choice(response['build_multiple_choice']);
+            }
+
+            if (response['rebuild_text_entry']) {
+                toggle_entry_divs("text");
+            }
+
+            /* toggle dynamic input to on if the basic text entry has been enabled */
         },
         error: function(error){
             print_all(["Error: " + error]);
@@ -26,10 +40,8 @@ function accept_entry_input(event) {
     printtk(">   " + input_text)
     let data_values = {
         'input' : input_text,
-        'dest' : master_return,
-        'helper' : master_helper
     }
-    accept_input_ajax(data_values, '/accept-input-data');
+    ajax_accept_input(data_values, '/accept-input-data');
     form.elements[0].value = "";
 }
 
@@ -44,11 +56,15 @@ function print_all(list){
 }
 
 function printtk(text) {
+    if (text == null) {
+        text = "null_data"
+    }
     var par = document.createElement("p");
     par.classList.add("command_input_text");
+    /* game_display_div defined on game page script */
     game_display_div.appendChild(par);
-    print_letter_by_letter(text, par)
-
+    print_letter_by_letter(text, par);
+    
 }
 
 function print_letter_by_letter(text, par_element) {
@@ -62,28 +78,43 @@ function print_letter_by_letter(text, par_element) {
 }
 
 
-
-function build_multiple_choice(display_strings, values) {
-    let buttons_div = domument.getElementById("button_entry_div");
+function build_multiple_choice(display_strings) {
+    text_entry_div.style.display = "none";
+    button_entry_div.style.display = "block";
     for (let i=0; i < display_strings.length; i++) {
         let btn = document.createElement("btn");
         btn.classList.add("enter_button");
         btn.innerHTML = display_strings[i];
-        btn.value = values[i];
-        buttons_div.appendChild(btn);
+        btn.value = i
+        btn.onclick = accept_button_input.bind(null, display_strings[i], i);
+        button_entry_div.appendChild(btn);
     }
-    document.getElementById("text_entry_div").style.display = "none";
-    document.getElementById("button_entry_div").style.display = "block";
-
-}
-
-function accept_button_input(value, display) {
-    /* pass */
-}
-
-function ask_y_n() {
     
-    build_multiple_choice(["Yes", "No"], ["y", "n"])
+
+}
+
+function toggle_entry_divs(element_type) {
+    if (element_type == "button") {
+        text_entry_div.style.display = "none";
+        button_entry_div.style.display = "block";
+    } else if (element_type == "text") {
+        button_entry_div.style.display = "none";
+        text_entry_div.style.display = "block";
+    }
+}
+
+function accept_button_input(display, button_index) {
+    printtk(">   " + display)
+    let data_values = {
+        'input' : button_index,
+    }
+    ajax_accept_input(data_values, '/accept-input-data');
+    
+    button_entry_div.style.display = "none";
+    while (button_entry_div.firstChild) {
+        button_entry_div.removeChild(button_entry_div.firstChild);
+    } 
+
 }
 
 function toggle_dynamic_input(bind_or_unbind) {
