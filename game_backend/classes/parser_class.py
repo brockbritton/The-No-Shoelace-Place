@@ -18,7 +18,7 @@ class Parser:
         interact_keys = {'interact':["interact", "pull", "push"]}
         break_keys = {'break':["break", "smash", "tear down", "rip off", "damage"]}
         move_keys = {'go':["go", "move", "walk", "turn"]}
-        display_keys = {'display':["display", "view", "show", "reveal"]}
+        display_keys = {'display':["display", "view", "show", "reveal", "look at"]}
 
         self.movement_dict = {
             "forward" : ["forward", "forwards", "straight", "front "],
@@ -86,6 +86,7 @@ class Parser:
             if item.name.lower() in str_input.lower():
                 obj_loc_tuples.append((item, player.inv))
 
+        print(obj_loc_tuples)
         if len(obj_loc_tuples) > 1:
             to_print.append("Please include only one object at a time.")
             return False, to_print
@@ -164,7 +165,8 @@ def organize_parsed_data(parsed_tuple, player):
     actions = {
         'print_all': [],
         'ask_y_or_n': False,
-        'build_multiple_choice': []
+        'build_multiple_choice': [],
+        'update_inv_visual': []
     }
     #   actions_list (verbs), 
     action = parsed_tuple[0]
@@ -178,6 +180,7 @@ def organize_parsed_data(parsed_tuple, player):
     direction_tuple = parsed_tuple[4]
     #   option for displaying (like items or directions)
     display_option_tuple = parsed_tuple[5]
+    print(parsed_tuple)
 
 
     # If there is no verb and one object - inspect object
@@ -235,13 +238,22 @@ def organize_parsed_data(parsed_tuple, player):
         elif action == "drop":
             if object_loc_tuple[0] in player.inv:
                 if storage_locations == None or 'drop' not in storage_locations.keys():
-                    dest, helper = player.drop_item(object_loc_tuple[0], None) 
+                    return_tuple = player.drop_item(object_loc_tuple[0], None) 
+                    dest, helper, = return_tuple[0], return_tuple[1]
+                    actions = gl.combine_dicts(actions, return_tuple[2])
                     actions['print_all'].append(f"You have dropped the {object_loc_tuple[0].name} on the ground.")
                 else:
                     if 'drop' in storage_locations.keys():
-                        dest, helper = player.drop_item(object_loc_tuple[0], storage_locations['drop'][0])
-                        actions['print_all'].append(f"You have dropped the {object_loc_tuple[0].name} to the {storage_locations['drop'][0].name}.")
-    
+                        if len(storage_locations['drop']) == 1:
+                            return_tuple = player.drop_item(object_loc_tuple[0], storage_locations['drop'][0])
+                            dest, helper, = return_tuple[0], return_tuple[1]
+                            actions = gl.combine_dicts(actions, return_tuple[2])
+                            actions['print_all'].append(f"You have dropped the {object_loc_tuple[0].name} to the {storage_locations['drop'][0].name}.")
+                        else:
+                            return_tuple = player.drop_item(object_loc_tuple[0], None) 
+                            dest, helper, = return_tuple[0], return_tuple[1]
+                            actions = gl.combine_dicts(actions, return_tuple[2])
+                            actions['print_all'].append(f"You have dropped the {object_loc_tuple[0].name} on the ground.")
             else:
                 actions['print_all'].append("You cannot drop this item beacuse you are not holding it.")
 

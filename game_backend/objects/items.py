@@ -26,7 +26,7 @@ common_room_cabinets = item_class.Storage_Box("common room cabinet", "cabinet", 
 #### Basement Items ####
 
 power_room_key = item_class.Key("power room key", "key", "", None)
-keycard = item_class.Keycard("high security keycard", "key", "", None)
+keycard = item_class.Keycard("basement keycard", "key", "", None)
 crowbar = item_class.Crowbar("crowbar", "crowbar", "", None)
 
 flashlight = item_class.Flashlight("flashlight", "flashlight", "", None)

@@ -1,11 +1,13 @@
 
 from flask import Flask, jsonify, render_template, request, session
 import game_backend.input_organizer as input_organizer
+import game_backend.gl_backend_functions as gl
 
 
 app = Flask(__name__)
 app.secret_key = "ihaveasecretkey"
 app.config['SESSION_TYPE'] = 'filesystem'
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 @app.route("/")
 def home():
@@ -30,12 +32,8 @@ def accept_input_data():
     data_dict = request.form.to_dict()
     
     print("frontend input ", data_dict['input'])
-    print(type(data_dict['input']))
 
-    #use js_return to send the correct part of master_return
-    
     actions_dict = input_organizer.organize_raw_input(data_dict['input'])
-    
     return actions_dict
     
 
@@ -46,12 +44,9 @@ def start_game():
     session['current_js_actions'] = {
         'build_multiple_choice': None,
     }
-
-    js_data_dict = {
-        'print_all': input_organizer.start_game()['print_all'],
-        'build_multiple_choice': []
-    }
-    return js_data_dict
+    return_dict = input_organizer.start_game()
+    print(return_dict)
+    return return_dict
 
 @app.route("/api/data")
 def get_data():

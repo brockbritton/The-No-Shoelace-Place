@@ -35,9 +35,18 @@ class Character:
     def __repr__(self) -> str:
         return f'{self.name}(character)'
 
+    def build_inv_str_list(self):
+        strings = []
+        for item in self.inv:
+            strings.append(item.name)
+        if len(strings) < 6:
+            for i in range(6 - len(strings)):
+                strings.append("")
+        return strings
+
     def add_inventory(self, item):
         self.inv.append(item)
-        #update the inventory visual
+        return self.build_inv_str_list()
 
     def add_inventory_choice(self, choice, item): ##unneeded?
         
@@ -48,7 +57,7 @@ class Character:
         if choice.lower() == "y":
             if (len(self.inv) < self.inv_cap):
                 actions['print_all'].append("You have added a " + item.name + " to your inventory.")
-                self.add_inventory(item)
+                actions['update_inv_visual'] = self.add_inventory(item)
                 self.loc.remove_item(item)
                 return (None, None, actions)
             else:
@@ -70,7 +79,7 @@ class Character:
         }
         if (len(self.inv) < self.inv_cap):
             actions['print_all'].append("You have added the " + item.name + " to your inventory.")
-            self.add_inventory(item)
+            actions['update_inv_visual'] = self.add_inventory(item)
             self.loc.remove_item(item)
             return (None, None, actions)
         else:
@@ -83,12 +92,13 @@ class Character:
 
     def sub_inventory(self, item):
         self.inv.remove(item)
-        # update the inventory visual
+        return self.build_inv_str_list()
 
     def drop_item(self, item, loc):
+        actions = {}
         self.loc.add_item(item, loc)
-        self.sub_inventory(item)
-        return None, None
+        actions['update_inv_visual'] = self.sub_inventory(item)
+        return (None, None, actions)
                 
     def enter_room(self): #####
         actions = {
@@ -378,7 +388,7 @@ class Character:
         }
         actions['print_all'].append("You have dropped the " + item.name)
         self.loc.add_item(item, None)
-        self.sub_inventory(item)
+        actions['update_inv_visual'] = self.sub_inventory(item)
 
         return (None, None, actions)
 
@@ -407,10 +417,10 @@ class Character:
              
             actions['print_all'].append("You have dropped " + list[0].name + " for " + list[1].name)
             
-            self.add_inventory(list[1])
+            actions['update_inv_visual'] = self.add_inventory(list[1])
             self.loc.remove_item(list[1])
             self.loc.add_item(list[0], None)
-            self.sub_inventory(list[0])
+            actions['update_inv_visual'] = self.sub_inventory(list[0])
             
             return (None, None, actions)
         

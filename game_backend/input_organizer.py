@@ -11,6 +11,7 @@ import game_backend.gl_backend_functions as gl
 def start_game():
     actions = {
         'print_all': [],
+        'update_inv_visual': []
     }
 
     room.basement_stairs.set_coordinates(room.ward_stairs, 0, 0, room.basement_landing)
@@ -30,11 +31,12 @@ def start_game():
     actions['print_all'].append("----Intro Paragraph----") 
     actions['print_all'].append("...")
 
-    global player1
+    global player1, input_parser
     player1 = character_class.Character("Jay Doe")
-    #gui.update_inv_visual(player1)
-    global input_parser
     input_parser = parser_class.Parser()
+    #Update inventory visual
+    actions['update_inv_visual'] = player1.build_inv_str_list()
+    
 
     actions['print_all'].append("Welcome " + player1.name + "!")
     
@@ -55,7 +57,8 @@ def organize_raw_input(frontend_input):
         'print_all': [],
         'build_multiple_choice': [],
         'ask_y_or_n': False,
-        'rebuild_text_input': False
+        'rebuild_text_entry': False,
+        'update_inv_visual': []
     }
 
     if frontend_input.isnumeric() and wait_for_frontend_input['build_multiple_choice'] != None:
@@ -67,7 +70,6 @@ def organize_raw_input(frontend_input):
     ### parsing begins ###
     if master_dest == None:
         parsed_values, print_list = input_parser.parse_input(player1, input_value)
-        print(parsed_values, print_list)
         actions['print_all'].extend(print_list)
         parsed = False
         if not isinstance(parsed_values, bool):
@@ -79,11 +81,8 @@ def organize_raw_input(frontend_input):
                     actions = parse_tuples(return_tuple, actions)
                     break
         else:
+            # error in user input rules, skip parsing
             parsed = True 
-
-        if not parsed:
-            return_tuple = main(input_value, master_helper)
-            actions = parse_tuples(return_tuple, actions)
         
 
     elif master_dest == "drop_gen_item":
@@ -178,36 +177,15 @@ def organize_raw_input(frontend_input):
     else:
         actions['rebuild_text_entry'] = True
 
+    if actions['print_all'] == []:
+        actions['print_all'] = ["Excuse me?"]
+
     print()
     print("master return", master_dest)
     print("master helper", master_helper)
     print("master actions", actions)
 
     return actions
-
-
-def main(choice, helper): 
-    return_tuple = (None, None, None)
-    actions = {
-        'print_all': []
-    }
-    #this is for when an item is selected from the inventory and selected to be dropped
-    if choice == 'drop item':
-        if isinstance(helper, item_class.Item):
-            return_tuple = player1.drop_item_choice(helper)
-        else:
-            # if using the command line a player wants to drop an item
-            pass
-
-    elif choice == 'inspect item':
-        if isinstance(helper, item_class.Item):
-            return_tuple = helper.inspect_item()
-            actions = gl.combine_dicts(actions, return_tuple[2])
-        else:
-            # If a player wants to inspect an item either available in the room or in their inventory
-            pass
-
-    return (return_tuple[1], return_tuple[2], actions)
 
 
 def parse_tuples(tuple_list, old_action_dict):

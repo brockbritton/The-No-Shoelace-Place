@@ -11,10 +11,9 @@ class Item:
         self.inspect_bool = True
 
     
-
 class Inv_Item(Item):
 
-    # name - visible name of item
+    # name - visible name of item  !!!! must be 17 characters or less !!!!
     # desc - description of item 
     # hidden_atr - either None ,or, list of [text description, class of interact]
     # craftable - either None ,or, list of [required second item class, result item class]

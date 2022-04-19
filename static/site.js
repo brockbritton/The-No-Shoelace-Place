@@ -2,7 +2,8 @@
 var master_return = '';
 var master_helper = '';
 
-var rate_of_letters = 5;
+var rate_of_letters = 20; /* fast: 5, slow: 50, normal: 20 */
+
 
 function ajax_accept_input(data_values, route) {
     $.ajax({
@@ -10,22 +11,18 @@ function ajax_accept_input(data_values, route) {
         data: data_values,
         type: 'POST',
         success: function(response){
-        
-            if (response['print_all'] != 'null_data') {
-                print_all(response['print_all']);
-                printtk(typeof response['print_all'])
-            } else {
-                printtk("Excuse me?")
+            print_all(response['print_all']);
+            
+            if (('update_inv_visual' in response) && (response['update_inv_visual'].length != 0)) {
+                update_inv_visual(response['update_inv_visual']);
             }
 
-            if (response['build_multiple_choice'].length != 0) {
+            if (('build_multiple_choice' in response) && (response['build_multiple_choice'].length != 0)) {
                 build_multiple_choice(response['build_multiple_choice']);
-            }
-
-            if (response['rebuild_text_entry']) {
+            } else if (('rebuild_text_entry' in response) && (response['rebuild_text_entry'])) {
                 toggle_entry_divs("text");
             }
-
+            
             /* toggle dynamic input to on if the basic text entry has been enabled */
         },
         error: function(error){
@@ -77,7 +74,6 @@ function print_letter_by_letter(text, par_element) {
     game_display_div.scrollTop = game_display_div.scrollHeight;
 }
 
-
 function build_multiple_choice(display_strings) {
     text_entry_div.style.display = "none";
     button_entry_div.style.display = "block";
@@ -116,6 +112,32 @@ function accept_button_input(display, button_index) {
     } 
 
 }
+
+function update_inv_visual(inv_strings) {
+    for (let i=0; i < 6; i++) {
+        let elem_id = "inv_slot_" + (i+1).toString();
+        if (document.getElementById(elem_id).innerHTML != inv_strings[i]) {
+            document.getElementById(elem_id).innerHTML = "";
+            build_inv_labels_letter_by_letter(elem_id, inv_strings[i]);
+        } 
+    }
+}
+
+function build_inv_labels_letter_by_letter(id, text_string) {
+    let elem = document.getElementById(id);
+    if (text_string.length == 0) {
+        elem.innerHTML = "";
+    } else {
+        if (text_string.length == 1) {
+            elem.innerHTML += text_string
+        } else {
+
+            elem.innerHTML += text_string[0]
+            setTimeout(build_inv_labels_letter_by_letter.bind(null, id, text_string.slice(1)), rate_of_letters * (text_string.length)/4)
+        }
+    }
+}
+ 
 
 function toggle_dynamic_input(bind_or_unbind) {
     /* pass */
