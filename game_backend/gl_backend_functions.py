@@ -10,3 +10,8 @@ def combine_dicts(old, new):
             old[key] = new[key]
     return old
 
+def parse_tuples(tuple_list, old_action_dict):
+    dest, helper = tuple_list[0], tuple_list[1]
+    new_action_dict = combine_dicts(old_action_dict, tuple_list[2])
+    return dest, helper, new_action_dict
+

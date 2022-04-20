@@ -46,7 +46,7 @@ def start_game():
     actions['print_all'].append("Enter 'commands' to display all commands or 'help' for more information: ")
 
     return_tuple = player1.enter_room()
-    actions = parse_tuples(return_tuple, actions)
+    master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     return actions
 
@@ -78,7 +78,7 @@ def organize_raw_input(frontend_input):
                     parsed = True
                     #print("parser found data")
                     return_tuple = parser_class.organize_parsed_data(parsed_values, player1)
-                    actions = parse_tuples(return_tuple, actions)
+                    master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
                     break
         else:
             # error in user input rules, skip parsing
@@ -87,51 +87,51 @@ def organize_raw_input(frontend_input):
 
     elif master_dest == "drop_gen_item":
         return_tuple = player1.drop_gen_item(input_value, master_helper) 
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "add_inventory_choice":
         return_tuple = player1.add_inventory_choice(input_value, master_helper) 
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "full_inv_drop_items":
         return_tuple = player1.full_inv_drop_items(input_value, master_helper) 
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "drop_x_for_y":
         return_tuple = player1.drop_x_for_y(input_value, master_helper) 
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "inspect_pb":
         return_tuple = player1.inspect_pb(input_value) 
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "interact_pb":
         return_tuple = player1.interact_pb(input_value)
-        actions = parse_tuples(return_tuple, actions) 
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions) 
 
     elif master_dest == "deal_take_damage":
         return_tuple = player1.deal_take_damage(input_value, master_helper) 
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "choose_fight_action":
         return_tuple = player1.choose_fight_action(input_value, master_helper) 
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "open_door_key":
         return_tuple = player1.open_door_key(input_value, master_helper) 
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "open_door_crowbar": #x2
         return_tuple = player1.open_door_crowbar(input_value, master_helper) 
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "choose_room":
         return_tuple = player1.choose_room(input_value, master_helper)
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "open_electronic_door":
         return_tuple = player1.open_electronic_door(input_value, master_helper)
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "enter_code":
         master_return, master_helper = master_helper[2].enter_code(input_value, master_helper)
@@ -139,7 +139,7 @@ def organize_raw_input(frontend_input):
 
     elif master_dest == "drop_item":
         return_tuple = player1.drop_item_choice(input_value)
-        actions = parse_tuples(return_tuple, actions)
+        master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
     elif master_dest == "execute_event":
         master_return, master_helper = master_helper.execute_event(input_value) ###???
@@ -188,8 +188,4 @@ def organize_raw_input(frontend_input):
     return actions
 
 
-def parse_tuples(tuple_list, old_action_dict):
-    global master_dest, master_helper
-    master_dest, master_helper = tuple_list[0], tuple_list[1]
-    new_action_dict = gl.combine_dicts(old_action_dict, tuple_list[2])
-    return new_action_dict
+

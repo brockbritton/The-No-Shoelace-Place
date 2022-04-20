@@ -13,7 +13,7 @@ admissions = room_class.Ward_Room("Admissions",
 service_hallway = room_class.Ward_Room("Service Hallway", 
     "A clean hallway, clearly used purely for servicing the various rooms along the hall", 
     "")
-outside_time = room_class.Ward_Room("Outside Time", 
+outside_time = room_class.Ward_Room("Outside Courtyard", 
     "A brick courtyard, with walls twelve feet tall, and no way to climb them. A park bench sits off to one side with a large open space taking up the majority.", 
     "") #adds happiness
 utility_closet = room_class.Ward_Room("Utility Closet", 

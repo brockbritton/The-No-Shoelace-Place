@@ -89,15 +89,13 @@ class Character:
             actions['ask_y_or_n'] = True
             return ("full_inv_drop_items", item, actions)
 
-
     def sub_inventory(self, item):
         self.inv.remove(item)
         return self.build_inv_str_list()
 
     def drop_item(self, item, loc):
-        actions = {}
         self.loc.add_item(item, loc)
-        actions['update_inv_visual'] = self.sub_inventory(item)
+        actions = {['update_inv_visual']: self.sub_inventory(item)}
         return (None, None, actions)
                 
     def enter_room(self): #####
@@ -191,7 +189,6 @@ class Character:
                 actions['print_all'].append("Your health is now at " + str(self.health) + " points.")
             return actions['print_all']
                  
-
     def display_fighting_options(self, flist):
         actions = {
             'print_all': [],
@@ -379,8 +376,6 @@ class Character:
             blrf_dict[blrf_direct_list[i]] = nesw_direct_list[i]
         return blrf_dict
 
-    
-
     def drop_gen_item(self, choice, item):
         actions = {
             'print_all': [],
@@ -551,7 +546,8 @@ class Character:
             return ("open_door_key", list, actions)
 
         return_tuple = self.check_move_through_door(list)
-        return (return_tuple[0], return_tuple[1], actions['print_all'].extend(return_tuple[2]))
+        dest, helper, actions = gl.parse_tuples(return_tuple, actions)
+        return (dest, helper, actions)
 
     def open_door_crowbar(self, choice, list): 
         #list: next_room, direction choice, door, player
@@ -570,7 +566,8 @@ class Character:
             return ("open_door_crowbar", list, actions)
         
         return_tuple = self.check_move_through_door(list)
-        return (return_tuple[0], return_tuple[1], actions['print_all'].extend(return_tuple[2]))
+        dest, helper, actions = gl.parse_tuples(return_tuple, actions)
+        return (dest, helper, actions)
 
     def open_electronic_door(self, choice, list):
         #list: next_room, direction choice, door
@@ -588,7 +585,8 @@ class Character:
             list[2].locked = False
             list[2].open = True
             return_tuple = self.check_move_through_door(list)
-            return (return_tuple[0], return_tuple[1], actions['print_all'].extend(return_tuple[2]))
+            dest, helper, actions = gl.parse_tuples(return_tuple, actions)
+            return (dest, helper, actions)
 
         else:
             actions['print_all'].append("Please enter a valid choice.")
@@ -607,24 +605,28 @@ class Character:
                 self.last_loc = self.loc
                 self.loc = help_list[0]
                 return_tuple = self.enter_room()
-                return return_tuple
+                dest, helper, actions = gl.parse_tuples(return_tuple, actions)
+                return (dest, helper, actions)
 
             else:
                 actions['print_all'].append("Try another way.")
                 return_tuple = self.enter_room()
-                return (return_tuple[0], return_tuple[1], actions['print_all'].extend(return_tuple[2]))
+                dest, helper, actions = gl.parse_tuples(return_tuple, actions)
+                return (dest, helper, actions)
         else:
             i = self.loc.doors[help_list[1]].index(help_list[2])
             if self.loc.doors[help_list[1]][i].open:
                 self.last_loc = self.loc
                 self.loc = help_list[0]
                 return_tuple = self.enter_room()
-                return (return_tuple[0], return_tuple[1], actions['print_all'].extend(return_tuple[2]))
+                dest, helper, actions = gl.parse_tuples(return_tuple, actions)
+                return (dest, helper, actions)
 
             else:
                 actions['print_all'].append("Try another way.")
                 return_tuple = self.enter_room()
-                return (return_tuple[0], return_tuple[1], actions['print_all'].extend(return_tuple[2]))
+                dest, helper, actions = gl.parse_tuples(return_tuple, actions)
+                return (dest, helper, actions)
 
     def drop_item_choice(self, choice):
             item_index = self.inv.index(choice)

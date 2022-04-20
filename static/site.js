@@ -79,7 +79,7 @@ function build_multiple_choice(display_strings) {
     button_entry_div.style.display = "block";
     for (let i=0; i < display_strings.length; i++) {
         let btn = document.createElement("btn");
-        btn.classList.add("enter_button");
+        btn.classList.add("game_inline_bordered_buttons");
         btn.innerHTML = display_strings[i];
         btn.value = i
         btn.onclick = accept_button_input.bind(null, display_strings[i], i);
