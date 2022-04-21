@@ -1,5 +1,6 @@
 *.ds_store
 .DS_Store
+.venv
 
 .vscode
 
@@ -7,6 +8,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
