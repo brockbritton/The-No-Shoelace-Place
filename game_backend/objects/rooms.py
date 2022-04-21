@@ -32,10 +32,10 @@ library = room_class.Ward_Room("Library",
 staff_breakroom = room_class.Ward_Room("Staff Breakroom", 
     "", 
     "")
-med_station = room_class.Ward_Room("Medication Room", 
+med_station = room_class.Ward_Room("Med Station", 
     "A window at which patients can receive medications.", 
     "")
-ward_stairs = room_class.Ward_Room("Stairs Level 1", 
+ward_stairs = room_class.Ward_Room("Stairs Level One", 
     "A dimly lit stairwell, leading to a floor below.", 
     "")
 bathroom_cr = room_class.Ward_Room("CR Bathroom", 
@@ -128,7 +128,7 @@ def ward_set_door_dictionaries():
 basement_stairs = room_class.Basement_Room("Stairs Level B", "")
 basement_landing = room_class.Basement_Room("Basement Landing", "")
 old_nurses_station = room_class.Basement_Room("Old Nursing Station", "")
-old_med_window = room_class.Basement_Room("Old Medication Window", "")
+old_med_window = room_class.Basement_Room("Old Med Window", "")
 old_medical_storage = room_class.Basement_Room("Old Medical Storage", "")
 
 sedation_room = room_class.Basement_Room("Sedation Room", "")
@@ -214,5 +214,4 @@ power_room.set_interacts([item.power_box])
 
 #create door dictionaries
 def basement_set_door_dictionaries():
-    power_room.create_door_dict([None, item.power_room_door, None,  None])
-    maze_int6.create_door_dict([None, None, None, item.power_room_door])
+    power_room.create_door_dict([None, None, item.power_s_door, None])

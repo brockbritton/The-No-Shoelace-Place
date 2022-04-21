@@ -274,9 +274,9 @@ button :active {
 }
 
 #ability_right {
-    float: right;
+    float: left;
     width: min-content;
-    margin-right: 1.25em;
+    margin-left: 1.25em;
 }
 
 #game_buttons {
@@ -335,7 +335,7 @@ button :active {
     display: inline-block;
 }
 
-.inv_strings {
+.inv_ablty_strings {
     text-align: left;
     font-family: 'Courier New', monospace !important;
     font-size: 1.25em;
@@ -345,16 +345,7 @@ button :active {
     display: inline-block;
 }
 
-.ability_strings {
-    text-align: left;
-    font-size: 1.25em;
-    margin-top: 0em;
-    margin-bottom: 0em;
-    width: fit-content;
-    display: inline-block;
-}
-
-.ability_str_lvl_div {
+.ability_btns_div {
     display: flex;
     justify-content: left;
     align-items: center;

@@ -87,6 +87,11 @@ class Room:
         
         blrf_rooms_list = [self.north, self.east, self.south, self.west]
         blrf_direct_list = []
+
+        if player.last_loc == None:
+            print("Last Location L: None")
+        else: 
+            print("Last Location L:", player.last_loc.name)
         
         if player.last_loc != None:
             
@@ -200,7 +205,7 @@ class Room:
             else:
                 sentences.append(blrf_directions[i] + " there is a wall")
         
-        paragraph_parts = self._build_complicated_adjacent_rooms_sentence(sentences)
+        paragraph_parts = self.build_complicated_adjacent_rooms_sentence(sentences, blrf_rooms)
         if none_or_one == None:
             full_paragraph = " ".join(paragraph_parts)
             return full_paragraph
@@ -214,7 +219,9 @@ class Room:
             return paragraph_parts[3]
 
         
-    def _build_complicated_adjacent_rooms_sentence(self, room_states):
+        
+
+    def build_complicated_adjacent_rooms_sentence(self, room_states, actual_rooms):
         blrf_directions = ["Behind you", "To your left", "To your right", "In front of you"]
         all_parts = []
         for i in range(0, len(room_states)):
@@ -373,6 +380,7 @@ class Ward_Room(Room):
         return f'{self.name}(ward room)'
 
 
+
 class Basement_Room(Room):
     def __init__(self, name, description) -> None:
         super().__init__(name, description)
@@ -390,13 +398,18 @@ class Maze_Room(Room):
         return f'{self.name}(maze room)'
 
     def print_directions(self, player, none_or_one):
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': [],
+            'ask_y_or_n': False
+        }
         if item.flashlight in player.inv:
             if item.flashlight.full_power:
-                return super().print_directions(player, none_or_one)
+                super().print_directions(player, none_or_one)
             else:
-                return "The flashlight's light is barely strong enough to see even a few steps."
+                actions['print_all'].append("The flashlight's weak light does not reach far enough to show")
         else:
-            return "It is completely dark here. There is no light to see by."
+            actions['print_all'].append("It is completely dark here. There is no light to see by")
         
         
 

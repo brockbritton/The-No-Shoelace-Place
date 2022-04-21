@@ -28,7 +28,7 @@ class Character:
         self.condition = None
 
         #self.calendar = calendar_class.Calendar()
-        #self.abilities = [ability.meditation, ability.assertiveness, ability.pos_attitude, ability.opposite_action, ability.catharsis]
+        #self.abilities = [ability.catharsis, ability.assertiveness, ability.pos_attitude, ability.meditation, ability.opposite_action]
 
         self.guided = False #for outside time or from admissions to common room
 
@@ -95,7 +95,7 @@ class Character:
 
     def drop_item(self, item, loc):
         self.loc.add_item(item, loc)
-        actions = {'update_inv_visual': self.sub_inventory(item)}
+        actions = {['update_inv_visual']: self.sub_inventory(item)}
         return (None, None, actions)
                 
     def enter_room(self): #####
