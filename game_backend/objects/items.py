@@ -40,7 +40,7 @@ shotgun_shells = item_class.Shotgun_Shells("shotgun shells", "ammo", "", None) #
 power_box = item_class.Power_Box("fuse box", "fuse box")
 
 # Basement Doors
-power_s_door = item_class.Door("Power Room Door", "door", [power_room_key])
+power_room_door = item_class.Door("Power Room Door", "door", [power_room_key])
 high_security_door = item_class.Electronic_Door("High Security Door", "door", "2116", [keycard])
 
 # Storage Containers
