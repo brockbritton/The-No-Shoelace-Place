@@ -187,25 +187,34 @@
 
     </div>
     <script>
+
+        if (!sessionStorage.getItem("game_start")) {
+            sessionStorage.setItem("game_start", 0);
+            ajax_accept_input(null, '/tnslp/start-game');
+        } else {
+            window.location.href = "/";
+            sessionStorage.clear();
+        }
+           
         
-        /* Start Game Function */
-        ajax_accept_input(null, '/tnslp/start-game')
-        
-        /*
-        window.onbeforeunload = function() {
-            return "The current game session will end if you leave this page. \n Are you sure you want to leave?";
-        };
-        */
+        window.addEventListener('beforeunload', function (e) {
+            // Cancel the event
+            // e.preventDefault();
+            // Chrome requires returnValue to be set
+            // e.returnValue = '';
+            return false;
+        });
         
         const form = document.getElementById('command_input_form');
         const game_display_div = document.getElementById("game_text_display");
 
-        const text_entry_div = document.getElementById("text_entry_div")
-        const text_entry = document.getElementById('command_input')
-        const button_entry_div = document.getElementById("button_entry_div")
+        const text_entry_div = document.getElementById("text_entry_div");
+        const text_entry = document.getElementById('command_input');
+        const button_entry_div = document.getElementById("button_entry_div");
+
+        text_entry.focus();
 
         form.addEventListener('submit', accept_entry_input);
-        text_entry.focus();
 
 
     </script>

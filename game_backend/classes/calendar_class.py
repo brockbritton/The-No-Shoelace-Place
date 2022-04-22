@@ -13,17 +13,21 @@ class Calendar:
     def __repr__(self) -> str:
         return f'(calendar)'
 
-
     def next_day(self):
         # Player stats values are updated on initialized Day object
         new_day = _Day(self.max_turns_daily, len(self.days_list))
         self.days_list.append(new_day)
 
+    def _get_curr_day_data(self):
+        #return current day, turns left
+        return self.days_list[-1].day_number, self.days_list[-1].turns_left
+
     def use_turns(self, num):
         actions = {
             'print_all': [],
             'build_multiple_choice': [],
-            'ask_y_or_n': False
+            'ask_y_or_n': False,
+            'update_ui_values': {}
         }
         self.days_list[-1].turns_left -= num
         if self.days_list[-1].turns_left == 0:
@@ -71,9 +75,9 @@ class _Day:
     def __init__(self, turns, day) -> None:
         self.day_number = day
         self.turns_left = turns
-        #gui_cal.settk(gui_cal.day_value, day)
-        #gui_cal.settk(gui_cal.turns_value, turns)
         self.activity1 = None
         self.activity2 = None
 
+    def __repr__(self) -> str:
+        return f'(day)'
 

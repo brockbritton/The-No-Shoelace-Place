@@ -24,11 +24,11 @@ class Character:
         self.inv_cap_start = 6 #starting inventory capacity
 
         self.health = 65 #starting / current player health
-        self.full_health = 100 #starting player health
+        self.full_health = 100 #maximum player health
         self.condition = None
 
-        #self.calendar = calendar_class.Calendar()
-        #self.abilities = [ability.meditation, ability.assertiveness, ability.pos_attitude, ability.opposite_action, ability.catharsis]
+        self.calendar = calendar_class.Calendar()
+        self.abilities = [ability.meditation, ability.assertiveness, ability.pos_attitude, ability.opposite_action, ability.catharsis]
 
         self.guided = False #for outside time or from admissions to common room
 

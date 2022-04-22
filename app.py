@@ -1,5 +1,5 @@
 
-from flask import Flask, jsonify, render_template, request, session
+from flask import Flask, render_template, request, session
 import game_backend.input_organizer as input_organizer
 import game_backend.gl_backend_functions as gl
 
@@ -29,6 +29,7 @@ def tnslp():
 
 @app.route("/accept-input-data", methods=['POST'])
 def accept_input_data():
+    print(session)
     data_dict = request.form.to_dict()
     
     print("frontend input ", data_dict['input'])

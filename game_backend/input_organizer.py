@@ -11,7 +11,8 @@ import game_backend.gl_backend_functions as gl
 def start_game():
     actions = {
         'print_all': [],
-        'update_inv_visual': []
+        'update_inv_visual': [],
+        'update_ui_values': {}
     }
 
     room.basement_stairs.set_coordinates(room.ward_stairs, 0, 0, room.basement_landing)
@@ -34,6 +35,7 @@ def start_game():
     global player1, input_parser
     player1 = character_class.Character("Jay Doe")
     input_parser = parser_class.Parser()
+    
     #Update inventory visual
     actions['update_inv_visual'] = player1.build_inv_str_list()
     
@@ -43,7 +45,7 @@ def start_game():
     actions['print_all'].append("----Secondary Intro Paragraph----")
     actions['print_all'].append("...")
 
-    actions['print_all'].append("Enter 'commands' to display all commands or 'help' for more information: ")
+    actions['print_all'].append("For help, use the game help button in the bottom right corner.")
 
     return_tuple = player1.enter_room()
     master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)

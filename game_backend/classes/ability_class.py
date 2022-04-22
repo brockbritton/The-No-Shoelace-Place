@@ -1,22 +1,20 @@
 import random
 
-
 class Ability:
 
     def __init__(self, display_name, base_damage, conditions_list) -> None:
         self.name = display_name
         self.damage = base_damage
-        self.affect = conditions_list
+        self.affects = conditions_list
         self.lvl = 0
 
     def __repr__(self) -> str:
         return f'{self.name}(ability)'
 
-
     def upgrade_ability(self): 
         self.lvl += 1
         self.damage *= self.lvl
-        for c in self.affect:
+        for c in self.affects:
             c.upgrade_condition()  #this is a condition
 
 

@@ -26,7 +26,7 @@ function ajax_accept_input(data_values, route) {
             /* toggle dynamic input to on if the basic text entry has been enabled */
         },
         error: function(error){
-            print_all(["Error: " + error]);
+            print_all(["Error: " + error.message]);
         }
     }); 
 }

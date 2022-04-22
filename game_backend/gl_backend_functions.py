@@ -8,6 +8,8 @@ def combine_dicts(old, new):
             old[key].extend(new[key])
         elif isinstance(new[key], bool) or isinstance(new[key], tuple):
             old[key] = new[key]
+        elif isinstance(new[key], dict):
+            old[key] = combine_update_value_dicts(old[key], new[key])
     return old
 
 def parse_tuples(tuple_list, old_action_dict):
@@ -15,3 +17,7 @@ def parse_tuples(tuple_list, old_action_dict):
     new_action_dict = combine_dicts(old_action_dict, tuple_list[2])
     return dest, helper, new_action_dict
 
+def combine_update_value_dicts(old_dict, new_dict):
+    for key, value in new_dict:
+        old_dict[key] = value
+    return old_dict

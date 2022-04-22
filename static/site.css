@@ -52,7 +52,7 @@ button :active {
 }
 
 #blurb_quote {
-    font-family: 'Alegreya'; /* blurb quote font */
+    font-family: "Courier New", Courier !important;  /* blurb quote font */
     font-size: 2em;
     text-align: center;
 }

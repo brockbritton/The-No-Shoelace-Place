@@ -81,15 +81,19 @@ class Room:
     def update_storage_dict(self):
         for sc in self.storage_containers:
             self.storage_dict[sc] = sc.items
+
+    def print_one_direction(self, room_obj, str_letter): ##more params?
+        ...
             
-    def print_directions(self, player, none_or_one):
+    def print_directions(self, player, none_or_one): ####### ugh
         direct_list = ["n", "e", "s", "w"]
         
         blrf_rooms_list = [self.north, self.east, self.south, self.west]
         blrf_direct_list = []
+
+        print("Current Location:", self.name)
         
         if player.last_loc != None:
-            
             for r in blrf_rooms_list:
                 if isinstance(r, list):
                     for x in r:
@@ -109,7 +113,6 @@ class Room:
             else:
                 blrf_direct_list.append(direct_list[last_room_index + 1])
 
-            
             if last_room_index - 1 < 0: #right
                 blrf_direct_list.append(direct_list[3])
             else:
