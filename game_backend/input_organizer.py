@@ -6,6 +6,12 @@ import game_backend.classes.parser_class as parser_class
 import game_backend.objects.rooms as room
 import game_backend.gl_backend_functions as gl
 
+from flask import session
+
+def create_character():
+    global player1
+    player1 = character_class.Character("Jay Doe")
+    session['player1'] = player1
 
 #start game and handle input
 def start_game():
@@ -32,8 +38,17 @@ def start_game():
     actions['print_all'].append("----Intro Paragraph----") 
     actions['print_all'].append("...")
 
-    global player1, input_parser
-    player1 = character_class.Character("Jay Doe")
+    global input_parser
+    
+    # Check if player1 exists in session
+    try:
+        if session['player1'] is not None:
+            pass
+    except KeyError:
+        create_character()
+
+  
+    
     input_parser = parser_class.Parser()
     
     #Update inventory visual
