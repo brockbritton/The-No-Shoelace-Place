@@ -188,6 +188,7 @@
     </div>
     <script>
 
+        /*
         if (!sessionStorage.getItem("game_start")) {
             sessionStorage.setItem("game_start", 0);
             ajax_accept_input(null, '/tnslp/start-game');
@@ -195,7 +196,9 @@
             window.location.href = "/";
             sessionStorage.clear();
         }
-           
+        */ 
+
+        ajax_accept_input(null, '/tnslp/start-game');
         
         window.addEventListener('beforeunload', function (e) {
             // Cancel the event

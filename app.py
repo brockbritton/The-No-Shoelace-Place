@@ -2,7 +2,6 @@
 from flask import Flask, render_template, request, session
 import game_backend.input_organizer as input_organizer
 import game_backend.gl_backend_functions as gl
-
 from flask_session import Session
 
 
@@ -15,9 +14,15 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+
+@app.before_first_request
+def before_first_request():
+    app.logger.info("before_first_request")
+    session.clear()
+    input_organizer.create_character()
+
 @app.route("/")
 def home():
-
     return render_template("home.html")
 
 
@@ -32,7 +37,6 @@ def credits():
 
 @app.route("/tnslp/", methods=('GET', 'POST'))
 def tnslp():
-
     input_organizer.start_game()
     return render_template("game_page.html")
 
