@@ -11,6 +11,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_COOKIE_SECURE"] = False
 Session(app)
 
 
@@ -45,7 +46,6 @@ def tnslp():
 
 @app.route("/accept-input-data", methods=['POST'])
 def accept_input_data():
-    print(session)
     data_dict = request.form.to_dict()
     
     print("frontend input ", data_dict['input'])
