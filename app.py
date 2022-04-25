@@ -7,7 +7,6 @@ from flask_session import Session
 
 app = Flask(__name__)
 app.secret_key = "ihaveasecretkey"
-app.config['SESSION_TYPE'] = 'filesystem'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 app.config["SESSION_PERMANENT"] = False
@@ -19,12 +18,15 @@ Session(app)
 def before_first_request():
     app.logger.info("before_first_request")
     session.clear()
+    session['save_prints'] = []
+    session['current_js_actions'] = {
+        'build_multiple_choice': None,
+    }
     input_organizer.create_character()
 
 @app.route("/")
 def home():
     return render_template("home.html")
-
 
 
 @app.route("/quotes/")
@@ -53,16 +55,15 @@ def accept_input_data():
     
 
 
-@app.route("/tnslp/start-game", methods=['POST'])
-def start_game():
+@app.route("/tnslp/loading-game", methods=['POST'])
+def loading_game():
     
-    session['current_js_actions'] = {
-        'build_multiple_choice': None,
-    }
+    if len(session['save_prints']) <= 9:
+        session['save_prints'] = []
+        return_dict = input_organizer.start_game()
+    else:
+        return_dict = input_organizer.load_game()
 
-    return_dict = input_organizer.start_game()
-
-    print(return_dict)
     return return_dict
 
      
@@ -73,4 +74,4 @@ def get_data():
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=5000, debug=False)
+    app.run(host="localhost", port=5000, debug=True)

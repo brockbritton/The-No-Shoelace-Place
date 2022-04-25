@@ -11,7 +11,12 @@ function ajax_accept_input(data_values, route) {
         data: data_values,
         type: 'POST',
         success: function(response){
-            print_all(response['print_all']);
+            if (('print_all' in response) && (response['print_all'].lenght != 0)) {
+                print_all(response['print_all']);
+            } else if (('load_prints' in response)) {
+                load_prints(response['load_prints']);
+
+            }
             
             if (('update_inv_visual' in response) && (response['update_inv_visual'].length != 0)) {
                 update_inv_visual(response['update_inv_visual']);
@@ -52,6 +57,12 @@ function print_all(list){
     }
 }
 
+function load_prints(list) {
+    for (let text in list) {
+        printtk(list[text]);
+    }
+}
+
 function printtk(text) {
     if (text == null) {
         text = "null_data"
@@ -85,7 +96,6 @@ function build_multiple_choice(display_strings) {
         btn.onclick = accept_button_input.bind(null, display_strings[i], i);
         button_entry_div.appendChild(btn);
     }
-    
 
 }
 

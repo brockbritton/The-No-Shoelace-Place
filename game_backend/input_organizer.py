@@ -17,7 +17,6 @@ def create_character():
         session['player1'] = character_class.Character("Jay Doe")
         print("character now exists")
     
-    print("Session", session)
 
 #start game and handle input
 def start_game():
@@ -63,9 +62,19 @@ def start_game():
 
     return_tuple = session['player1'].enter_room()
     master_dest, master_helper, actions = gl.parse_tuples(return_tuple, actions)
+    if len(session['save_prints']) == 0:
+        session['save_prints'].extend(actions['print_all'])
 
     return actions
 
+def load_game():
+    actions = {
+        'load_prints': session['save_prints'],
+        'update_inv_visual': session['player1'].build_inv_str_list(),
+        'update_ui_values': {}
+    }
+
+    return actions
 
 def organize_raw_input(frontend_input):
     global master_helper, master_dest, wait_for_frontend_input
@@ -78,6 +87,8 @@ def organize_raw_input(frontend_input):
         'rebuild_text_entry': False,
         'update_inv_visual': []
     }
+
+    session['save_prints'].append("> " + frontend_input)
 
     if frontend_input.isnumeric() and wait_for_frontend_input['build_multiple_choice'] != None:
         input_value = wait_for_frontend_input['build_multiple_choice'][int(frontend_input)]
@@ -197,6 +208,8 @@ def organize_raw_input(frontend_input):
 
     if actions['print_all'] == []:
         actions['print_all'] = ["Excuse me?"]
+
+    session['save_prints'].extend(actions['print_all'])
 
     print()
     print("master return", master_dest)
