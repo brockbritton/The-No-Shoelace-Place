@@ -19,11 +19,8 @@ def create_character():
         session['master_dest'] = None
         session['master_helper'] = None
         session['parser'] = parser_class.Parser()
-        room.basement_stairs.set_coordinates(room.ward_stairs, 0, 0, room.basement_landing)
-        room.ward_stairs.set_coordinates(room.basement_stairs, 0, 0, room.common_room)
-
-        #room.basement_set_door_dictionaries()
-        #room.ward_set_door_dictionaries()
+        room.basement_set_door_dictionaries() #doors arent working
+        room.ward_set_door_dictionaries() #doors arent working
 
     
 #start game and handle input
@@ -85,12 +82,14 @@ def organize_raw_input(frontend_input):
         'update_inv_visual': []
     }
 
-    session['save_prints'].append("> " + frontend_input)
+    session['save_prints'].append("> " + frontend_input) ####doesnt work for multiple choice
 
     if frontend_input.isnumeric() and wait_for_frontend_input['build_multiple_choice'] != None:
+        print("convert to int")
         input_value = wait_for_frontend_input['build_multiple_choice'][int(frontend_input)]
         wait_for_frontend_input['build_multiple_choice'] = None
     else:
+        print("stay as str")
         input_value = frontend_input.strip()
 
     ### parsing begins ###

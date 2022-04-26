@@ -228,7 +228,12 @@ class Character:
     
     def choose_room(self, choice, list):
         #list: d_choice, next_rooms (plural)
-        room_index = list[1].index(choice)
+        
+        for i in range(0, len(list[1])): #ugly workaround for comment below
+            if choice.name == list[1][i].name:
+                print("found room:" + list[1][i].name)
+                room_index = i
+        #room_index = list[1].index(choice) 
 
         return_tuple = self.move_nesw(list[0], list[1][room_index])
         return return_tuple
@@ -482,6 +487,7 @@ class Character:
             'print_all': [],
             'ask_y_or_n': False
         }
+
         if choice.lower() == "y":
             actions['print_all'].append("There is a heavy layer of dust coating the screen.")
             actions['print_all'].append("Upon wiping it away, you notice a power button at the base.")

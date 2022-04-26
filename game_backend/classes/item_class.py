@@ -150,6 +150,7 @@ class Openable_Interact(Interact):
         elif isinstance(self, Drawers):
             interact_str = "drawer"
 
+        
         if act == "open":
             return self.open_interact(player, interact_str)
         elif act == "close":
@@ -162,6 +163,7 @@ class Openable_Interact(Interact):
             'build_multiple_choice': [],
             'ask_y_or_n': False
         }
+        
         if self.open:
             actions['print_all'].append(f"The {gen_str} here has already been opened")
             return ("open_door", actions)

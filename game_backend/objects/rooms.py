@@ -148,17 +148,17 @@ maze_north_end2 = room_class.Maze_Room("A Dead End", "")
 maze_int6 = room_class.Maze_Room("A Dark Intersection", "")
 maze_east_end2 = room_class.Maze_Room("A Dead End", "")
 
-power_room = room_class.Basement_Room("", "")
+power_room = room_class.Basement_Room("Power Room", "")
 
-waiting_room = room_class.Basement_Room("", "")
-old_therapy_room = room_class.Basement_Room("", "")
-clinical_hallway = room_class.Basement_Room("", "")
-straightjacket_storage = room_class.Basement_Room("", "")
-tanning_bed_cell = room_class.Basement_Room("", "")
+waiting_room = room_class.Basement_Room("Waiting Room", "")
+old_therapy_room = room_class.Basement_Room("Old Therapy Room", "")
+clinical_hallway = room_class.Basement_Room("Clinical Hallway", "")
+straightjacket_storage = room_class.Basement_Room("Straightjacket Storage", "")
+tanning_bed_cell = room_class.Basement_Room("Confinement", "")
 
-high_security_area = room_class.Basement_Room("", "")
-plexiglass_cell = room_class.Basement_Room("", "")
-shock_therapy_room = room_class.Basement_Room("", "")
+high_security_area = room_class.Basement_Room("High Security Wing", "")
+plexiglass_cell = room_class.Basement_Room("Plexiglass Cell", "")
+shock_therapy_room = room_class.Basement_Room("Shock Therapy Room", "")
 
 ####
 basement_landing.set_coordinates(residential_hallway, basement_stairs, waiting_room, [old_nurses_station, old_med_window])
@@ -216,3 +216,7 @@ power_room.set_interacts([item.power_box])
 def basement_set_door_dictionaries():
     power_room.create_door_dict([None, item.power_room_door, None,  None])
     maze_int6.create_door_dict([None, None, None, item.power_room_door])
+
+# Connect the ward level to the basement level
+basement_stairs.set_coordinates(ward_stairs, 0, 0, basement_landing)
+ward_stairs.set_coordinates(basement_stairs, 0, 0, common_room)
