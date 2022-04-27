@@ -1,8 +1,10 @@
 
 
-import game_backend.objects.items as item  ## comes before item_class import
-import game_backend.classes.item_class as item_class
 import num2words as n2w
+
+import game_backend.classes.item_class as item_class
+import game_backend.objects.items as item  # # comes before item_class import
+
 
 class Room:
     _room_registry = []

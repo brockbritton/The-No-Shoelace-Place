@@ -1,8 +1,8 @@
 
 from flask import Flask, render_template, request, session
+
 import game_backend.classes.game_class as game_class
 from flask_session import Session
-
 
 app = Flask(__name__)
 app.secret_key = "ihaveasecretkey"

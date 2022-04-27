@@ -1,8 +1,9 @@
 
 import game_backend.classes.character_class as character_class
-import game_backend.objects.rooms as room
 import game_backend.classes.parser_class as parser_class
 import game_backend.gl_backend_functions as gl
+import game_backend.objects.rooms as room
+
 
 class Game:
 
