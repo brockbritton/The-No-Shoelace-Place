@@ -13,8 +13,8 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
-        room.basement_set_door_dictionaries() #doors arent working?
-        room.ward_set_door_dictionaries() #doors arent working?
+        room.basement_set_door_dictionaries()
+        room.ward_set_door_dictionaries()
 
     def start_game(self):
         actions = {

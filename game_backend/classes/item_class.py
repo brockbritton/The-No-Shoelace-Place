@@ -1,6 +1,5 @@
 
 import game_backend.classes.room_class as room_class
-import game_backend.objects.items as item
 
 
 class Item:
@@ -163,6 +162,14 @@ class Openable_Interact(Interact):
             'ask_y_or_n': False
         }
         
+        #check for items based on classes
+        has_crowbar, has_keycard = False, False
+        for i in player.inv:
+            if isinstance(i, Crowbar):
+                has_crowbar = True
+            elif isinstance(i, Keycard):
+                has_keycard = True
+
         if self.open:
             actions['print_all'].append(f"The {gen_str} here has already been opened")
             return ("open_door", actions)
@@ -178,13 +185,13 @@ class Openable_Interact(Interact):
                             actions['print_all'].append(f"Would you like to open the {gen_str} with your key?")
                             actions['ask_y_or_n'] = True
                             return ("open_door_key", actions)
-                if item.crowbar in player.inv and self.crowbar_open:
+                if has_crowbar and self.crowbar_open:
                     actions['print_all'].append(f"Would you like to open the {gen_str} with your crowbar?")
                     actions['ask_y_or_n'] = True
                     return ("open_door_crowbar", actions)
                 if not self.keyable and self.locked and self.crowbar_open:
                     actions['print_all'].append(f"The {gen_str} is locked, but the lock is broken.")
-                    if item.crowbar in player.inv:
+                    if has_crowbar:
                         actions['print_all'].append(f"Would you like to open the {gen_str} with your crowbar?")
                         actions['ask_y_or_n'] = True
                         return ("open_door_crowbar", actions)
@@ -194,7 +201,7 @@ class Openable_Interact(Interact):
                     actions['print_all'].append("")
                     if player.loc.lights_on:
 
-                        if item.keycard in player.inv:
+                        if has_keycard:
                             actions['print_all'].append("With the power restored, you can now try entering a code, or a use your keycard.")
                             actions['print_all'].append("What would you like to do?")
                             actions['build_multiple_choice'] = [["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1]]
@@ -207,7 +214,7 @@ class Openable_Interact(Interact):
                         return ("open_electronic_door", actions)
                     else:
                         actions['print_all'].append("With no power, the keypad is useless")
-                        if item.crowbar in player.inv:
+                        if has_crowbar:
                             actions['print_all'].append(f"There does not appear to be any way to open the {gen_str} with a crowbar")
                         return (None, actions)
                 
@@ -225,6 +232,15 @@ class Openable_Interact(Interact):
             'build_multiple_choice': [],
             'ask_y_or_n': False
         }
+
+        #check for items based on classes
+        has_crowbar, has_keycard = False, False
+        for i in player.inv:
+            if isinstance(i, Crowbar):
+                has_crowbar = True
+            elif isinstance(i, Keycard):
+                has_keycard = True
+
         # When door is open (and unlocked)
         if self.open:
             # Write something different
@@ -240,13 +256,13 @@ class Openable_Interact(Interact):
                         if k in player.inv:
                             
                             return ("dest", actions)
-                if item.crowbar in player.inv and self.crowbar_open:
+                if has_crowbar and self.crowbar_open:
                     
                     actions['ask_y_or_n'] = True
                     return ("dest", actions)
                 if not self.keyable and self.locked and self.crowbar_open:
                     actions['print_all'].append(f"The {gen_str} is locked, but the lock is broken.")
-                    if item.crowbar in player.inv:
+                    if has_crowbar:
                         
                         actions['ask_y_or_n'] = True
                         return ("dest", actions)
@@ -256,7 +272,7 @@ class Openable_Interact(Interact):
                     actions['print_all'].append("")
                     if player.loc.lights_on:
 
-                        if item.keycard in player.inv:
+                        if has_keycard:
                             actions['print_all'].append("With the power restored, you can now try entering a code, or a use your keycard.")
                             actions['print_all'].append("What would you like to do?")
                             actions['build_multiple_choice'] = [["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1]]
@@ -269,7 +285,7 @@ class Openable_Interact(Interact):
                         return ("dest", actions)
                     else:
                         actions['print_all'].append("With no power, the keypad is useless")
-                        if item.crowbar in player.inv:
+                        if has_crowbar:
                             actions['print_all'].append(f"There does not appear to be any way to open the {gen_str} with a crowbar")
                         return ("dest", actions)
                 
