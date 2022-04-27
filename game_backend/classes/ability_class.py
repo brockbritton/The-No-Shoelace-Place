@@ -1,5 +1,6 @@
 import random
 
+
 class Ability:
 
     def __init__(self, display_name, base_damage, conditions_list) -> None:

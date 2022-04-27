@@ -1,6 +1,6 @@
 
 
-import game_backend.objects.items as item
+import game_backend.objects.items as item  ## comes before item_class import
 import game_backend.classes.item_class as item_class
 import num2words as n2w
 

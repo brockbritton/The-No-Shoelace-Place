@@ -1,8 +1,11 @@
 
 import re
+
+from flask import session
+
 import game_backend.classes.item_class as item_class
 import game_backend.gl_backend_functions as gl
-from flask import session
+
 
 class Parser:
     def __init__(self) -> None:

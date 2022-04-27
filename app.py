@@ -22,7 +22,14 @@ def before_first_request():
     session['current_js_actions'] = {
         'build_multiple_choice': None,
     }
-    session['game'] = game_class.Game()
+
+    try:
+        if session['game'] is not None:
+            print("game already exists")
+
+    except KeyError:
+        session['game'] = game_class.Game()
+        print("game created")
 
 @app.route("/")
 def home():

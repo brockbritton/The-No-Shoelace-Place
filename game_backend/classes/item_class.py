@@ -150,13 +150,12 @@ class Openable_Interact(Interact):
         elif isinstance(self, Drawers):
             interact_str = "drawer"
 
-        
         if act == "open":
             return self.open_interact(player, interact_str)
         elif act == "close":
             return self.close_interact(player, interact_str)
 
-    def open_interact(self, player, gen_str):
+    def open_interact(self, player, gen_str): #######
         # When door is open (and unlocked)
         actions = {
             'print_all': [],
