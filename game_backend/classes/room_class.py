@@ -161,8 +161,8 @@ class Room:
                             if self.doors[blrf_direct_list[i]] != None and self.doors[blrf_direct_list[i]][x] != None:
                                 
                                 if not self.doors[blrf_direct_list[i]][x].locked:
-                                    if blrf_rooms[i].visited:
-                                        room_states.append(("unlocked door visited", blrf_rooms[i]))
+                                    if blrf_rooms[i][x].visited:
+                                        room_states.append(("unlocked door visited", blrf_rooms[i][x]))
                                     else:
                                         room_states.append("unlocked door unknown")
                                 else: 

@@ -18,7 +18,7 @@ class Character:
         self.loc = room.common_room #starting location
         self.last_loc = None
 
-        self.inv = [item.id_bracelet, item.basement_key, item.crowbar, item.keycard]
+        self.inv = [item.id_bracelet, item.basement_key, item.crowbar, item.ward_doors_key]
         #self.inv = []
         self.inv_cap = 6 #current inventory capacity - maybe just keep it set
         self.inv_cap_start = 6 #starting inventory capacity

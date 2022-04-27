@@ -1,7 +1,6 @@
 
 from flask import Flask, render_template, request, session
-import game_backend.input_organizer as input_organizer
-import game_backend.gl_backend_functions as gl
+import game_backend.classes.game_class as game_class
 from flask_session import Session
 
 
@@ -19,11 +18,11 @@ Session(app)
 def before_first_request():
     app.logger.info("before_first_request")
     session.clear()
-    session['save_prints'] = []
+
     session['current_js_actions'] = {
         'build_multiple_choice': None,
     }
-    input_organizer.create_character()
+    session['game'] = game_class.Game()
 
 @app.route("/")
 def home():
@@ -40,7 +39,7 @@ def credits():
 
 @app.route("/tnslp/", methods=('GET', 'POST'))
 def tnslp():
-    input_organizer.start_game()
+    session['game'].start_game()
     return render_template("game_page.html")
 
 
@@ -50,7 +49,7 @@ def accept_input_data():
     
     print("frontend input ", data_dict['input'])
 
-    actions_dict = input_organizer.organize_raw_input(data_dict['input'])
+    actions_dict = session['game'].organize_raw_input(data_dict['input'])
     return actions_dict
     
 
@@ -58,11 +57,11 @@ def accept_input_data():
 @app.route("/tnslp/loading-game", methods=['POST'])
 def loading_game():
     
-    if len(session['save_prints']) <= 9:
-        session['save_prints'] = []
-        return_dict = input_organizer.start_game()
+    if len(session['game'].save_prints) <= 9:
+        session['game'].save_prints = []
+        return_dict = session['game'].start_game()
     else:
-        return_dict = input_organizer.load_game()
+        return_dict = session['game'].load_game()
 
     return return_dict
 
