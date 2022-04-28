@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for
 import game_backend.classes.game_class as game_class
 from flask_session import Session
 
@@ -33,8 +33,11 @@ def before_first_request():
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return redirect(url_for('welcome'))
 
+@app.route("/welcome")
+def welcome():
+    return render_template("home_image.html")
 
 @app.route("/quotes/")
 def quotes():
@@ -44,13 +47,13 @@ def quotes():
 def credits():
     return render_template("credits.html")
 
-@app.route("/tnslp/", methods=('GET', 'POST'))
+@app.route("/game/", methods=('GET', 'POST'))
 def tnslp():
     session['game'].start_game()
     return render_template("game_page.html")
 
 
-@app.route("/accept-input-data", methods=['POST'])
+@app.route("/game/accept-input-data", methods=['POST'])
 def accept_input_data():
     data_dict = request.form.to_dict()
     
@@ -61,7 +64,7 @@ def accept_input_data():
     
 
 
-@app.route("/tnslp/loading-game", methods=['POST'])
+@app.route("/game/loading-game", methods=['POST'])
 def loading_game():
     
     if len(session['game'].save_prints) <= 9:
@@ -72,11 +75,13 @@ def loading_game():
 
     return return_dict
 
-     
-
 @app.route("/api/data")
 def get_data():
     return app.send_static_file("data.json")
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html'), 404
 
 
 if __name__ == '__main__':

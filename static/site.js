@@ -43,7 +43,7 @@ function accept_entry_input(event) {
     let data_values = {
         'input' : input_text,
     }
-    ajax_accept_input(data_values, '/accept-input-data');
+    ajax_accept_input(data_values, '/game/accept-input-data');
     form.elements[0].value = "";
 }
 

@@ -19,7 +19,7 @@ html {
 
 /* All Elements */
 * {
-    background-color: black;
+    /*background-color: black;*/
     color: white;
     font-family: Georgia, serif;
     font-size: 1em;
@@ -51,10 +51,61 @@ button :active {
     text-align: center;
 }
 
+#center_welcome {
+    justify-content: center;
+    justify-items: center;
+    width: 100%;
+}
+
+#center_welcome #welcome_logo {
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -50px;
+    width: 50%;
+}
+
+#center_welcome #welcome_buttons {
+    background-color: none !important;
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    top: 55%;
+    bottom: 20%;
+    /*z-index: 99;*/
+}
+
+.transparent_background {
+    /*filter: alpha(opacity=0) !important; */
+	opacity: 0 !important;
+}
+
+#header_background_image {
+    background-image: url('/static/tnslp-home.png');
+    background-size: 1000px;
+    height: 1000px;
+    width: 1000px;
+
+}
+
 #blurb_quote {
     font-family: "Courier New", Courier !important;  /* blurb quote font */
     font-size: 2em;
     text-align: center;
+}
+
+#home_vertical_space{
+    height: 400px;
+    background-color: rgba(0,0,0,0);
+}
+
+#home_menu_buttons {
+    position: relative;
+    top: 50%;
+    background-color: rgba(0,0,0,0);
 }
 
 .menu_buttons {
@@ -74,6 +125,8 @@ button :active {
     display: block;
     font-size: 1.5em;
     margin: 15px auto;
+    filter: alpha(opacity=100);
+	opacity: 1 !important;
 }
 
 .large_bordered_button:hover {
@@ -92,6 +145,8 @@ button :active {
     display: block;
     font-size: 1em;
     margin: 10px auto;
+    filter: alpha(opacity=100);
+	opacity: 1 !important;
 }
 
 .regular_bordered_button:hover {
@@ -218,6 +273,8 @@ button :active {
 #command_input {
     font-family: 'Courier New', monospace !important; 
     font-size: 1em;
+    background-color: black;
+    color: white;
 }
 
 #command_input:focus {

@@ -1,0 +1,34 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css')}}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='tnslp.png')}}">
+    <title>Home</title>
+</head>
+<body>
+    <div id="center_welcome">
+        <img src="{{ url_for('static', filename='tnslp-welcome-logo.png')}}" alt="TNSLP Logo" id="welcome_logo">
+        <div id="welcome_buttons">
+            <button class="large_bordered_button" 
+                type="button" 
+                onclick="location.href='/game'">
+                Play Game
+            </button>
+            <button class="regular_bordered_button" type="button">
+                Load Game
+            </button>
+            <button class="regular_bordered_button" type="button">
+                How to Play
+            </button>
+        </div>
+    </div>
+
+    
+    
+</body>
+</html>

@@ -71,7 +71,7 @@
                     </div>
                     <div id="ps_right">
                         <div class="ps_inv_elem_spacing">
-                            <p class="ps_values" id="xp_value">350</p>
+                            <p class="ps_values" id="xp_value">0</p>
                         </div>
                         <div class="ps_inv_elem_spacing">
                             <p class="ps_values" id="day_value">1</p>
@@ -80,7 +80,7 @@
                             <p class="ps_values" id="turns_value">15</p>
                         </div>
                         <div class="ps_inv_elem_spacing">
-                            <p class="ps_values" id="room_value">Starting</p>
+                            <p class="ps_values" id="room_value">Unknown</p>
                         </div>
                         <div class="ps_inv_elem_spacing">
                             <p class="ps_values" id="health_value">65</p>
@@ -170,7 +170,7 @@
                             <p class="inv_strings" id="opp_action_lvl">0</p>
                         </div>
                         <div class="ability_str_lvl_div">
-                            <p class="inv_strings" id="meditation_lvl">0</p>
+                            <p class="inv_strings" id="catharsis_lvl">0</p>
                         </div>
                     </div>
                 </div>
@@ -198,7 +198,7 @@
         }
         */ 
 
-        ajax_accept_input(null, '/tnslp/loading-game');
+        ajax_accept_input(null, '/game/loading-game');
         
         window.addEventListener('beforeunload', function (e) {
             // Cancel the event

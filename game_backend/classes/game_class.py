@@ -9,22 +9,31 @@ class Game:
     def __init__(self) -> None:
         self.master_dest = None
         self.master_helper = None
-        self.wait_for_frontend_input = {}
+        self.wait_for_frontend_input = {'build_multiple_choice': None}
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
         room.basement_set_door_dictionaries()
         room.ward_set_door_dictionaries()
+        self.ui_values = {
+            "xp_value": (0, "add"),
+            "day_value": (1, "add"),
+            "turns_value": (15, "sub"),
+            "room_value": ("Unknown", "set"),
+            "health_value": (65, "add"),
+            "stats_value": ("Unknown", "set"),
+            "meditation_lvl": (0, "add"),
+            "assertiveness_lvl": (0, "add"),
+            "pos_attitude_lvl": (0, "add"),
+            "opp_action_lvl": (0, "add"),
+            "catharsis_lvl": (0, "add"),
+        }
 
     def start_game(self):
         actions = {
             'print_all': [],
             'update_inv_visual': [],
             'update_ui_values': {}
-        }
-
-        self.wait_for_frontend_input = {
-            'build_multiple_choice': None,
         }
 
         actions['print_all'].append("----Intro Paragraph----") 
