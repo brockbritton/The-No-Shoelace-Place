@@ -49,7 +49,7 @@ def credits():
 @app.route("/game/", methods=('GET', 'POST'))
 def tnslp():
     session['game'].start_game()
-    return render_template("game_page.html")
+    return render_template("game.html")
 
 
 @app.route("/game/accept-input-data", methods=['POST'])
@@ -81,6 +81,10 @@ def get_data():
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('page_not_found.html'), 404
+
+@app.errorhandler(405)
+def page_not_found(error):
+    return render_template('method_not_allowed.html'), 405
 
 
 if __name__ == '__main__':

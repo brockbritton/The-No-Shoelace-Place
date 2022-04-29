@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='site.css')}}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='tnslp.png')}}">
-    <title>404 Page not Found</title>
+    <title>405 Method not Allowed</title>
 </head>
 <body>
     <div id="center_welcome">
-        <img src="{{ url_for('static', filename='img/error_404.png')}}" alt="404 Page not Found" id="welcome_logo">
+        <img src="{{ url_for('static', filename='img/error_405.png')}}" alt="405 Method not Allowed" id="welcome_logo">
         <div id="welcome_buttons">
             <button class="large_bordered_button" 
                 type="button" 
@@ -22,7 +21,5 @@
         </div>
     </div>
 
-    
-    
 </body>
 </html>

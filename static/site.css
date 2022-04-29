@@ -77,8 +77,8 @@ html {
 }
 
 .large_bordered_button:hover {
-    color: #C0C0C0;
-    border: 2px solid #C0C0C0;
+    color: #A9A9A9;
+    border: 2px solid #A9A9A9;
 }
 
 .regular_bordered_button {
@@ -97,8 +97,8 @@ html {
 }
 
 .regular_bordered_button:hover {
-    color: #DCDCDC;
-    border: 2px solid #DCDCDC;
+    color: #A9A9A9;
+    border: 2px solid #A9A9A9;
 }
 
 /* ######### */
@@ -116,7 +116,8 @@ html {
 
 #image_header #cursor_space {
     position: absolute;
-    height: 250px;
+    margin-top: 100px;
+    height: 140px;
     left: 50%;
     transform: translate(-50%);
     width: 70%;
