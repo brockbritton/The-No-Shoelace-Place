@@ -36,7 +36,7 @@ def home():
 
 @app.route("/welcome")
 def welcome():
-    return render_template("home_image.html")
+    return render_template("welcome.html")
 
 @app.route("/quotes/")
 def quotes():

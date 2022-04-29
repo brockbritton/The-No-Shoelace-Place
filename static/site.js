@@ -3,6 +3,7 @@ var master_return = '';
 var master_helper = '';
 
 var rate_of_letters = 20; /* fast: 5, slow: 50, normal: 20 */
+var rate_of_header_fadein = 250;
 
 
 function ajax_accept_input(data_values, route) {
@@ -114,7 +115,7 @@ function accept_button_input(display, button_index) {
     let data_values = {
         'input' : button_index,
     }
-    ajax_accept_input(data_values, '/accept-input-data');
+    ajax_accept_input(data_values, '/game/accept-input-data');
     
     button_entry_div.style.display = "none";
     while (button_entry_div.firstChild) {
@@ -146,6 +147,19 @@ function build_inv_labels_letter_by_letter(id, text_string) {
             setTimeout(build_inv_labels_letter_by_letter.bind(null, id, text_string.slice(1)), rate_of_letters * (text_string.length)/4)
         }
     }
+}
+
+function fade_to_fill_header() {
+    
+    if (parseFloat(foreground_header_image.style.opacity) < 1) {
+        foreground_header_image.style.opacity = parseFloat(foreground_header_image.style.opacity) + 1.0/60;
+        setTimeout(fade_to_fill_header, rate_of_header_fadein / 60)
+    } 
+
+}
+
+function fade_to_outline_header() {
+    foreground_header_image.style.opacity = 0;
 }
  
 

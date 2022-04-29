@@ -12,10 +12,10 @@
     <title>Text Adventure</title>
 </head>
 <body>
-    <div class="page_header">
-        <h1 id="header_game_title">
-            The No-Shoelace Place
-        </h1>
+    <div id="image_header">
+        <img id="background_image" src="{{ url_for('static', filename='img/line-header.png')}}" alt="">
+        <img id="foreground_image" src="{{ url_for('static', filename='img/filled-header.png')}}" alt="">
+        <div id="cursor_space" onmouseenter="fade_to_fill_header()" onmouseleave="fade_to_outline_header()"></div>
     </div>
     <div id="game_gui">
         <div id="text_and_entry_widgets">
@@ -188,16 +188,16 @@
     </div>
     <script>
 
-        /*
-        if (!sessionStorage.getItem("game_start")) {
-            sessionStorage.setItem("game_start", 0);
-            ajax_accept_input(null, '/tnslp/start-game');
-        } else {
-            window.location.href = "/";
-            sessionStorage.clear();
-        }
-        */ 
+const form = document.getElementById('command_input_form');
+        const game_display_div = document.getElementById("game_text_display");
 
+        const text_entry_div = document.getElementById("text_entry_div");
+        const text_entry = document.getElementById('command_input');
+        const button_entry_div = document.getElementById("button_entry_div");
+
+        const image_header = document.getElementById("image_header");
+        const foreground_header_image = document.getElementById("foreground_image");
+        foreground_header_image.style.opacity - 0;
         ajax_accept_input(null, '/game/loading-game');
         
         window.addEventListener('beforeunload', function (e) {
@@ -208,16 +208,10 @@
             return false;
         });
         
-        const form = document.getElementById('command_input_form');
-        const game_display_div = document.getElementById("game_text_display");
-
-        const text_entry_div = document.getElementById("text_entry_div");
-        const text_entry = document.getElementById('command_input');
-        const button_entry_div = document.getElementById("button_entry_div");
-
-        text_entry.focus();
+        
 
         form.addEventListener('submit', accept_entry_input);
+        text_entry.focus();
 
 
     </script>

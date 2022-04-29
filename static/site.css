@@ -17,7 +17,9 @@ html {
     align-items: center;
 }
 
+/* ############ */
 /* All Elements */
+/* ############ */
 * {
     /*background-color: black;*/
     color: white;
@@ -25,32 +27,10 @@ html {
     font-size: 1em;
 }
 
-button { 
-    color:white;  
-    background-color: black; 
-}
 
-button :hover {
-    color: #696969;
-}
-
-button :active {
-    color: #C0C0C0;
-}
-
-
+/* ############### */
 /* Title/Home Page */
-#header_welcome {
-    padding: 1em 0 0 0;
-    font-size: 2.5em;
-    text-align: center;
-}
-
-#header_game_title {
-    font-size: 5em;
-    text-align: center;
-}
-
+/* ############### */
 #center_welcome {
     justify-content: center;
     justify-items: center;
@@ -78,42 +58,9 @@ button :active {
     /*z-index: 99;*/
 }
 
-.transparent_background {
-    /*filter: alpha(opacity=0) !important; */
-	opacity: 0 !important;
-}
-
-#header_background_image {
-    background-image: url('/static/tnslp-home.png');
-    background-size: 1000px;
-    height: 1000px;
-    width: 1000px;
-
-}
-
-#blurb_quote {
-    font-family: "Courier New", Courier !important;  /* blurb quote font */
-    font-size: 2em;
-    text-align: center;
-}
-
-#home_vertical_space{
-    height: 400px;
-    background-color: rgba(0,0,0,0);
-}
-
-#home_menu_buttons {
-    position: relative;
-    top: 50%;
-    background-color: rgba(0,0,0,0);
-}
-
-.menu_buttons {
-    background-color: black;
-    position: relative;
-    top: 50%;
-}
-
+/* ######### */
+/*  Buttons  */
+/* ######### */
 .large_bordered_button {
     background-color: black; 
     border: 2px solid white;
@@ -130,8 +77,8 @@ button :active {
 }
 
 .large_bordered_button:hover {
-    color: #696969;
-    border: 2px solid #696969;
+    color: #C0C0C0;
+    border: 2px solid #C0C0C0;
 }
 
 .regular_bordered_button {
@@ -150,12 +97,57 @@ button :active {
 }
 
 .regular_bordered_button:hover {
-    color: #696969;
-    border: 2px solid #696969;
+    color: #DCDCDC;
+    border: 2px solid #DCDCDC;
 }
 
-
+/* ######### */
 /* Game Page */
+/* ######### */
+
+
+#image_header{
+    margin-top: -50px;
+    height: 250px;
+    width: auto;
+    background-color: none;
+    
+}
+
+#image_header #cursor_space {
+    position: absolute;
+    height: 250px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 70%;
+    background-color: none;
+    overflow: hidden;
+    z-index: 2;
+}
+
+#image_header #background_image {
+    position: absolute;
+    height: auto;
+    left: 50%;
+    transform: translate(-50%);
+    width: 70%;
+    background-color: none;
+    overflow: hidden;
+    margin-top: -10px;
+}
+
+#image_header #foreground_image {
+    position: absolute;
+    height: auto;
+    left: 50%;
+    transform: translate(-50%);
+    width: 70%;
+    background-color: none;
+    overflow: hidden;
+    margin-top: -10px;
+    opacity: 0;
+}
+
 
 #game_gui {
     width: 88%;
@@ -172,7 +164,9 @@ button :active {
     font-size: 1em;
 }
 
+/* ####################### */
 /* Game Page Button Styles */
+/* ####################### */
 
 .game_inline_bordered_buttons {
     background-color: black; 
