@@ -3,7 +3,8 @@ var master_return = '';
 var master_helper = '';
 
 var rate_of_letters = 20; /* fast: 5, slow: 50, normal: 20 */
-var rate_of_header_fadein = 250;
+var rate_of_header_fadein = 500;
+var on_header_element = false;
 
 
 function ajax_accept_input(data_values, route) {
@@ -149,17 +150,24 @@ function build_inv_labels_letter_by_letter(id, text_string) {
     }
 }
 
+
+
 function fade_to_fill_header() {
-    
-    if (parseFloat(foreground_header_image.style.opacity) < 1) {
+    if (parseFloat(foreground_header_image.style.opacity) == 0) {
+        on_header_element = true;
+    }
+    if (parseFloat(foreground_header_image.style.opacity) < 1 && on_header_element) {
+        
         foreground_header_image.style.opacity = parseFloat(foreground_header_image.style.opacity) + 1.0/60;
-        setTimeout(fade_to_fill_header, rate_of_header_fadein / 60)
+        setTimeout(fade_to_fill_header, rate_of_header_fadein / 60);
+        
     } 
 
 }
 
 function fade_to_outline_header() {
     foreground_header_image.style.opacity = 0;
+    on_header_element = false;
 }
  
 
