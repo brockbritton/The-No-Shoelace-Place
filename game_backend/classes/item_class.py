@@ -16,11 +16,10 @@ class Inv_Item(Item):
     # desc - description of item 
     # hidden_atr - either None ,or, list of [text description, class of interact]
     # craftable - either None ,or, list of [required second item class, result item class]
-    def __init__(self, name, gen_name, desc, hidden_atr) -> None:
+    def __init__(self, name, gen_name, desc) -> None:
         super().__init__(name, gen_name)
         self.inv_space = 1
-        self.desc = desc
-        self.hidden_atr = hidden_atr  
+        self.desc = desc  
         self.pick_up_bool = True
         self.interact_bool = False
         self.openable_bool = False
@@ -30,17 +29,6 @@ class Inv_Item(Item):
     def __repr__(self) -> str:
         return f'{self.name}(inv item)'
 
-    def select_inv_item(self):
-        actions = {
-            'print_all': [],
-            'build_multiple_choice': None,
-            'ask_y_or_n': False
-        }
-        actions['print_all'].append(f"You have selected the {self.name} from your inventory.")
-        actions['print_all'].append("What would you like to do with it?")
-        actions['build_multiple_choice'] = ["Inspect it", "Drop it"],[["inspect item", self], ["drop item", self]]
-        return (None, None, actions)
-
     def inspect_item(self): 
         actions = {
             'print_all': [],
@@ -48,7 +36,7 @@ class Inv_Item(Item):
             'ask_y_or_n': False
         }
         actions['print_all'].append(self.desc)
-        actions['print_all'].append("Item Description")
+        actions['print_all'].append("Item Description...")
 
         if self.hidden_atr != None:
             pass # Edit for how the items have hidden attributes
@@ -58,29 +46,32 @@ class Inv_Item(Item):
         return (None, None, actions)
 
 class Key(Inv_Item):
-    def __init__(self, name, gen_name , desc, hidden_atr):
-        super().__init__(name, gen_name, desc, hidden_atr)
+    def __init__(self, name, gen_name , desc):
+        super().__init__(name, gen_name, desc)
 
 class Keycard(Inv_Item):
-    def __init__(self, name, gen_name , desc, hidden_atr):
-        super().__init__(name, gen_name, desc, hidden_atr)
+    def __init__(self, name, gen_name , desc):
+        super().__init__(name, gen_name, desc)
+
 
 class Plastic_Utensil(Inv_Item):
-    def __init__(self, name, gen_name , desc, hidden_atr):
-        super().__init__(name, gen_name, desc, hidden_atr)
+    def __init__(self, name, gen_name , desc):
+        super().__init__(name, gen_name, desc)
+
 
 class Flashlight(Inv_Item):
-    def __init__(self, name, gen_name , desc, hidden_atr):
-        super().__init__(name, gen_name, desc, hidden_atr)
+    def __init__(self, name, gen_name , desc):
+        super().__init__(name, gen_name, desc)
         self.full_power = False
 
 class Crowbar(Inv_Item):
-    def __init__(self, name, gen_name , desc, hidden_atr):
-        super().__init__(name, gen_name, desc, hidden_atr)
+    def __init__(self, name, gen_name , desc):
+        super().__init__(name, gen_name, desc)
+
 
 class ID_Bracelet(Inv_Item):
-    def __init__(self, name, gen_name , desc, hidden_atr):
-        super().__init__(name, gen_name, desc, hidden_atr)
+    def __init__(self, name, gen_name , desc):
+        super().__init__(name, gen_name, desc)
         self.properties = ["name", "age", "gender", "diagnosis"]
         self.values = [None, None, None, None]
 
@@ -89,15 +80,9 @@ class ID_Bracelet(Inv_Item):
         pass
 
 class Shotgun_Shells(Inv_Item):
-    def __init__(self, name, gen_name , desc, hidden_atr):
-        super().__init__(name, gen_name, desc, hidden_atr)
+   def __init__(self, name, gen_name , desc):
+        super().__init__(name, gen_name, desc)
         self.inv_space = 2
-
-class Utility_Belt(Inv_Item):
-    def __init__(self, name, gen_name , desc, hidden_atr):
-        super().__init__(name, gen_name, desc, hidden_atr)
-        self.inv_space = 0
-        self.added_cap = 5 #added capacity to inv
 
 ###################
 #### Interacts ####

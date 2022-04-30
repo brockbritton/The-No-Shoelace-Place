@@ -100,14 +100,12 @@ pat_room_202.set_coordinates(0, 0, 0, red_hallway)
 pat_room_204.set_coordinates(0, 0, 0, red_hallway)
 
 
-
-
 #Set interacts in rooms
 common_room.set_storage_units([item.common_room_cabinets, item.common_room_table])
 
 #Set items in storage units
 common_room.storage_containers[0].set_items([item.flashlight])
-item.common_room_cabinets.set_items([item.shotgun_shells])
+item.common_room_cabinets.set_items([])
 item.common_room_table.set_items([item.power_room_key])
 
 

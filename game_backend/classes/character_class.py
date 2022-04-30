@@ -26,10 +26,7 @@ class Character:
         self.full_health = 100 #maximum player health
         self.condition = None
 
-        self.ui_values = {
-            
-        }
-
+        self.xp = 0
 
         self.calendar = calendar_class.Calendar()
         self.abilities = [ability.meditation, ability.assertiveness, ability.pos_attitude, ability.opposite_action, ability.catharsis]

@@ -4,11 +4,11 @@ import game_backend.classes.item_class as item_class
 # Ward Items
 # name, desc, hidden_atr
 
-id_bracelet = item_class.ID_Bracelet("id bracelet", "bracelet", "", None)
+id_bracelet = item_class.ID_Bracelet("id bracelet", "bracelet", "")
 
-basement_key = item_class.Key("basement door key", "key", "", None)
-cabinet_key = item_class.Key("ward keys", "key", "", None)
-ward_doors_key = item_class.Key("ward security key", "key", "", None)
+basement_key = item_class.Key("basement door key", "key", "")
+cabinet_key = item_class.Key("ward keys", "key", "")
+ward_doors_key = item_class.Key("ward security key", "key", "")
 
 # Ward Doors
 admissions_entrance = item_class.Keyable_Door("Admissions Exit Door", "door", None) 
@@ -25,15 +25,11 @@ common_room_cabinets = item_class.Storage_Box("common room cabinet", "cabinet", 
 
 #### Basement Items ####
 
-power_room_key = item_class.Key("power room key", "key", "", None)
-keycard = item_class.Keycard("basement keycard", "key", "", None)
-crowbar = item_class.Crowbar("crowbar", "crowbar", "", None)
+power_room_key = item_class.Key("power room key", "key", "")
+keycard = item_class.Keycard("basement keycard", "key", "")
+crowbar = item_class.Crowbar("crowbar", "crowbar", "")
 
-flashlight = item_class.Flashlight("flashlight", "flashlight", "", None)
-
-
-utility_belt = item_class.Utility_Belt("utility belt", "belt", "", None) 
-shotgun_shells = item_class.Shotgun_Shells("shotgun shells", "ammo", "", None) #currently useless
+flashlight = item_class.Flashlight("flashlight", "flashlight", "")
 
 #### Basement Interacts ####
 
