@@ -7,7 +7,7 @@ A text-based choose your own adventure game in which players have to utilize cre
 
 ## Developer Overview:
 
-This game backend is built entirely with base python. The front end interface is built with Flask using hmtl templates, javascript, and css. The requirements of for this project are flask, flask_session, and num2words.
+This game backend is built entirely with base python. The front end interface is built with Flask using hmtl templates, javascript, and css. The python requirements for this project are flask, flask_session, and num2words.
 
 ### Installation
 Clone the repository by clicking the green Code dropdown button on the top right of the main page of the repository. You have multiple options, but here are the two most common:
