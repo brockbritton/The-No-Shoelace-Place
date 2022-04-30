@@ -16,7 +16,7 @@
     <div id="image_header">
         <img id="background_image" src="{{ url_for('static', filename='img/line-header.png')}}" alt="">
         <img id="foreground_image" src="{{ url_for('static', filename='img/filled-header.png')}}" alt="">
-        <div id="cursor_space" onmouseenter="fade_to_fill_header()" onmouseleave="fade_to_outline_header()"></div>
+        <div id="cursor_space" onmouseenter="fade_to_fill_header()" onmouseleave="switch_to_outline_header()"></div>
     </div>
     <div id="game_gui">
         <div id="text_and_entry_widgets">

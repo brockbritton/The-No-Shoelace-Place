@@ -33,7 +33,11 @@ function ajax_accept_input(data_values, route) {
             /* toggle dynamic input to on if the basic text entry has been enabled */
         },
         error: function(error){
-            print_all(["Error: " + error.message]);
+            if (route == "/game/loading-game") {
+                ajax_accept_input(data_values, route)
+            } else {
+                printtk("error: " + error);
+            }
         }
     }); 
 }
@@ -155,17 +159,15 @@ function build_inv_labels_letter_by_letter(id, text_string) {
 function fade_to_fill_header() {
     if (parseFloat(foreground_header_image.style.opacity) == 0) {
         on_header_element = true;
+
     }
     if (parseFloat(foreground_header_image.style.opacity) < 1 && on_header_element) {
-        
         foreground_header_image.style.opacity = parseFloat(foreground_header_image.style.opacity) + 1.0/60;
         setTimeout(fade_to_fill_header, rate_of_header_fadein / 60);
-        
     } 
-
 }
 
-function fade_to_outline_header() {
+function switch_to_outline_header() {
     foreground_header_image.style.opacity = 0;
     on_header_element = false;
 }

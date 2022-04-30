@@ -55,7 +55,6 @@ html {
     position: absolute;
     top: 55%;
     bottom: 20%;
-    /*z-index: 99;*/
 }
 
 /* ######### */
@@ -107,10 +106,12 @@ html {
 
 
 #image_header{
+    position: relative;
     margin-top: -50px;
     height: 250px;
     width: auto;
     background-color: none;
+    z-index: 0;
     
 }
 
@@ -147,19 +148,22 @@ html {
     overflow: hidden;
     margin-top: -10px;
     opacity: 0;
+    z-index: 2;
 }
 
 
 #game_gui {
+    position: relative;
     width: 88%;
     display: flex;
     height: 550px; /* 550px? */
-    background-color: black;
+    background-color: none !important;
     padding: 0px 100px 0px 100px;
+    z-index: 2;
 }
 
 #game_gui > * {
-    background-color: black;
+    background-color: none;
     color: white;
     font-family: 'Courier New', monospace !important;
     font-size: 1em;
@@ -208,12 +212,10 @@ html {
     width: 88%;
     display: flex;
     height: 550px; /* 550px? */
-    background-color: black;
     padding: 0px 100px 0px 100px;
 }
 
 #game_gui > * {
-    background-color: black;
     color: white;
     font-family: 'Courier New', monospace !important;
     font-size: 1em;
@@ -225,6 +227,8 @@ html {
     height: 700px;
     border: 10px solid, white;
     flex: 5;
+    overflow: hidden;
+    background-color: none !important;
 }
 
 #game_text_display {
@@ -235,15 +239,19 @@ html {
     box-sizing: border-box;
     padding: 10px;
     font-size: 1.5em;
+    z-index: 3;
+    background-color: none !important;
 }
 
 .command_input_text {
     font-size: 1em;
     font-family: 'Courier New', monospace !important; 
+    background-color: none !important;
 }
 
 #entry_widgets {
-    height: 30%;
+    height: 10%;
+    overflow: hidden;
 }
 
 #text_entry_div {
@@ -289,7 +297,7 @@ html {
 }
 
 .panel_divs {
-    background-color: black;
+    background-color: none !important;
     color: white;
     font-family: Georgia, serif;
     font-size: 1.25em;
@@ -299,11 +307,13 @@ html {
 }
 
 #ps_left {
+    background-color: none !important;
     float: left;
     width: 35%;
 }
 
 #ps_right {
+    background-color: none !important;
     float: right;
     width: 60%;
     text-align: right;
@@ -345,7 +355,7 @@ html {
 
 
 .panel_titles {
-    background-color: black;
+    background-color: none !important;
     color: white;
     font-family: Georgia, serif;
     font-size: 1.25em;
@@ -369,7 +379,7 @@ html {
 
 .right_panel_text {
     text-align: left;
-    /* font-weight: bold; */
+    background-color: none !important;
     font-size: 1.25em;
     margin-top: 0em;
     margin-bottom: 0em;
@@ -418,7 +428,7 @@ html {
     padding: 0em;
     margin-top: 0em;
     margin-bottom: .5em;
-    background-color: black;
+    background-color: none !important;
     height: 1.25em;
     width: 95%;
     

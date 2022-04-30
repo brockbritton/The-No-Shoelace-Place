@@ -19,7 +19,7 @@ class Game:
         self.ui_values = {
             "xp_value": (0, "add"),
             "day_value": (1, "add"),
-            "turns_value": (15, "sub"),
+            "turns_value": (15, "add"),
             "room_value": ("Unknown", "set"),
             "health_value": (65, "add"),
             "stats_value": ("Unknown", "set"),
