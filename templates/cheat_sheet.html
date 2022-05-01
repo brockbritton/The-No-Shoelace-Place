@@ -1,0 +1,41 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css')}}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png')}}">
+    <title>Commands Cheat Sheet</title>
+</head>
+<body>
+    <div id="center_welcome">
+        <img src="{{ url_for('static', filename='img/filled-header.png')}}" alt="image_header" id="cheat_sheet_header">
+        <div id="cheat_sheet_home">
+            <button class="large_bordered_button" 
+                type="button" 
+                onclick="location.href='/welcome'">
+                Go Home
+            </button>
+        </div>
+    </div>
+    
+    </div id="cheat_sheet_pars">
+        <h3 class="category_header"> Movement and Exploration </h3>
+
+        <h3 class="category_header"> Interaction with the Environment </h3>
+            <h5 class="subcategory_header"> Doors </h5>
+            <h5 class="subcategory_header"> Storage Objects </h5>
+            <h5 class="subcategory_header"> Inventory Items </h5>
+
+        <h3 class="category_header"> Interaction with NPC's </h3>
+
+        <h3 class="category_header"> Puzzles </h3>
+
+
+    <div>
+
+</body>
+</html>

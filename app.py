@@ -47,7 +47,7 @@ def credits():
     return render_template("credits.html")
 
 @app.route("/game/", methods=('GET', 'POST'))
-def tnslp():
+def play_game():
     session['game'].start_game()
     return render_template("game.html")
 
@@ -62,7 +62,6 @@ def accept_input_data():
     return actions_dict
     
 
-
 @app.route("/game/loading-game", methods=['POST'])
 def loading_game():
     
@@ -73,6 +72,11 @@ def loading_game():
         return_dict = session['game'].load_game()
 
     return return_dict
+
+@app.route("/game/cheat-sheet")
+def cheat_sheet():
+    return render_template("cheat_sheet.html")
+
 
 @app.route("/api/data")
 def get_data():
