@@ -389,11 +389,12 @@ html {
 
 .ps_values {
     text-align: right;
+    background-color: none !important;
     font-family: 'Courier New', monospace !important;
     font-size: 1.25em;
     margin-top: 0em;
     margin-bottom: 0em;
-    width: fit-content;
+    width: auto;
     display: inline-block;
 }
 

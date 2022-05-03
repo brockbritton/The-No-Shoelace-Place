@@ -24,9 +24,15 @@ class Character:
 
         self.health = 65 #starting / current player health
         self.full_health = 100 #maximum player health
-        self.condition = None
+        self.diagnosis = None
 
         self.xp = 0
+        self.xp_dict = {
+            'new_room': 10,
+            'new_item': 5,
+            'easter_egg': 100,
+            'new_door_unlocked': 50,
+        }
 
         self.calendar = calendar_class.Calendar()
         self.abilities = [ability.meditation, ability.assertiveness, ability.pos_attitude, ability.opposite_action, ability.catharsis]
@@ -44,6 +50,17 @@ class Character:
             for i in range(6 - len(strings)):
                 strings.append("")
         return strings
+
+    def earn_xp(self, amount):
+        self.xp += amount
+        return "xp_value"
+
+    def gain_lose_health(self, hp, gain_lose):
+        if gain_lose == "gain":
+            self.health += hp
+        elif gain_lose == "lose":
+            self.health -= hp
+        return "health_value"
 
     def add_inventory(self, item):
         self.inv.append(item)
@@ -102,17 +119,15 @@ class Character:
     def enter_room(self): #####
         actions = {
             'print_all': [],
+            'update_ui_values': []
         }
         actions['print_all'].append(self.loc.print_room_name())
-
-        # Setting gui current room
-        #gui_char.settk(gui_char.ps_curr_room_value, self.loc.name)
+        actions['update_ui_values'].append("room_value")
 
         if not self.loc.visited:
             # Updating XP for gui 
-            #actions['print_all'].append(f"New Room Discovered! + {gui_char.xp_dict['new_room']}")
-            actions['print_all'].append(f"New Room Discovered! + 10xp")
-            #gui_char.settk(gui_char.xp_value, gui_char.gettk(gui_char.xp_value, 0) + gui_char.xp_dict['new_room'])
+            actions['print_all'].append(f"New Room Discovered! + {self.xp_dict['new_room']}xp")
+            actions['update_ui_values'].append(self.earn_xp(10))
             self.loc.visited = True
 
         if self.loc.lights_on:
@@ -245,7 +260,8 @@ class Character:
         actions = {
             'print_all': [],
             'ask_y_or_n': False,
-            'build_multiple_choice': []
+            'build_multiple_choice': [],
+            'update_ui_values': []
         }
         invalid_direction = ["You cannot go that way", "There is a wall in that direction", "It is not possible to go that way"]  
         
@@ -541,7 +557,8 @@ class Character:
         #list: next_room, direction choice, door
         actions = {
             'print_all': [],
-            'ask_y_or_n': False
+            'ask_y_or_n': False,
+            'update_ui_values': []
         }
         if choice == 'y':
             list[2].locked = False
@@ -560,7 +577,8 @@ class Character:
         #list: next_room, direction choice, door, player
         actions = {
             'print_all': [],
-            'ask_y_or_n': False
+            'ask_y_or_n': False,
+            'update_ui_values': []
         }
         if choice == 'y':
             list[2].locked = False
@@ -580,7 +598,8 @@ class Character:
         #list: next_room, direction choice, door
         actions = {
             'print_all': [],
-            'ask_y_or_n': False
+            'ask_y_or_n': False,
+            'update_ui_values': []
         }
         if choice == '1':
             actions['print_all'].append("Ready for Code: ")
@@ -605,7 +624,8 @@ class Character:
         print(self.loc.doors)
         actions = {
             'print_all': [],
-            'ask_y_or_n': False
+            'ask_y_or_n': False,
+            'update_ui_values': []
         }
         if not isinstance(self.loc.doors[help_list[1]], list):
             if self.loc.doors[help_list[1]].open:

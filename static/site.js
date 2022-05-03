@@ -24,6 +24,10 @@ function ajax_accept_input(data_values, route) {
                 update_inv_visual(response['update_inv_visual']);
             }
 
+            if (('update_ui_values' in response) && (response['update_ui_values'].length != 0)) {
+                update_ui_values(response['update_ui_values']);
+            }
+
             if (('build_multiple_choice' in response) && (response['build_multiple_choice'].length != 0)) {
                 build_multiple_choice(response['build_multiple_choice']);
             } else if (('rebuild_text_entry' in response) && (response['rebuild_text_entry'])) {
@@ -154,6 +158,13 @@ function build_inv_labels_letter_by_letter(id, text_string) {
     }
 }
 
+function update_ui_values(list_pairs) {
+    for (let id_value_pair of list_pairs) {
+        if (document.getElementById(id_value_pair[0]).innerHTML != id_value_pair[1]) {
+            document.getElementById(id_value_pair[0]).innerHTML = id_value_pair[1];
+        } 
+    }
+}
 
 
 function fade_to_fill_header() {

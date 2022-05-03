@@ -9,9 +9,11 @@ import game_backend.objects.items as item  # # comes before item_class import
 class Room:
     _room_registry = []
 
-    def __init__(self, name, description) -> None:
-        self.description = description
+    def __init__(self, name, display_name, description) -> None:
         self.name = name
+        self.display_name = display_name
+        self.description = description
+        
         self.storage_containers = [item_class.Storage_Spot("ground", "ground")]
         self.storage_dict = {}
         self.interacts = []
@@ -38,7 +40,7 @@ class Room:
         elif string == "w":
             return self.west
 
-    def set_storage_units(self, list):
+    def add_storage_units(self, list):
         for i in list:
             self.storage_containers.append(i)
 
@@ -369,8 +371,8 @@ class Room:
         return full_sentence
 
 class Ward_Room(Room):
-    def __init__(self, name, description, door_label) -> None:
-        super().__init__(name, description)
+    def __init__(self, name, display_name, description, door_label) -> None:
+        super().__init__(name, display_name, description)
         self.label = door_label
         self.lights_on = True
     
@@ -379,8 +381,8 @@ class Ward_Room(Room):
 
 
 class Basement_Room(Room):
-    def __init__(self, name, description) -> None:
-        super().__init__(name, description)
+    def __init__(self, name, display_name, description) -> None:
+        super().__init__(name, display_name, description)
         self.lights_on = False
     
     def __repr__(self) -> str:
@@ -388,7 +390,7 @@ class Basement_Room(Room):
 
 class Maze_Room(Room):
     def __init__(self, name, description) -> None:
-        super().__init__(name, description)
+        super().__init__(name, "unclear", description)
         self.lights_on = False
 
     def __repr__(self) -> str:

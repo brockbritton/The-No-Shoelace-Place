@@ -14,8 +14,7 @@ class Inv_Item(Item):
 
     # name - visible name of item  !!!! must be 17 characters or less !!!!
     # desc - description of item 
-    # hidden_atr - either None ,or, list of [text description, class of interact]
-    # craftable - either None ,or, list of [required second item class, result item class]
+
     def __init__(self, name, gen_name, desc) -> None:
         super().__init__(name, gen_name)
         self.inv_space = 1
@@ -35,13 +34,10 @@ class Inv_Item(Item):
             'build_multiple_choice': [],
             'ask_y_or_n': False
         }
+        actions['print_all'].append("Item Description:")
         actions['print_all'].append(self.desc)
-        actions['print_all'].append("Item Description...")
+        
 
-        if self.hidden_atr != None:
-            pass # Edit for how the items have hidden attributes
-        else:
-            actions['print_all'].append("There does not seem to be anything special about this item.")
 
         return (None, None, actions)
 
@@ -79,10 +75,6 @@ class ID_Bracelet(Inv_Item):
         # How to visually print it all
         pass
 
-class Shotgun_Shells(Inv_Item):
-   def __init__(self, name, gen_name , desc):
-        super().__init__(name, gen_name, desc)
-        self.inv_space = 2
 
 ###################
 #### Interacts ####
@@ -96,7 +88,6 @@ class Interact(Item):
         self.openable_bool = False
         self.lockable_bool = False
         self.breakable = False
-        self.hidden_atr = None
 
     def __repr__(self) -> str:
         return f'{self.name}(interact item)'

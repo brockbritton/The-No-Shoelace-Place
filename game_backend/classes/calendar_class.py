@@ -1,6 +1,5 @@
 
 import random
-
 import game_backend.objects.events as event
 
 
@@ -28,18 +27,17 @@ class Calendar:
             'print_all': [],
             'build_multiple_choice': [],
             'ask_y_or_n': False,
-            'update_ui_values': {}
+            'update_ui_values': []
         }
         self.days_list[-1].turns_left -= num
         if self.days_list[-1].turns_left == 0:
+
             actions['print_all'].append("The old day is ending...")
             self.next_day()
+            actions['update_ui_values'].append("day_value")
             actions['print_all'].append("The new day is beginning...")
 
-        else:
-            #gui_cal.settk(gui_cal.turns_value, gui_cal.gettk(gui_cal.turns_value, 0) - num)
-            pass
-
+        actions['update_ui_values'].append("turns_value")
         return actions
 
 

@@ -16,25 +16,31 @@ class Game:
         self.parser = parser_class.Parser()
         room.basement_set_door_dictionaries()
         room.ward_set_door_dictionaries()
-        self.ui_values = {
-            "xp_value": (0, "add"),
-            "day_value": (1, "add"),
-            "turns_value": (15, "add"),
-            "room_value": ("Unknown", "set"),
-            "health_value": (65, "add"),
-            "stats_value": ("Unknown", "set"),
-            "meditation_lvl": (0, "add"),
-            "assertiveness_lvl": (0, "add"),
-            "pos_attitude_lvl": (0, "add"),
-            "opp_action_lvl": (0, "add"),
-            "catharsis_lvl": (0, "add"),
+        
+
+    def get_ui_values(self, player, id):
+        ui_values = {
+            # id for html element : (current value, method of updating)
+            "xp_value": player.xp,
+            "day_value": player.calendar.days_list[-1].day_number,
+            "turns_value": player.calendar.days_list[-1].turns_left,
+            "room_value": player.loc.display_name,
+            "health_value": player.health,
+            "diagnosis_value": player.diagnosis,
+            "meditation_lvl": player.abilities[0].lvl,
+            "assertiveness_lvl": player.abilities[1].lvl,
+            "pos_attitude_lvl": player.abilities[2].lvl,
+            "opp_action_lvl": player.abilities[3].lvl,
+            "catharsis_lvl":  player.abilities[4].lvl,
         }
+        return ui_values[id]
+
 
     def start_game(self):
         actions = {
             'print_all': [],
             'update_inv_visual': [],
-            'update_ui_values': {}
+            'update_ui_values': [],
         }
 
         actions['print_all'].append("----Intro Paragraph----") 
@@ -57,14 +63,26 @@ class Game:
         if len(self.save_prints) == 0:
             self.save_prints.extend(actions['print_all'])
 
+        if len(actions['update_ui_values']) > 0:
+            values_to_update = []
+            for id in actions['update_ui_values']:
+                values_to_update.append([id, str(self.get_ui_values(self.player1, id))])
+            actions['update_ui_values'] = values_to_update
+
         return actions
 
     def load_game(self):
         actions = {
             'load_prints': self.save_prints,
             'update_inv_visual': self.player1.build_inv_str_list(),
-            'update_ui_values': {}
+            'update_ui_values': ["xp_value", "day_value", "turns_value", "room_value", "health_value", "diagnosis_value", "meditation_lvl", "assertiveness_lvl", "pos_attitude_lvl", "opp_action_lvl", "catharsis_lvl"],
         }
+
+        if len(actions['update_ui_values']) > 0:
+            values_to_update = []
+            for id in actions['update_ui_values']:
+                values_to_update.append([id, str(self.get_ui_values(self.player1, id))])
+            actions['update_ui_values'] = values_to_update
 
         return actions
 
@@ -76,7 +94,8 @@ class Game:
             'build_multiple_choice': [],
             'ask_y_or_n': False,
             'rebuild_text_entry': False,
-            'update_inv_visual': []
+            'update_inv_visual': [],
+            'update_ui_values': ["room_value"] ###keep empty 
         }
 
         self.save_prints.append("> " + frontend_input) ####doesnt work for multiple choice
@@ -166,25 +185,31 @@ class Game:
         elif self.master_dest == "execute_event":
             self.master_dest, self.master_helper = self.master_helper.execute_event(input_value) ###???
             if isinstance(self.master_helper, int):
-                for i in range(0, self.master_helper):
-                    # Updates the gui visual to show the decrease in turns
-                    self.player1.calendar.use_turns(1)
+                actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(self.master_helper))
 
         else:
-            actions['print_all'].append("We have an issue...")
+            print("We have a destination issue...")
 
         if self.master_helper == "dead":
             #game over screen
             pass
 
-        """
-        if master_return == None and not isinstance(master_helper, int):
-            player1.calendar.use_turns(1)
-            if player1.calendar.days_list[-1].turns_left == (player1.calendar.max_turns_daily // 3) or player1.calendar.days_list[-1].turns_left == ((player1.calendar.max_turns_daily * 2) // 3): 
-                master_return, master_helper = player1.calendar.calculate_next_activity().ask_event()
+        # Using turns and potential to ask events
+        if self.master_dest == None:
+            actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(1))
+            if (self.player1.calendar.days_list[-1].turns_left == (self.player1.calendar.max_turns_daily // 3)) or (self.player1.calendar.days_list[-1].turns_left == ((self.player1.calendar.max_turns_daily * 2) // 3)): 
+                pass
+                #return_tuple = self.player1.calendar.calculate_next_activity().ask_event()
+                #self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
             else:
-                master_return, master_helper = None, None
-        """
+                self.master_dest, self.master_helper = None, None
+        
+        
+        if len(actions['update_ui_values']) > 0:
+            values_to_update = []
+            for id in actions['update_ui_values']:
+                values_to_update.append([id, str(self.get_ui_values(self.player1, id))])
+            actions['update_ui_values'] = values_to_update
 
         
         if len(actions['build_multiple_choice']) != 0:
@@ -199,9 +224,10 @@ class Game:
         else:
             actions['rebuild_text_entry'] = True
 
-        if actions['print_all'] == []:
-            actions['print_all'] = ["Excuse me?"]
+        if len(actions['print_all']) == 0:
+            actions['print_all'] = ["I don't understand."]
 
+        #Save text prints from this term so loading is possible
         self.save_prints.extend(actions['print_all'])
 
         print()

@@ -170,7 +170,8 @@ def organize_parsed_data(parsed_tuple, player):
         'print_all': [],
         'ask_y_or_n': False,
         'build_multiple_choice': [],
-        'update_inv_visual': []
+        'update_inv_visual': [],
+        'update_ui_values': []
     }
     #   actions_list (verbs), 
     action = parsed_tuple[0]
