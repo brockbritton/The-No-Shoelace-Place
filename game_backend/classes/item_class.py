@@ -9,6 +9,15 @@ class Item:
         self.gen_name = gen_name
         self.inspect_bool = True
 
+    def inspect_item(self): 
+        actions = {
+            'print_all': [],
+        }
+
+        actions['print_all'].append(f"There does not appear to be anything special about this {self.gen_name}.")
+        
+        return actions
+
     
 class Inv_Item(Item):
 
@@ -28,18 +37,6 @@ class Inv_Item(Item):
     def __repr__(self) -> str:
         return f'{self.name}(inv item)'
 
-    def inspect_item(self): 
-        actions = {
-            'print_all': [],
-            'build_multiple_choice': [],
-            'ask_y_or_n': False
-        }
-        actions['print_all'].append("Item Description:")
-        actions['print_all'].append(self.desc)
-        
-
-
-        return (None, None, actions)
 
 class Key(Inv_Item):
     def __init__(self, name, gen_name , desc):
@@ -77,7 +74,7 @@ class ID_Bracelet(Inv_Item):
 
 
 ###################
-#### Interacts ####
+#### Interacts #### 
 ###################
 
 class Interact(Item):
