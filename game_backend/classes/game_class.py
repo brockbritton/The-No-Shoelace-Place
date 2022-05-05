@@ -36,7 +36,6 @@ class Game:
         }
         return ui_values[id]
 
-
     def start_game(self):
         actions = {
             'print_all': [],
@@ -97,136 +96,106 @@ class Game:
             'update_ui_values': ["room_value"] ###keep empty 
         }
 
+        # Save the player input as part as the saved prints
         self.save_prints.append("> " + frontend_input) ####doesnt work for multiple choice
 
+        # waiting vars = self.wait_for_frontend_input['build_multiple_choice']
+        # If there is a list of variables in waiting vars and the input is numeric, 
+        # convert to integer so that the correct variable from waiting vars is accessed
         if frontend_input.isnumeric() and self.wait_for_frontend_input['build_multiple_choice'] != None:
-            print("convert to int")
             input_value = self.wait_for_frontend_input['build_multiple_choice'][int(frontend_input)]
             self.wait_for_frontend_input['build_multiple_choice'] = None
+
+            # Match the destination to the input value
+            # and execute the desired action
+            match self.master_dest:
+                case "drop_gen_item": return_tuple = self.player1.drop_gen_item(input_value, self.master_helper) 
+                case "add_inventory_choice": return_tuple = self.player1.add_inventory_choice(input_value, self.master_helper) 
+                case "full_inv_drop_items": return_tuple = self.player1.full_inv_drop_items(input_value, self.master_helper) 
+                case "drop_x_for_y": return_tuple = self.player1.drop_x_for_y(input_value, self.master_helper) 
+                case "inspect_pb": return_tuple = self.player1.inspect_pb(input_value) 
+                case "interact_pb": return_tuple = self.player1.interact_pb(input_value)
+                case "deal_take_damage": return_tuple = self.player1.deal_take_damage(input_value, self.master_helper) 
+                case "choose_fight_action": return_tuple = self.player1.choose_fight_action(input_value, self.master_helper) 
+                case "open_door_key": return_tuple = self.player1.open_door_key(input_value, self.master_helper) 
+                case "open_door_crowbar": return_tuple = self.player1.open_door_crowbar(input_value, self.master_helper) 
+                case "choose_room": return_tuple = self.player1.choose_room(input_value, self.master_helper)
+                case "open_electronic_door": return_tuple = self.player1.open_electronic_door(input_value, self.master_helper)
+                case "drop_item": return_tuple = self.player1.drop_item_choice(input_value)
+                case "enter_code": return_tuple = self.master_helper[2].enter_code(input_value, self.master_helper)
+                case "execute_event": return_tuple = self.master_helper.execute_event(input_value)
+
+
+        # Otherwise, just use the input as it was given
         else:
-            print("stay as str")
             input_value = frontend_input.strip()
 
-        ### parsing begins ###
-        if self.master_dest == None:
+            # Begin parsing the input
             parsed_values, print_list = self.parser.parse_input(self.player1, input_value)
             actions['print_all'].extend(print_list)
-            parsed = False
+
+            # If a boolean were returned, an errorneous input was given
+            # Otherwise, check for existence of parsed values
             if not isinstance(parsed_values, bool):
                 for value in parsed_values:
                     if value != None:
-                        parsed = True
-                        #print("parser found data")
                         return_tuple = self.organize_parsed_data(parsed_values, self.player1)
                         self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
                         break
-            else:
-                # error in user input rules, skip parsing
-                parsed = True 
-            
+        
+        # Update the game destination and helper for the next input
+        # Also update the actions dict with the new value
+        self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
-        elif self.master_dest == "drop_gen_item":
-            return_tuple = self.player1.drop_gen_item(input_value, self.master_helper) 
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "add_inventory_choice":
-            return_tuple = self.player1.add_inventory_choice(input_value, self.master_helper) 
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "full_inv_drop_items":
-            return_tuple = self.player1.full_inv_drop_items(input_value, self.master_helper) 
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "drop_x_for_y":
-            return_tuple = self.player1.drop_x_for_y(input_value, self.master_helper) 
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "inspect_pb":
-            return_tuple = self.player1.inspect_pb(input_value) 
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "interact_pb":
-            return_tuple = self.player1.interact_pb(input_value)
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions) 
-
-        elif self.master_dest == "deal_take_damage":
-            return_tuple = self.player1.deal_take_damage(input_value, self.master_helper) 
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "choose_fight_action":
-            return_tuple = self.player1.choose_fight_action(input_value, self.master_helper) 
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "open_door_key":
-            return_tuple = self.player1.open_door_key(input_value, self.master_helper) 
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "open_door_crowbar": #x2
-            return_tuple = self.player1.open_door_crowbar(input_value, self.master_helper) 
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "choose_room":
-            return_tuple = self.player1.choose_room(input_value, self.master_helper)
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "open_electronic_door":
-            return_tuple = self.player1.open_electronic_door(input_value, self.master_helper)
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "enter_code":
-            self.master_dest, self.master_helper = self.master_helper[2].enter_code(input_value, self.master_helper)
-            ###???
-
-        elif self.master_dest == "drop_item":
-            return_tuple = self.player1.drop_item_choice(input_value)
-            self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-
-        elif self.master_dest == "execute_event":
-            self.master_dest, self.master_helper = self.master_helper.execute_event(input_value) ###???
-            if isinstance(self.master_helper, int):
-                actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(self.master_helper))
-
-        else:
-            print("We have a destination issue...")
-
+        
         if self.master_helper == "dead":
-            #game over screen
+            #option to continue or quit to menu and start over
+            #continue means new day and starting in room
             pass
 
-        # Using turns and potential to ask events
+        # If there is no destination for the next input,
+        # then spend one turn of this day
         if self.master_dest == None:
             actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(1))
+            # If the remaining turns are at 1/3 or 2/3 of the max, offer an event
             if (self.player1.calendar.days_list[-1].turns_left == (self.player1.calendar.max_turns_daily // 3)) or (self.player1.calendar.days_list[-1].turns_left == ((self.player1.calendar.max_turns_daily * 2) // 3)): 
-                pass
                 #return_tuple = self.player1.calendar.calculate_next_activity().ask_event()
                 #self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-            else:
-                self.master_dest, self.master_helper = None, None
+                ...
         
-        
+        # If there are frontend values to update, 
+        # access the data found the gui_ui_values dict 
+        # and add it to the actions dict being sent to the frontend
         if len(actions['update_ui_values']) > 0:
             values_to_update = []
             for id in actions['update_ui_values']:
                 values_to_update.append([id, str(self.get_ui_values(self.player1, id))])
             actions['update_ui_values'] = values_to_update
 
-        
+        # If there are values to build a multiple choice option,
+        # take the underlying values and place the in the waiting for the next frontend input
+        # and take the display vales and place them in the actions dict
         if len(actions['build_multiple_choice']) != 0:
             self.wait_for_frontend_input['build_multiple_choice'] = actions['build_multiple_choice'][1] #values
             actions['build_multiple_choice'] = actions['build_multiple_choice'][0] #displays
         
+        # ask_y_or_no is just a simplistic way to note 
+        # to build a multiple choice
         elif actions['ask_y_or_n']:
             self.wait_for_frontend_input['build_multiple_choice'] = ["y", "n"] #values
             actions['build_multiple_choice'] = ["Yes", "No"] #displays
             actions.pop('ask_y_or_n')
         
+        # Otherwise rebuild the text entry (no multiple choice buttons)
         else:
             actions['rebuild_text_entry'] = True
 
+        # If the original user input did not trigger any aspects of the game,
+        # then add a message to show players their input was not successful
         if len(actions['print_all']) == 0:
             actions['print_all'] = ["I don't understand."]
 
-        #Save text prints from this term so loading is possible
+        # Save all text prints from this turn so re-loading is possible
         self.save_prints.extend(actions['print_all'])
 
         print()
@@ -235,8 +204,6 @@ class Game:
         print("master actions", actions)
 
         return actions
-
-
 
 
     def organize_parsed_data(self, parsed_tuple, player): 

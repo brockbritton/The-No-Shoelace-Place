@@ -12,11 +12,14 @@ class Event:
             'ask_y_or_n': False
         }
         if y_or_n == "y":
-            self.describe_event()
-            return None, self.turns
+            actions['print_all'].extend(self.describe_event())
+            return (None, self.turns, actions)
         else:
             actions['print_all'].append("You did not attend this event")
             return (None, None, actions)
+
+    def describe_event(self):
+        return ["This is a test description of an event"]
         
         
 class Coping_Skill_Group(Event):
