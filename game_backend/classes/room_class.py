@@ -90,77 +90,42 @@ class Room:
     def print_directions(self, player, none_or_one): ########
         #left, forward, right, back
         
-        nesw_rooms = [self.north, self.east, self.south, self.west] 
-        nesw_letters = ["n", "e", "s", "w"] 
-        
         if player.last_loc != None:
-            lfrb_rooms, lfrb_cardinality = self._find_positional_rooms(player, nesw_rooms, nesw_letters)
+            lfrb_rooms, lfrb_cardinality = self._find_positional_rooms(player)
         else:
             lfrb_rooms = [self.east, self.south, self.west, self.north] 
             lfrb_cardinality = ["e", "s", "w", "n"]
 
-        print("Rooms:", lfrb_rooms)
-        print("Cardinality: ", lfrb_cardinality)
+        if none_or_one == None:
+            all_sentence_parts = []
+            blrf_sentence_start = ["To your left", "In front of you", "To your right", "Behind you"]
+            for i in range(0, len(lfrb_rooms)):
+                sentence_parts = self._get_sentence_parts(i, lfrb_rooms[i], lfrb_cardinality[i], blrf_sentence_start[i])
+                all_sentence_parts.extend(sentence_parts)
+            
+            sentences = []
+            for i in range(0, len(all_sentence_parts)):
+                sentence = self._build_complicated_adjacent_rooms_sentence(all_sentence_parts[i], blrf_sentence_start[i])
+                sentences.append(sentence)
+
+            full_paragraph = " ".join(sentences)
+            return full_paragraph
         
-        sentences = []
-        blrf_sentence_start = ["To your left", "In front of you", "To your right", "Behind you"]
-        for i in range(0, len(lfrb_rooms)):
+        else: #not quite working
+            i = ["left", "forward", "right", "backward"].index(none_or_one)
+            all_sentence_parts = []
+            blrf_sentence_start = ["To your left", "In front of you", "To your right", "Behind you"]
+            
+            sentence_parts = self._get_sentence_parts(i, lfrb_rooms[i], lfrb_cardinality[i], blrf_sentence_start[i])
+            all_sentence_parts.extend(sentence_parts)
+            
+            print(all_sentence_parts)
+            sentences = []
+            sentence = self._build_complicated_adjacent_rooms_sentence(all_sentence_parts, blrf_sentence_start[i])
+            sentences.append(sentence)
 
-            if lfrb_rooms[i] != 0: 
-                if isinstance(lfrb_rooms[i], list): 
-                    room_states = []
-                    for x in (range(0, len(lfrb_rooms[i]))):
-                        print("i, x:", i, x)
-                        if nesw_letters[i] in self.doors: #####?
-                            if self.doors[lfrb_cardinality[i]] != None and self.doors[lfrb_cardinality[i]][x] != None:
-                                
-                                if not self.doors[lfrb_cardinality[i]][x].locked:
-                                    if lfrb_rooms[i][x].visited:
-                                        room_states.append(("unlocked door visited", lfrb_rooms[i][x]))
-                                    else:
-                                        room_states.append("unlocked door unknown")
-                                else: 
-                                    #needs to be here
-                                    room_states.append("locked door") 
-
-                            else:
-                                if lfrb_rooms[i][x].visited:
-                                    room_states.append(("visited room", lfrb_rooms[i][x]))
-                                else:
-                                    room_states.append("unknown room")
-
-                        # Repeated due to if a door doesnt exist in this direction
-                        else: 
-                            if lfrb_rooms[i][x].visited:
-                                room_states.append(("visited room", lfrb_rooms[i][x]))
-                            else:
-                                room_states.append("unknown room")
-                    
-                    sentences.append(room_states)
-
-                # If there is only one room in a certain direction
-                else: 
-                    if self.has_doors and self.doors[lfrb_cardinality[i]] != None: #
-
-                        if not self.doors[lfrb_cardinality[i]].locked:
-                            if lfrb_rooms[i].visited:
-                                sentences.append(blrf_sentence_start[i] + " there is an unlocked door that leads to the " + lfrb_rooms[i].name)
-                            else:
-                                sentences.append(blrf_sentence_start[i] + " there is an unlocked door that leads to an unknown room.")
-                        else: 
-                            sentences.append(blrf_sentence_start[i] + " there is a locked door")
-                    else: 
-                        if lfrb_rooms[i].visited:
-                            sentences.append(blrf_sentence_start[i] + " is " + lfrb_rooms[i].name)
-                        else:
-                            sentences.append(blrf_sentence_start[i] +  " is an unknown room")
-            else:
-                sentences.append(blrf_sentence_start[i] + " there is a wall")
-        
-        paragraph_parts = self._build_complicated_adjacent_rooms_sentence(sentences, blrf_sentence_start)
-       
-        full_paragraph = " ".join(paragraph_parts)
-        return full_paragraph
+            full_paragraph = " ".join(sentences)
+            return full_paragraph
        
     def _find_back_index(self, player, blfr_rooms):
         for r in blfr_rooms:
@@ -172,8 +137,11 @@ class Room:
             elif r == player.last_loc:
                 return blfr_rooms.index(r)
 
-    def _find_positional_rooms(self, player, nesw_rooms, nesw_letters):
+    def _find_positional_rooms(self, player):
         # identify in what positional directions which real rooms are
+        nesw_rooms = [self.north, self.east, self.south, self.west] 
+        nesw_letters = ["n", "e", "s", "w"] 
+
         lfrb_rooms = []
         lfrb_cardinality = []
         last_room_index = self._find_back_index(player, nesw_rooms)
@@ -192,100 +160,153 @@ class Room:
 
         return lfrb_rooms, lfrb_cardinality
 
-
-    def _build_complicated_adjacent_rooms_sentence(self, room_states, sentence_starts):
-        all_parts = []
-        for i in range(0, len(room_states)):
-            if isinstance(room_states[i], list):
-                state_freq = {}
-                state_rooms = {}
-                for state in room_states[i]:
-                    if isinstance(state, tuple):
-                        if state[0] not in state_freq.keys():
-                            state_freq[state[0]] = 1
-                            state_rooms[state[0]] = [state[1]]
-                        else:
-                            state_freq[state[0]] += 1
-                            state_rooms[state[0]].append(state[1])
-                    else:
-                        if state not in state_freq.keys():
-                            state_freq[state] = 1
-                        else:
-                            state_freq[state] += 1
-
-                paragraph_guide = ["visited room", "unlocked door visited", "unlocked door unknown", "locked door", "unknown room"]
-                paragraph_parts = []
-                paragraph_parts.append(sentence_starts[i])
-                for i in range(0, len(paragraph_guide)):
-                    if paragraph_guide[i] in state_freq.keys():
-                        if i == 0:
-                            paragraph_parts.append(f" is {state_rooms[paragraph_guide[i]].pop(0).name}")
-                        elif i == 1:
-                            paragraph_parts.append(f" is an unlocked door leading to {state_rooms[paragraph_guide[i]].pop(0).name}")
-                        else:
-                            # build a sentence using the keys and values from above
-                            value_text = n2w.num2words(state_freq[paragraph_guide[i]])
-                            vowels = ["a", "e", "i", "o", "u"]
-                            if value_text == "one":
-                                if paragraph_guide[i][0] in vowels:
-                                    verb = "is an"
+    def _get_sentence_parts(self, i, adjacent_room, direction_cardinality, sentence_start):
+        sentence = []
+        if adjacent_room != 0: 
+            if isinstance(adjacent_room, list): 
+                room_states = []
+                for x in (range(0, len(adjacent_room))):
+                    if direction_cardinality in self.doors: #?
+                        if self.doors[direction_cardinality] != None and self.doors[direction_cardinality][x] != None:
+                            
+                            if not self.doors[direction_cardinality][x].locked:
+                                if adjacent_room[x].visited:
+                                    room_states.append(("unlocked door visited", adjacent_room[x]))
                                 else:
-                                    verb = "is a"
-                                plural = ""
-                                piece = "an "
+                                    room_states.append("unlocked door unknown")
                             else: 
-                                verb = (f"are {value_text}")
-                                plural = "s"
-                                piece = ""
+                                #needs to be here
+                                room_states.append("locked door") 
 
-                            if paragraph_guide[i] == "unlocked door unknown":
-                                paragraph_parts.append(f"{verb} locked door{plural} leading to {piece}unknown room{plural}")
-                            elif paragraph_guide[i] == "locked door":
-                                paragraph_parts.append(f"{verb} locked door{plural}")
-                            elif paragraph_guide[i] == "unknown room":
-                                paragraph_parts.append(f"{verb} unknown room{plural}")
-                all_parts.append(paragraph_parts)
-            
-            else:
-                all_parts.append(room_states[i])
-
-            all_sentences = []
-            for parts_set in all_parts:
-                if isinstance(parts_set, list):
-                    if len(parts_set[1:]) == 1:
-                        full_sentence = " ".join(parts_set)
-                        full_sentence += "."
-                        all_sentences.append(full_sentence)
-                    else:
-                        full_sentence = ""
-                        for i in range(0, len(parts_set)):
-                            if i > 1:
-                                if "is" in parts_set[i]:
-                                    parts_set[i] = parts_set[i].replace("is ", "")
-                                elif "are" in parts_set[i]:
-                                    parts_set[i] = parts_set[i].replace("are ", "")
-                                
-                                # between the 2nd and 2nd to last item
-                                if i > 1 and i < len(parts_set) - 1:
-                                    full_sentence += (f", {parts_set[i]}")
-                                
-                                # the last item
-                                elif i == len(parts_set) - 1:
-                                    full_sentence += (f" and {parts_set[i]}.")
-
+                        else:
+                            if adjacent_room[x].visited:
+                                room_states.append(("visited room", adjacent_room[x]))
                             else:
-                                if i == 0:
-                                    full_sentence += (f"{parts_set[i]}")
-                                else:
-                                    full_sentence += (f" {parts_set[i]}")
- 
-                        all_sentences.append(full_sentence)
+                                room_states.append("unknown room")
 
+                    # Repeated due to if a door doesnt exist in this direction
+                    else: 
+                        if adjacent_room[x].visited:
+                            room_states.append(("visited room", adjacent_room[x]))
+                        else:
+                            room_states.append("unknown room")
+                
+                sentence.append(room_states)
+
+            # If there is only one room in a certain direction
+            else: 
+                if self.has_doors and self.doors[direction_cardinality] != None: #
+
+                    if not self.doors[direction_cardinality].locked:
+                        if adjacent_room.visited:
+                            sentence.append(sentence_start + " there is an unlocked door that leads to the " + adjacent_room.name)
+                        else:
+                            sentence.append(sentence_start + " there is an unlocked door that leads to an unknown room.")
+                    else: 
+                        sentence.append(sentence_start + " there is a locked door")
+                else: 
+                    if adjacent_room.visited:
+                        sentence.append(sentence_start + " is " + adjacent_room.name)
+                    else:
+                        sentence.append(sentence_start +  " is an unknown room")
+        else:
+            sentence.append(sentence_start + " there is a wall")
+
+        return sentence
+
+    def _build_complicated_adjacent_rooms_sentence(self, room_states, sentence_start):
+        all_parts = []
+        if isinstance(room_states, list):
+            state_freq = {}
+            state_rooms = {}
+            for state in room_states:
+                if isinstance(state, tuple):
+                    if state[0] not in state_freq.keys():
+                        state_freq[state[0]] = 1
+                        state_rooms[state[0]] = [state[1]]
+                    else:
+                        state_freq[state[0]] += 1
+                        state_rooms[state[0]].append(state[1])
                 else:
-                    parts_set += "."
-                    all_sentences.append(parts_set)
+                    if state not in state_freq.keys():
+                        state_freq[state] = 1
+                    else:
+                        state_freq[state] += 1
+
+            paragraph_guide = ["visited room", "unlocked door visited", "unlocked door unknown", "locked door", "unknown room"]
+            paragraph_parts = []
+            paragraph_parts.append(sentence_start)
+            for i in range(0, len(paragraph_guide)):
+                if paragraph_guide[i] in state_freq.keys():
+                    if i == 0:
+                        paragraph_parts.append(f" is {state_rooms[paragraph_guide[i]].pop(0).name}")
+                    elif i == 1:
+                        paragraph_parts.append(f" is an unlocked door leading to {state_rooms[paragraph_guide[i]].pop(0).name}")
+                    else:
+                        # build a sentence using the keys and values from above
+                        value_text = n2w.num2words(state_freq[paragraph_guide[i]])
+                        vowels = ["a", "e", "i", "o", "u"]
+                        if value_text == "one":
+                            if paragraph_guide[i][0] in vowels:
+                                verb = "is an"
+                            else:
+                                verb = "is a"
+                            plural = ""
+                            piece = "an "
+                        else: 
+                            verb = (f"are {value_text}")
+                            plural = "s"
+                            piece = ""
+
+                        if paragraph_guide[i] == "unlocked door unknown":
+                            paragraph_parts.append(f"{verb} locked door{plural} leading to {piece}unknown room{plural}")
+                        elif paragraph_guide[i] == "locked door":
+                            paragraph_parts.append(f"{verb} locked door{plural}")
+                        elif paragraph_guide[i] == "unknown room":
+                            paragraph_parts.append(f"{verb} unknown room{plural}")
+            
+            all_parts.append(paragraph_parts)
         
-        return all_sentences
+        else:
+            all_parts.append(room_states)
+
+        all_sentences = []
+        for parts_set in all_parts:
+            if isinstance(parts_set, list):
+                if len(parts_set[1:]) == 1:
+                    full_sentence = " ".join(parts_set)
+                    full_sentence += "."
+                    all_sentences.append(full_sentence)
+                else:
+                    full_sentence = ""
+                    for i in range(0, len(parts_set)):
+                        if i > 1:
+                            if "is" in parts_set[i]:
+                                parts_set[i] = parts_set[i].replace("is ", "")
+                            elif "are" in parts_set[i]:
+                                parts_set[i] = parts_set[i].replace("are ", "")
+                            
+                            # between the 2nd and 2nd to last item
+                            if i > 1 and i < len(parts_set) - 1:
+                                full_sentence += (f", {parts_set[i]}")
+                            
+                            # the last item
+                            elif i == len(parts_set) - 1:
+                                full_sentence += (f" and {parts_set[i]}.")
+
+                        else:
+                            if i == 0:
+                                full_sentence += (f"{parts_set[i]}")
+                            else:
+                                full_sentence += (f" {parts_set[i]}")
+
+                    all_sentences.append(full_sentence)
+
+            else:
+                parts_set += "."
+                all_sentences.append(parts_set)
+    
+        return all_sentences[0]
                     
 
     def print_items_loc_desc(self):
