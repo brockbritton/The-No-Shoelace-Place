@@ -3,7 +3,6 @@ import game_backend.classes.room_class as room_class
 
 
 class Item:
-
     def __init__(self, name, gen_name) -> None:
         self.name = name
         self.gen_name = gen_name
@@ -15,7 +14,6 @@ class Item:
         }
 
         actions['print_all'].append(f"There does not appear to be anything special about this {self.gen_name}.")
-        
         return actions
 
     
@@ -37,7 +35,6 @@ class Inv_Item(Item):
     def __repr__(self) -> str:
         return f'{self.name}(inv item)'
 
-
 class Key(Inv_Item):
     def __init__(self, name, gen_name , desc):
         super().__init__(name, gen_name, desc)
@@ -46,11 +43,9 @@ class Keycard(Inv_Item):
     def __init__(self, name, gen_name , desc):
         super().__init__(name, gen_name, desc)
 
-
 class Plastic_Utensil(Inv_Item):
     def __init__(self, name, gen_name , desc):
         super().__init__(name, gen_name, desc)
-
 
 class Flashlight(Inv_Item):
     def __init__(self, name, gen_name , desc):
@@ -60,7 +55,6 @@ class Flashlight(Inv_Item):
 class Crowbar(Inv_Item):
     def __init__(self, name, gen_name , desc):
         super().__init__(name, gen_name, desc)
-
 
 class ID_Bracelet(Inv_Item):
     def __init__(self, name, gen_name , desc):
@@ -97,37 +91,13 @@ class Power_Box(Interact):
         for r in room_class.Room._room_registry:
             r.switch_lights()
 
-
 class Openable_Interact(Interact):
-    
-    def __init__(self, name, gen_name, keys_list) -> None:
+    def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
         self.open = False
-        self.locked = True
-        self.broken = False
-        self.crowbar_open = True
-        self.keyable = True
-        self.compatible_keys = keys_list
-        self.electronic_open = False
         self.openable_bool = True
-        self.lockable_bool = True
-        
 
-    def open_close_interact(self, player, act):
-        # act: "open" or "close"
-        if isinstance(self, Door):
-            interact_str = "door"
-        elif isinstance(self, Cabinet):
-            interact_str = "cabinet"
-        elif isinstance(self, Drawers):
-            interact_str = "drawer"
-
-        if act == "open":
-            return self.open_interact(player, interact_str)
-        elif act == "close":
-            return self.close_interact(player, interact_str)
-
-    def open_interact(self, player, gen_str): #######
+    def open_interact(self, player): #######
         # When door is open (and unlocked)
         actions = {
             'print_all': [],
@@ -144,7 +114,7 @@ class Openable_Interact(Interact):
                 has_keycard = True
 
         if self.open:
-            actions['print_all'].append(f"The {gen_str} here has already been opened")
+            actions['print_all'].append(f"The {self.gen_name} here has already been opened")
             return ("open_door", actions)
 
         # When door is closed
@@ -152,24 +122,24 @@ class Openable_Interact(Interact):
             # When door is closed and locked
             if not self.open and self.locked:
                 if self.keyable and self.locked:
-                    actions['print_all'].append(f"There is a locked {gen_str} here.")
+                    actions['print_all'].append(f"There is a locked {self.gen_name} here.")
                     for k in self.compatible_keys:
                         if k in player.inv:
-                            actions['print_all'].append(f"Would you like to open the {gen_str} with your key?")
+                            actions['print_all'].append(f"Would you like to open the {self.gen_name} with your key?")
                             actions['ask_y_or_n'] = True
                             return ("open_door_key", actions)
                 if has_crowbar and self.crowbar_open:
-                    actions['print_all'].append(f"Would you like to open the {gen_str} with your crowbar?")
+                    actions['print_all'].append(f"Would you like to open the {self.gen_name} with your crowbar?")
                     actions['ask_y_or_n'] = True
                     return ("open_door_crowbar", actions)
                 if not self.keyable and self.locked and self.crowbar_open:
-                    actions['print_all'].append(f"The {gen_str} is locked, but the lock is broken.")
+                    actions['print_all'].append(f"The {self.gen_name} is locked, but the lock is broken.")
                     if has_crowbar:
-                        actions['print_all'].append(f"Would you like to open the {gen_str} with your crowbar?")
+                        actions['print_all'].append(f"Would you like to open the {self.gen_name} with your crowbar?")
                         actions['ask_y_or_n'] = True
                         return ("open_door_crowbar", actions)
                 if self.locked and self.electronic_open:
-                    actions['print_all'].append(f"There is a {gen_str} locked with an electronic pad here.")
+                    actions['print_all'].append(f"There is a {self.gen_name} locked with an electronic pad here.")
                     actions['print_all'].append("It appears to need a keycard or code to open.")
                     actions['print_all'].append("")
                     if player.loc.lights_on:
@@ -188,86 +158,41 @@ class Openable_Interact(Interact):
                     else:
                         actions['print_all'].append("With no power, the keypad is useless")
                         if has_crowbar:
-                            actions['print_all'].append(f"There does not appear to be any way to open the {gen_str} with a crowbar")
+                            actions['print_all'].append(f"There does not appear to be any way to open the {self.gen_name} with a crowbar")
                         return (None, actions)
                 
             # When door is closed and unlocked
             if not self.open and not self.locked:
-                actions['print_all'].append(f"The {gen_str} is not locked.")
+                actions['print_all'].append(f"The {self.gen_name} is not locked.")
                 actions['print_all'].append("Would you like to open it?")
                 actions['ask_y_or_n'] = True
                 return ("open_door", actions)
 
-    def close_interact(self, player, gen_str): ######## NEED WORK
+    def close_interact(self, player): ######## NEED WORK
         
         actions = {
             'print_all': [],
             'build_multiple_choice': [],
             'ask_y_or_n': False
         }
+        
+class Lockable_Interact(Interact):
+    def __init__(self, name, gen_name, keys_list) -> None:
+        super().__init__(name, gen_name)
+        self.compatible_keys = keys_list
+        self.lockable_bool = True
+        self.locked = True
+        self.keyable = True
+        self.crowbar_open = True
+        self.electronic_open = False
+        self.open = False
+        self.openable_bool = True
 
-        #check for items based on classes
-        has_crowbar, has_keycard = False, False
-        for i in player.inv:
-            if isinstance(i, Crowbar):
-                has_crowbar = True
-            elif isinstance(i, Keycard):
-                has_keycard = True
+    def unlock_interact(self, player):
+        ...
 
-        # When door is open (and unlocked)
-        if self.open:
-            # Write something different
-            pass
-
-        # When door is closed
-        else:
-            # When door is closed and locked
-            if not self.open and self.locked:
-                if self.keyable and self.locked:
-                    actions['print_all'].append(f"There is a locked {gen_str} here.")
-                    for k in self.compatible_keys:
-                        if k in player.inv:
-                            
-                            return ("dest", actions)
-                if has_crowbar and self.crowbar_open:
-                    
-                    actions['ask_y_or_n'] = True
-                    return ("dest", actions)
-                if not self.keyable and self.locked and self.crowbar_open:
-                    actions['print_all'].append(f"The {gen_str} is locked, but the lock is broken.")
-                    if has_crowbar:
-                        
-                        actions['ask_y_or_n'] = True
-                        return ("dest", actions)
-                if self.locked and self.electronic_open:
-                    actions['print_all'].append(f"There is a {gen_str} locked with an electronic pad here.")
-                    actions['print_all'].append("It appears to need a keycard or code to open.")
-                    actions['print_all'].append("")
-                    if player.loc.lights_on:
-
-                        if has_keycard:
-                            actions['print_all'].append("With the power restored, you can now try entering a code, or a use your keycard.")
-                            actions['print_all'].append("What would you like to do?")
-                            actions['build_multiple_choice'] = [["Enter a Code", "Use a Keycard", "Cancel"], [1, 2, -1]]
-                            
-                        else: 
-                            actions['print_all'].append("With the power restored, you can now try entering a code.")
-                            actions['print_all'].append("What would you like to do?")
-                            actions['build_multiple_choice'] = [["Enter a Code", "Cancel"], [1, -1]]
-
-                        return ("dest", actions)
-                    else:
-                        actions['print_all'].append("With no power, the keypad is useless")
-                        if has_crowbar:
-                            actions['print_all'].append(f"There does not appear to be any way to open the {gen_str} with a crowbar")
-                        return ("dest", actions)
-                
-            # When door is closed and unlocked
-            if not self.open and not self.locked:
-                actions['print_all'].append(f"The {gen_str} is not locked.")
-                actions['print_all'].append("Would you like to open it?")
-                actions['ask_y_or_n'] = True
-                return ("dest", actions)
+    def lock_interact(self, player):
+        ...
 
 class Storage_Unit(Interact):
     def __init__(self, name, gen_name) -> None:
@@ -287,76 +212,30 @@ class Storage_Unit(Interact):
 class Storage_Spot(Storage_Unit):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
-        
+
+class Storage_Bin(Storage_Unit):
+    def __init__(self, name, gen_name) -> None:
+        super().__init__(name, gen_name)
+        self.lockable_bool = False
+        self.openable_bool = False
 
 class Storage_Box(Openable_Interact, Storage_Unit):
+    def __init__(self, name, gen_name) -> None:
+        super().__init__(name, gen_name)
+        self.lockable_bool = False
+        self.openable_bool = True
+
+class Storage_LockBox(Lockable_Interact, Openable_Interact, Storage_Unit):
     def __init__(self, name, gen_name, locked_bool, keys_list) -> None:
         super().__init__(name, gen_name, keys_list)
         self.locked = locked_bool
-
-
-
-class Cabinet(Storage_Box):
-    def __init__(self, name, gen_name, locked_bool, keys_list):
-        super().__init__(name, gen_name, locked_bool, keys_list)
-        self.locked = locked_bool
-
-class Drawers(Storage_Box):
-    def __init__(self, name, gen_name, locked_bool, keys_list):
-        super().__init__(name, gen_name, locked_bool, keys_list)
-        self.locked = locked_bool
       
 class Door(Openable_Interact):
-    def __init__(self, name, gen_name, keys_list):
-        super().__init__(name, gen_name, keys_list)
-        self.electronic_open = False
+    def __init__(self, name, gen_name):
+        super().__init__(name, gen_name)
+        self.lockable_bool = False
             
-class Keyable_Door(Door):
+class Lockable_Door(Lockable_Interact, Door):
     def __init__(self, name, gen_name, keys_list) -> None:
         super().__init__(name, gen_name, keys_list)
         self.keyable = True
-
-class Electronic_Door(Door):
-    def __init__(self, name, gen_name, code, keys_list) -> None:
-        super().__init__(name, gen_name, keys_list)
-        self.keyable = False
-        self.electronic_open = True
-        self.crowbar_open = False
-        self.code = code 
-        self.crowbar_open = False
-        self.electronic_open = True
-
-    def enter_code(self, choice, list): #should be accept code but whatever
-        #list: next_room, direction choice, door, player
-        actions = {
-            'print_all': [],
-            'build_multiple_choice': [],
-            'ask_y_or_n': False
-        }
-        
-        if choice == 'q':
-            actions['print_all'].append("You are no longer attempting codes. ")
-            return (None, None, actions)
-        elif not choice.isnumeric(): #make it so it can only enter numbers? using tkinter validate
-            actions['print_all'].append("Please enter only numbers")
-            return ("enter_code", list, actions)
-        elif len(choice) < 1:
-            actions['print_all'].append("Please enter a code before submitting!")
-            return ("enter_code", list, actions)
-
-        elif len(choice) > 6:
-            actions['print_all'].append("Please enter a code no longer than 6 numbers!")
-            return ("enter_code", list, actions)
-
-        if self.code == choice:
-            self.open = True
-            actions['print_all'].append("The door hisses, sliding into the wall revealing the Control Room!")
-            list[2].locked = False
-            list[2].open = True
-            return (None, None, actions)
-    
-        else:
-            actions['print_all'].append("The code did not open the door.")
-            actions['print_all'].append("Continue trying or enter 'q' to quit:")
-            return ("enter_code", list, actions)
-

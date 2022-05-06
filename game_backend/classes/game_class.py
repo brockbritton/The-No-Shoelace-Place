@@ -1,7 +1,7 @@
 
 import game_backend.classes.character_class as character_class
-import game_backend.classes.parser_class as parser_class
 import game_backend.classes.item_class as item_class
+import game_backend.classes.parser_class as parser_class
 import game_backend.gl_backend_functions as gl
 import game_backend.objects.rooms as room
 
@@ -17,6 +17,9 @@ class Game:
         self.parser = parser_class.Parser()
         room.basement_set_door_dictionaries()
         room.ward_set_door_dictionaries()
+    
+    def __repr__(self) -> str:
+        return f'Whole Game Object - player: {self.player1.name}'
         
 
     def get_ui_values(self, player, id):
@@ -99,6 +102,9 @@ class Game:
         # Save the player input as part as the saved prints
         self.save_prints.append("> " + frontend_input) ####doesnt work for multiple choice
 
+        # Set a default return tuple if nothing connects
+        return_tuple = (None, None, {})
+
         # waiting vars = self.wait_for_frontend_input['build_multiple_choice']
         # If there is a list of variables in waiting vars and the input is numeric, 
         # convert to integer so that the correct variable from waiting vars is accessed
@@ -108,6 +114,7 @@ class Game:
 
             # Match the destination to the input value
             # and execute the desired action
+            print("matching destination")
             match self.master_dest:
                 case "drop_gen_item": return_tuple = self.player1.drop_gen_item(input_value, self.master_helper) 
                 case "add_inventory_choice": return_tuple = self.player1.add_inventory_choice(input_value, self.master_helper) 
@@ -128,6 +135,7 @@ class Game:
 
         # Otherwise, just use the input as it was given
         else:
+            print("parsing data - no destination")
             input_value = frontend_input.strip()
 
             # Begin parsing the input
@@ -140,7 +148,6 @@ class Game:
                 for value in parsed_values:
                     if value != None:
                         return_tuple = self.organize_parsed_data(parsed_values, self.player1)
-                        self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
                         break
         
         # Update the game destination and helper for the next input

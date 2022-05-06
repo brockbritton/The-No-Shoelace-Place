@@ -244,12 +244,7 @@ class Character:
     
     def choose_room(self, choice, list):
         #list: d_choice, next_rooms (plural)
-        
-        for i in range(0, len(list[1])): #ugly workaround for comment below
-            if choice.name == list[1][i].name:
-                print("found room:" + list[1][i].name)
-                room_index = i
-        #room_index = list[1].index(choice) 
+        room_index = list[1].index(choice) 
 
         return_tuple = self.move_nesw(list[0], list[1][room_index])
         return return_tuple
@@ -292,8 +287,7 @@ class Character:
             
             if not isinstance(self.loc.doors[d_choice], list): 
                 if self.loc.doors[d_choice] != None: 
-                    
-                    (dest, actions_open_close) = self.loc.doors[d_choice].open_close_interact(self, "open")
+                    (dest, actions_open_close) = self.loc.doors[d_choice].open_interact(self)
                     actions = gl.combine_dicts(actions, actions_open_close)
                     if dest == "open_door":
                         self.last_loc = self.loc
@@ -317,7 +311,7 @@ class Character:
                 next_room_index = possible_rooms.index(next_room)
                 if self.loc.doors[d_choice][next_room_index] != None: 
                     
-                    (dest, actions_open_close) = self.loc.doors[d_choice][next_room_index].open_close_interact(self, "open")
+                    (dest, actions_open_close) = self.loc.doors[d_choice][next_room_index].open_interact(self)
                     actions = gl.combine_dicts(actions, actions_open_close)
                     if dest == "open_door":
                         self.loc = next_room

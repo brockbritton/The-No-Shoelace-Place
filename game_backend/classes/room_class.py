@@ -3,7 +3,7 @@
 import num2words as n2w
 
 import game_backend.classes.item_class as item_class
-import game_backend.objects.items as item  # # comes before item_class import
+import game_backend.objects.items as item
 
 
 class Room:
@@ -15,6 +15,7 @@ class Room:
         self.description = description
         
         self.storage_containers = [item_class.Storage_Spot("ground", "ground")]
+        self.walls = [] ######
         self.storage_dict = {}
         self.interacts = []
         self.monsters = []
@@ -86,87 +87,36 @@ class Room:
         for sc in self.storage_containers:
             self.storage_dict[sc] = sc.items
 
-    def print_one_direction(self, room_obj, str_letter): ##more params?
-        ...
-            
-    def print_directions(self, player, none_or_one): ####### ugh
-        direct_list = ["n", "e", "s", "w"]
+    def print_directions(self, player, none_or_one): ########
+        #left, forward, right, back
         
-        blrf_rooms_list = [self.north, self.east, self.south, self.west]
-        blrf_direct_list = []
-
-        print("Current Location:", self.name)
+        nesw_rooms = [self.north, self.east, self.south, self.west] 
+        nesw_letters = ["n", "e", "s", "w"] 
         
         if player.last_loc != None:
-            for r in blrf_rooms_list:
-                if isinstance(r, list):
-                    for x in r:
-                        if x == player.last_loc:
-                            last_room_index = blrf_rooms_list.index(r)
-
-                elif r == player.last_loc:
-                    last_room_index = blrf_rooms_list.index(r)
-
-                #can also be 0 - for wall
-
-            blrf_direct_list.append(direct_list[last_room_index]) #back
-
-
-            if last_room_index + 1 > 3: #left
-                blrf_direct_list.append(direct_list[0])
-            else:
-                blrf_direct_list.append(direct_list[last_room_index + 1])
-
-            if last_room_index - 1 < 0: #right
-                blrf_direct_list.append(direct_list[3])
-            else:
-                blrf_direct_list.append(direct_list[last_room_index - 1])
-
-            if last_room_index + 2 > 3: #forward
-                blrf_direct_list.append(direct_list[last_room_index - 2])
-            else:
-                blrf_direct_list.append(direct_list[last_room_index + 2])
-
-        else: 
-            blrf_direct_list = ["n", "e", "w", "s"]
-            last_room_index = 0
-        
-        behind = blrf_rooms_list[last_room_index]
-
-        # forward
-        if last_room_index + 2 > 3:
-            forward = blrf_rooms_list[last_room_index - 2]
+            lfrb_rooms, lfrb_cardinality = self._find_positional_rooms(player, nesw_rooms, nesw_letters)
         else:
-            forward = blrf_rooms_list[last_room_index + 2]
-        
-        # left
-        if last_room_index + 1 > 3:
-            left = blrf_rooms_list[0]
-        else:
-            left = blrf_rooms_list[last_room_index + 1]
+            lfrb_rooms = [self.east, self.south, self.west, self.north] 
+            lfrb_cardinality = ["e", "s", "w", "n"]
 
-        # right
-        if last_room_index - 1 < 0:
-            right = blrf_rooms_list[3]
-        else:
-            right = blrf_rooms_list[last_room_index - 1]
+        print("Rooms:", lfrb_rooms)
+        print("Cardinality: ", lfrb_cardinality)
         
-        blrf_rooms = [behind, left, right, forward]
-
         sentences = []
-        blrf_directions = ["Behind you", "To your left", "To your right", "In front of you"]
-        for i in range(0, len(blrf_rooms)):
+        blrf_sentence_start = ["To your left", "In front of you", "To your right", "Behind you"]
+        for i in range(0, len(lfrb_rooms)):
 
-            if blrf_rooms[i] != 0: 
-                if isinstance(blrf_rooms[i], list): 
+            if lfrb_rooms[i] != 0: 
+                if isinstance(lfrb_rooms[i], list): 
                     room_states = []
-                    for x in (range(0, len(blrf_rooms[i]))):
-                        if direct_list[i] in self.doors:
-                            if self.doors[blrf_direct_list[i]] != None and self.doors[blrf_direct_list[i]][x] != None:
+                    for x in (range(0, len(lfrb_rooms[i]))):
+                        print("i, x:", i, x)
+                        if nesw_letters[i] in self.doors: #####?
+                            if self.doors[lfrb_cardinality[i]] != None and self.doors[lfrb_cardinality[i]][x] != None:
                                 
-                                if not self.doors[blrf_direct_list[i]][x].locked:
-                                    if blrf_rooms[i][x].visited:
-                                        room_states.append(("unlocked door visited", blrf_rooms[i][x]))
+                                if not self.doors[lfrb_cardinality[i]][x].locked:
+                                    if lfrb_rooms[i][x].visited:
+                                        room_states.append(("unlocked door visited", lfrb_rooms[i][x]))
                                     else:
                                         room_states.append("unlocked door unknown")
                                 else: 
@@ -174,15 +124,15 @@ class Room:
                                     room_states.append("locked door") 
 
                             else:
-                                if blrf_rooms[i][x].visited:
-                                    room_states.append(("visited room", blrf_rooms[i][x]))
+                                if lfrb_rooms[i][x].visited:
+                                    room_states.append(("visited room", lfrb_rooms[i][x]))
                                 else:
                                     room_states.append("unknown room")
 
                         # Repeated due to if a door doesnt exist in this direction
                         else: 
-                            if blrf_rooms[i][x].visited:
-                                room_states.append(("visited room", blrf_rooms[i][x]))
+                            if lfrb_rooms[i][x].visited:
+                                room_states.append(("visited room", lfrb_rooms[i][x]))
                             else:
                                 room_states.append("unknown room")
                     
@@ -190,39 +140,60 @@ class Room:
 
                 # If there is only one room in a certain direction
                 else: 
-                    if self.has_doors and self.doors[blrf_direct_list[i]] != None: #
+                    if self.has_doors and self.doors[lfrb_cardinality[i]] != None: #
 
-                        if not self.doors[blrf_direct_list[i]].locked:
-                            if blrf_rooms[i].visited:
-                                sentences.append(blrf_directions[i] + " there is an unlocked door that leads to the " + blrf_rooms[i].name)
+                        if not self.doors[lfrb_cardinality[i]].locked:
+                            if lfrb_rooms[i].visited:
+                                sentences.append(blrf_sentence_start[i] + " there is an unlocked door that leads to the " + lfrb_rooms[i].name)
                             else:
-                                sentences.append(blrf_directions[i] + " there is an unlocked door that leads to an unknown room.")
+                                sentences.append(blrf_sentence_start[i] + " there is an unlocked door that leads to an unknown room.")
                         else: 
-                            sentences.append(blrf_directions[i] + " there is a locked door")
+                            sentences.append(blrf_sentence_start[i] + " there is a locked door")
                     else: 
-                        if blrf_rooms[i].visited:
-                            sentences.append(blrf_directions[i] + " is " + blrf_rooms[i].name)
+                        if lfrb_rooms[i].visited:
+                            sentences.append(blrf_sentence_start[i] + " is " + lfrb_rooms[i].name)
                         else:
-                            sentences.append(blrf_directions[i] +  " is an unknown room")
+                            sentences.append(blrf_sentence_start[i] +  " is an unknown room")
             else:
-                sentences.append(blrf_directions[i] + " there is a wall")
+                sentences.append(blrf_sentence_start[i] + " there is a wall")
         
-        paragraph_parts = self._build_complicated_adjacent_rooms_sentence(sentences)
-        if none_or_one == None:
-            full_paragraph = " ".join(paragraph_parts)
-            return full_paragraph
-        elif none_or_one == "backward":
-            return paragraph_parts[0]
-        elif none_or_one == "left":
-            return paragraph_parts[1]
-        elif none_or_one == "right":
-            return paragraph_parts[2]
-        elif none_or_one == "forward":
-            return paragraph_parts[3]
+        paragraph_parts = self._build_complicated_adjacent_rooms_sentence(sentences, blrf_sentence_start)
+       
+        full_paragraph = " ".join(paragraph_parts)
+        return full_paragraph
+       
+    def _find_back_index(self, player, blfr_rooms):
+        for r in blfr_rooms:
+            if isinstance(r, list):
+                for x in r:
+                    if x == player.last_loc:
+                        return blfr_rooms.index(r)
 
+            elif r == player.last_loc:
+                return blfr_rooms.index(r)
+
+    def _find_positional_rooms(self, player, nesw_rooms, nesw_letters):
+        # identify in what positional directions which real rooms are
+        lfrb_rooms = []
+        lfrb_cardinality = []
+        last_room_index = self._find_back_index(player, nesw_rooms)
         
-    def _build_complicated_adjacent_rooms_sentence(self, room_states):
-        blrf_directions = ["Behind you", "To your left", "To your right", "In front of you"]
+        for i in range(1, 4):
+            if last_room_index + i > 3:
+                lfrb_rooms.append(nesw_rooms[(last_room_index + i) - 4])
+                lfrb_cardinality.append(nesw_letters[(last_room_index + i) - 4])
+
+            else:
+                lfrb_rooms.append(nesw_rooms[last_room_index + i])
+                lfrb_cardinality.append(nesw_letters[last_room_index + i])
+
+        lfrb_rooms.append(nesw_rooms[last_room_index])
+        lfrb_cardinality.append(nesw_letters[last_room_index])
+
+        return lfrb_rooms, lfrb_cardinality
+
+
+    def _build_complicated_adjacent_rooms_sentence(self, room_states, sentence_starts):
         all_parts = []
         for i in range(0, len(room_states)):
             if isinstance(room_states[i], list):
@@ -244,7 +215,7 @@ class Room:
 
                 paragraph_guide = ["visited room", "unlocked door visited", "unlocked door unknown", "locked door", "unknown room"]
                 paragraph_parts = []
-                paragraph_parts.append(blrf_directions[i])
+                paragraph_parts.append(sentence_starts[i])
                 for i in range(0, len(paragraph_guide)):
                     if paragraph_guide[i] in state_freq.keys():
                         if i == 0:

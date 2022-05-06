@@ -1,5 +1,6 @@
 
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, redirect, render_template, request, session, url_for
+
 import game_backend.classes.game_class as game_class
 from flask_session import Session
 
@@ -57,7 +58,6 @@ def accept_input_data():
     data_dict = request.form.to_dict()
     
     print("frontend input ", data_dict['input'])
-
     actions_dict = session['game'].organize_raw_input(data_dict['input'])
     return actions_dict
     

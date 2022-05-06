@@ -1,17 +1,13 @@
 
 import re
 
-from flask import session
-
 import game_backend.classes.item_class as item_class
 import game_backend.gl_backend_functions as gl
 
 
 class Parser:
     def __init__(self) -> None:
-
         self.player = None
-        
         pick_up_keys = {'pick up':["pick up", "take", "retrieve", "get", "grab", "remove"]}
         drop_keys = {'drop':["drop", "place", "put down", "put", "insert", "set"]}
         inspect_keys = {'inspect':["inspect", "look at", "examine", "read", "check out", "search"]}
