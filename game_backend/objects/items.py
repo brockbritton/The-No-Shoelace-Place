@@ -6,8 +6,8 @@ import game_backend.classes.item_class as item_class
 
 id_bracelet = item_class.ID_Bracelet("id bracelet", "bracelet", "")
 
-basement_key = item_class.Key("basement door key", "key", "")
-cabinet_key = item_class.Key("ward keys", "key", "")
+basement_key = item_class.Key("basement key", "key", "")
+cabinet_key = item_class.Key("ward cabinet keys", "key", "")
 ward_doors_key = item_class.Key("ward security key", "key", "")
 
 ##### Ward Doors

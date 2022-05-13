@@ -253,7 +253,7 @@ class Game:
                         else:
                             actions['print_all'].append("You cannot drop this item because you are not holding it.") 
 
-                    elif parsed_dict["action"][0] == "inspect": #working
+                    elif parsed_dict["action"][0] == "inspect":
                         try:
                             actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].inspect_object())
                         except AttributeError:
@@ -289,7 +289,21 @@ class Game:
                         else:
                             actions['print_all'].append("You cannot break this item")
                 
-                # If an action and a direction, but no object
+                # For if there are cases when multiple objects need to be parsed
+                elif len(parsed_dict["nearby_objects"]) > 1:
+                    # If one is a storage unit and one is an inv_item
+                    if parsed_dict["action"][0] == "drop":
+                        # check for if one is a storage unit and one is an inv_item
+                        inv_item, storage_unit = parsed_dict["nearby_objects"], parsed_dict["nearby_objects"]
+                        # Check for if one is a storage unit and one is an inv_item
+                        if parsed_dict["nearby_objects"][0] in self.player1.inv:
+                            return_tuple = self.player1.drop_item(parsed_dict["nearby_objects"][0], None) #need parsing for drop location
+                            dest, helper, actions = gl.parse_tuples(return_tuple, actions)
+                        else:
+                            actions['print_all'].append("You cannot drop this item because you are not holding it.") 
+
+
+                # When there are no objects, and only a direction
                 elif len(parsed_dict["directions"]) == 1:
                     if parsed_dict["action"][0] == "go":
                         if parsed_dict["directions"][0] == "cardinal":
@@ -324,7 +338,7 @@ class Game:
                 # Please refer to one object at a time
                 pass
         # If the parsed dictionary does not have an action, or a direction, or a nearby object
-        # and does have a special action
+        # but does have a special action
         elif len(parsed_dict["special_actions"]) > 0:
             for action in parsed_dict["special_actions"]:
                 match action:
