@@ -1,4 +1,5 @@
 
+from tkinter import E
 import game_backend.classes.character_class as character_class
 import game_backend.classes.item_class as item_class
 import game_backend.classes.parser_class as parser_class
@@ -60,7 +61,7 @@ class Game:
 
         actions['print_all'].append("For help, use the game help button in the bottom right corner.")
 
-        return_tuple = self.player1.enter_room()
+        return_tuple = self.player1.loc.enter_room(self.player1)
         self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
         
         if len(self.save_prints) == 0:
@@ -139,16 +140,12 @@ class Game:
             input_value = frontend_input.strip()
 
             # Begin parsing the input
-            parsed_values, print_list = self.parser.parse_input(self.player1, input_value)
-            actions['print_all'].extend(print_list)
-
-            # If a boolean were returned, an errorneous input was given
-            # Otherwise, check for existence of parsed values
-            if not isinstance(parsed_values, bool):
-                for value in parsed_values:
-                    if value != None:
-                        return_tuple = self.organize_parsed_data(parsed_values, self.player1)
-                        break
+            parsed_dict = self.parser.parse_input(self.player1, input_value)
+            # Check the parsed dictionary for existing values
+            for value in parsed_dict.values():
+                if len(value) > 0:
+                    return_tuple = self.evaluate_parsed_data(parsed_dict)
+                    break
         
         # Update the game destination and helper for the next input
         # Also update the actions dict with the new value
@@ -213,7 +210,7 @@ class Game:
         return actions
 
 
-    def organize_parsed_data(self, parsed_tuple, player): 
+    def evaluate_parsed_data(self, parsed_dict): 
         dest, helper = None, None
         actions = {
             'print_all': [],
@@ -222,128 +219,120 @@ class Game:
             'update_inv_visual': [],
             'update_ui_values': []
         }
-        #   actions_list (verbs), 
-        action = parsed_tuple[0]
-        #   obj_loc_tuples (objects and their current locations), 
-        object_loc_tuple = parsed_tuple[1]
-        #   item_storage_locations (places to store objects if necessary verbs were parsed), 
-        storage_locations = parsed_tuple[2]
-        #   openable_items (objects that can be opened/closed, locked/unlocked if verbs were parsed)
-        openable_items = parsed_tuple[3]
-        #   movement direction (if a movement verb is parsed)
-        direction_tuple = parsed_tuple[4]
-        #   option for displaying (like items or directions)
-        display_option_tuple = parsed_tuple[5]
-        print(parsed_tuple)
 
-
-        # If there is no verb and one object - inspect object
-        if (action == None or action == 'inspect') and object_loc_tuple != None:
-            if isinstance(object_loc_tuple[0], item_class.Inv_Item):
-                actions = gl.combine_dicts(actions, object_loc_tuple[0].inspect_item())
-            else:
-                actions['print_all'].append("You can only inspect items at this time.")
-        
-            
-        elif direction_tuple != None:
-            # Move a certain direction
-            if direction_tuple[0] == "go":
-                i = ["backward", "left", "right", "forward"].index(direction_tuple[1])
-                direction_choice = ["b", "l", "r", "f"][i]
-                blrf_dict = player.check_blrf_directions()
-
-                next_rooms = [player.loc.north, player.loc.east, player.loc.south, player.loc.west]
-                i = ['n', 'e', 's', 'w'].index(blrf_dict[direction_choice])
-                return_tuple = player.move_nesw(blrf_dict[direction_choice], next_rooms[i])
-                dest, helper = return_tuple[0], return_tuple[1]
-                actions = gl.combine_dicts(actions, return_tuple[2])
-
-            # Printing adjacent rooms for a certain direction
-            # direction_tuple[0] == None
-            else:
-                actions['print_all'].append(player.loc.print_directions(player, direction_tuple[1]))
-
-
-        elif display_option_tuple != None:
-            if display_option_tuple[1] == 'items':
-                actions['print_all'].append(player.loc.print_items_loc_desc())
-
-            elif display_option_tuple[1] == 'directions':
-                actions['print_all'].append(player.loc.print_directions(player, None))
-
-        # If there is one action and one object
-        elif action != None and object_loc_tuple != None:
-            
-            if action == "pick up":
-                if object_loc_tuple[0].pick_up_bool:
-                    if isinstance(object_loc_tuple[1], item_class.Storage_Unit):
-                        return_tuple = player.pick_up_item(object_loc_tuple[0])
-                        dest, helper, = return_tuple[0], return_tuple[1]
-                        actions = gl.combine_dicts(actions, return_tuple[2])
-                    elif isinstance(object_loc_tuple[1], list):
-                        actions['print_all'].append("This item is already in your inventory.")
-                else:
-                    actions['print_all'].append("You cannot pick up this item.")
-
-            elif action == "drop":
-                if object_loc_tuple[0] in player.inv:
-                    if storage_locations == None or 'drop' not in storage_locations.keys():
-                        return_tuple = player.drop_item(object_loc_tuple[0], None) 
-                        dest, helper, = return_tuple[0], return_tuple[1]
-                        actions = gl.combine_dicts(actions, return_tuple[2])
-                        actions['print_all'].append(f"You have dropped the {object_loc_tuple[0].name} on the ground.")
-                    else:
-                        if 'drop' in storage_locations.keys():
-                            if len(storage_locations['drop']) == 1:
-                                return_tuple = player.drop_item(object_loc_tuple[0], storage_locations['drop'][0])
-                                dest, helper, = return_tuple[0], return_tuple[1]
-                                actions = gl.combine_dicts(actions, return_tuple[2])
-                                actions['print_all'].append(f"You have dropped the {object_loc_tuple[0].name} to the {storage_locations['drop'][0].name}.")
+        # The parsed dictionary is as follows:
+        """ 
+        parsed_info = {
+            "action" : [], #parsed actions : 
+            "nearby_objects" : [], #parsed objects : inv objects, storage containers, doors, room, 
+            "directions" : [], #parsed directions
+            "special_actions" : []
+        }
+        """
+        print(parsed_dict) 
+        # If the parsed dictionary has an action
+        if len(parsed_dict["action"]) > 0:
+            if len(parsed_dict["action"]) == 1:
+                # If there is an action and an object
+                if len(parsed_dict["nearby_objects"]) == 1:
+                    if parsed_dict["action"][0] == "pick up":
+                        if isinstance(parsed_dict["nearby_objects"][0], item_class.Inv_Item):
+                            if parsed_dict["nearby_objects"][0] not in self.player1.inv:
+                                return_tuple = self.player1.pick_up_item(parsed_dict["nearby_objects"][0])
+                                dest, helper, actions = gl.parse_tuples(return_tuple, actions)
                             else:
-                                return_tuple = player.drop_item(object_loc_tuple[0], None) 
-                                dest, helper, = return_tuple[0], return_tuple[1]
-                                actions = gl.combine_dicts(actions, return_tuple[2])
-                                actions['print_all'].append(f"You have dropped the {object_loc_tuple[0].name} on the ground.")
-                else:
-                    actions['print_all'].append("You cannot drop this item beacuse you are not holding it.")
+                                actions["print_all"].append("You are already holding this item.")
 
-            elif action == "inspect":
-                if object_loc_tuple[0].inspect_bool:
-                    pass
-                else:
-                    actions['print_all'].append("You cannot inspect this item.")
+                        else:
+                            actions['print_all'].append("You cannot pick up this item.")
 
-            elif action == "open":
-                if object_loc_tuple[0].openable_bool:
-                    pass
-                else:
-                    actions['print_all'].append("You cannot open this item")
+                    elif parsed_dict["action"][0] == "drop":
+                        if parsed_dict["nearby_objects"][0] in self.player1.inv:
+                            return_tuple = self.player1.drop_item(parsed_dict["nearby_objects"][0], None) #need parsing for drop location
+                            dest, helper, actions = gl.parse_tuples(return_tuple, actions)
+                        else:
+                            actions['print_all'].append("You cannot drop this item because you are not holding it.") 
 
-            elif action == "unlock":
-                if object_loc_tuple[0].lockable_bool:
-                    pass
-                else:
-                    actions['print_all'].append("You cannot unlock this item")
+                    elif parsed_dict["action"][0] == "inspect": #working
+                        try:
+                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].inspect_object())
+                        except AttributeError:
+                            actions['print_all'].append("You cannot inspect this item.")
 
-            elif action == "lock":
-                if object_loc_tuple[0].lockable_bool:
-                    pass
-                else:
-                    actions['print_all'].append("You cannot lock this item")
+                    elif parsed_dict["action"][0] == "open":
+                        if True:
+                            pass
+                        else:
+                            actions['print_all'].append("You cannot open this item")
 
-            elif action == "interact":
-                if object_loc_tuple[0].interact_bool:
-                    pass
-                else:
-                    actions['print_all'].append("You cannot interact with this item")
+                    elif parsed_dict["action"][0] == "unlock":
+                        if True:
+                            pass
+                        else:
+                            actions['print_all'].append("You cannot unlock this item")
 
-            elif action == "break":
-                if object_loc_tuple[0].breakable:
+                    elif parsed_dict["action"][0] == "lock":
+                        if True:
+                            pass
+                        else:
+                            actions['print_all'].append("You cannot lock this item")
+
+                    elif parsed_dict["action"][0] == "interact":
+                        if True:
+                            pass
+                        else:
+                            actions['print_all'].append("You cannot interact with this item")
+
+                    elif parsed_dict["action"][0] == "break":
+                        if True:
+                            pass
+                        else:
+                            actions['print_all'].append("You cannot break this item")
+                
+                # If an action and a direction, but no object
+                elif len(parsed_dict["directions"]) == 1:
+                    if parsed_dict["action"][0] == "go":
+                        if parsed_dict["directions"][0] == "cardinal":
+                            actions["print_all"].append("You don't know your cardinal directions in here.")
+                        else: 
+                            i = ["backward", "left", "right", "forward"].index(parsed_dict["directions"][0])
+                            direction_choice = ["b", "l", "r", "f"][i]
+                            blrf_dict = self.player1.check_blrf_directions()
+
+                            next_rooms = [self.player1.loc.north, self.player1.loc.east, self.player1.loc.south, self.player1.loc.west]
+                            i = ['n', 'e', 's', 'w'].index(blrf_dict[direction_choice])
+                            return_tuple = self.player1.move_nesw(blrf_dict[direction_choice], next_rooms[i])
+                            dest, helper = return_tuple[0], return_tuple[1]
+                            actions = gl.combine_dicts(actions, return_tuple[2])
+
+            else:
+                # Print error message if there are multiple actions
+                pass
+                
+        # If the parsed dictionary does not have an action
+        # and does have a direction or a nearby object
+        elif len(parsed_dict["directions"]) > 0 or len(parsed_dict["nearby_objects"]) > 0:
+            if len(parsed_dict["directions"]) + len(parsed_dict["nearby_objects"]) == 1:
+                if len(parsed_dict["directions"]) == 1:
+                    if parsed_dict["directions"][0] == "cardinal":
+                        actions["print_all"].append("You don't know your cardinal directions in here.")
+                    else: 
+                        actions['print_all'].append(self.player1.loc.print_directions(self.player1, parsed_dict["directions"][0]))
+                elif len(parsed_dict["nearby_objects"]) == 1:
                     pass
-                else:
-                    actions['print_all'].append("You cannot break this item")
-        
-        
+            else:
+                # Please refer to one object at a time
+                pass
+        # If the parsed dictionary does not have an action, or a direction, or a nearby object
+        # and does have a special action
+        elif len(parsed_dict["special_actions"]) > 0:
+            for action in parsed_dict["special_actions"]:
+                match action:
+                    case "xd" : actions["print_all"].append(self.player1.loc.print_directions(self.player1, None))
+                    case "xi" : actions["print_all"].append(self.player1.loc.xray_look_storage_units())
+
+
+
         return (dest, helper, actions)
     
 

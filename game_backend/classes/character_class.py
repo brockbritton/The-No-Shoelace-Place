@@ -66,30 +66,6 @@ class Character:
         self.inv.append(item)
         return self.build_inv_str_list()
 
-    def add_inventory_choice(self, choice, item): ##unneeded?
-        
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        if choice.lower() == "y":
-            if (len(self.inv) < self.inv_cap):
-                actions['print_all'].append("You have added a " + item.name + " to your inventory.")
-                actions['update_inv_visual'] = self.add_inventory(item)
-                self.loc.remove_item(item)
-                return (None, None, actions)
-            else:
-                 
-                actions['print_all'].append("Your inventory is full.")
-      
-                actions['print_all'].append("Would you like to remove an item from your inventory to make space for the " + item.name + "?")
-                actions['ask_y_or_n'] = True
-                return ("full_inv_drop_items", item, actions)
-
-        elif choice.lower() == "n":
-            actions['print_all'].append("You did not pick up the " + item.name)
-            return (None, None, actions)
-
     def pick_up_item(self, item):
         actions = {
             'print_all': [],
@@ -107,140 +83,74 @@ class Character:
             actions['ask_y_or_n'] = True
             return ("full_inv_drop_items", item, actions)
 
+    def add_inventory_choice(self, choice, item):
+        actions = {
+            'print_all': [],
+            'ask_y_or_n': False
+        }
+        if choice.lower() == "y":
+            return self.pick_up_item(item)
+
+        elif choice.lower() == "n":
+            actions['print_all'].append("You did not pick up the " + item.name)
+            return (None, None, actions)
+
     def sub_inventory(self, item):
         self.inv.remove(item)
         return self.build_inv_str_list()
 
     def drop_item(self, item, loc):
+        actions = {}
         self.loc.add_item(item, loc)
-        actions = {'update_inv_visual': self.sub_inventory(item)}
-        return (None, None, actions)
-                
-    def enter_room(self): #####
-        actions = {
-            'print_all': [],
-            'update_ui_values': []
-        }
-        actions['print_all'].append(self.loc.print_room_name())
-        actions['update_ui_values'].append("room_value")
-
-        if not self.loc.visited:
-            # Updating XP for gui 
-            actions['print_all'].append(f"New Room Discovered! + {self.xp_dict['new_room']}xp")
-            actions['update_ui_values'].append(self.earn_xp(10))
-            self.loc.visited = True
-
-        if self.loc.lights_on:
-            actions['print_all'].append(self.loc.print_description())
-
-        if not self.loc.lights_on:
-            stumble = random.randint(1,12)
-            if stumble == 1:
-                self.health -= 5
-                if self.health < 0:
-                    self.health = 0
-                actions['print_all'].append("In the dark, you stumbled and fell, scraping your hands on the rough ground.")
-                actions['print_all'].append("Your health is now at: " + str(self.health)) 
-
-                if self.health <= 0:
-                    return (None, "dead", actions)
-            
-        if len(self.loc.monsters) != 0:
-            
-            actions['print_all'].append("Look out! There's a " + self.loc.monsters[0].species + "!")
-            #dest, helper = self.fighting_menu(self.loc.monsters[0])
-            dest, helper = None, None
-            return (dest, helper, actions)
-
-        if isinstance(self.loc, room_class.Basement_Room) and self.loc.lights_on and self.health != 0: 
-            dest, helper = self.look_around()
-            return (dest, helper, actions)
-
+        actions['update_inv_visual'] = self.sub_inventory(item)
+        ##try except for the ground
+        try:
+            actions['print_all'] = [f"You have dropped the {item.name} on the {loc.name}."] 
+        except AttributeError:
+            actions['print_all'] = [f"You have dropped the {item.name} on the ground."]
         return (None, None, actions)
 
-    def look_around(self): #####
+    def full_inv_drop_items(self, choice, item):
+        ##expecting y or n
         actions = {
             'print_all': [],
             'ask_y_or_n': False
         }
-        if not self.loc.lights_on:
-            actions['print_all'].append(self.loc.print_description())
-        else:
-            actions['print_all'].append(self.loc.print_items_loc_desc())
-        
-        if len(self.loc.storage_containers) == 0 and len(self.loc.interacts) == 0:
-            actions['print_all'].append("There is nothing here...")
-            
-        actions['print_all'].append(self.loc.print_directions(self, None))
+        if choice.lower() == "y":
+            actions['print_all'].append("Would you like to drop " + self.inv[0].name + " for " + item.name + "?")
+            actions['ask_y_or_n'] = True
+            return ("drop_x_for_y", [self.inv[0], item], actions)
 
-        return (None, None, actions)
-
-    def check_accuracy(self):
-        if self.loc.lights_on:
-            return 0
         else: 
-            return random.randint(0,3)
-
+            return (None, None, actions)
+            
+    def drop_x_for_y(self, choice, list):
+        #list inv_item, found_item 
+        ##expecting y or n 
+        actions = {
+            'print_all': [],
+            'ask_y_or_n': False
+        }
+        if choice.lower() == "y":
+            return_tuple1 = self.drop_item(list[0], None) #this might work but its ugly
+            return_tuple2 = self.pick_up_item(list[1])
+            return (None, None, return_tuple2[2])
+            
+        
+        elif choice.lower() == "n":
+            if self.inv.index(list[0]) + 1 == len(self.inv):
+                actions['print_all'].append("You didn't drop anything or pick up " + self.loc.items[list[1]].name)
+                return (None, None, actions)
+            else:
+                next_item = self.inv[self.inv.index(list[0]) + 1]
+    
+                actions['print_all'].append("Would you like to drop " + next_item.name + " for " + list[1].name + "?")
+                actions['ask_y_or_n'] = True
+                return ("drop_x_for_y", [next_item, list[1]], actions)     
+    
     def take_damage(self, damage, affect):
         self.health -= damage
         self.condition = affect
-
-    def take_conditional_damage(self):
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        chance = random.randint(1, 6)
-        if chance == 1:
-            if self.condition == "poison":
-                self.health -= random.randint(1,4)
-                 
-                actions['print_all'].append("Your poisoning has hurt you.")
-                actions['print_all'].append("Your health is now at " + str(self.health) + " points")
-                 
-            elif self.condition == "bleeding":
-                self.health -= random.randint(1,6)
-                 
-                actions['print_all'].append("Your bleeding has hurt you.")
-                actions['print_all'].append("Your health is now at " + str(self.health) + " points.")
-            return actions['print_all']
-                 
-    def display_fighting_options(self, flist):
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        actions['print_all'].append("Combat Options: ") #wrong word?
-         
-        for i in range(0, len(flist)): 
-            actions['print_all'].append("\t" + str(i+1) + ".   " + str(flist[i]))
-        return actions['print_all']
-
-    def fighting_menu(self, monster): ###### NEEDS WORK #######
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        fighting = ["Attack", "Defend", "Heal"]
-
-        if monster.nature == "passive":
-            fighting.append("Escape")
-            actions['print_all'].append("The " + monster.species + " is calmly sitting in the middle of the room")
-        elif monster.nature == "aggresive":
-            actions['print_all'].append("As you enter the room, the " + monster.species + " engages you immediately!")
-        
-        self.display_fighting_options(fighting)
-        if self.condition == None:
-            condition = "Healthy"
-        else: 
-            condition = self.condition
-
-        actions['print_all'].append("Your Health: " + str(self.health) + "\t Your Condition: " + condition)
-        actions['print_all'].append(monster.species + " Health: " + str(monster.health))
-
-          
-        actions['print_all'].append("Choose a combat action:")
-        return ("choose_fight_action", [monster, fighting], actions)
     
     def choose_room(self, choice, list):
         #list: d_choice, next_rooms (plural)
@@ -292,7 +202,7 @@ class Character:
                     if dest == "open_door":
                         self.last_loc = self.loc
                         self.loc = next_room
-                        enter_room_tuple = self.enter_room()
+                        enter_room_tuple = self.loc.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
                     return (dest, [next_room, d_choice, self.loc.doors[d_choice]], actions)
@@ -303,7 +213,7 @@ class Character:
                     else: 
                         self.last_loc = self.loc
                         self.loc = next_room
-                        enter_room_tuple = self.enter_room()
+                        enter_room_tuple = self.loc.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
             else:
@@ -315,7 +225,7 @@ class Character:
                     actions = gl.combine_dicts(actions, actions_open_close)
                     if dest == "open_door":
                         self.loc = next_room
-                        enter_room_tuple = self.enter_room()
+                        enter_room_tuple = self.loc.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
                     return (dest, [next_room, d_choice, self.loc.doors[d_choice][next_room_index]], actions)
@@ -326,7 +236,7 @@ class Character:
                     else: 
                         self.last_loc = self.loc
                         self.loc = next_room
-                        enter_room_tuple = self.enter_room()
+                        enter_room_tuple = self.loc.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
 
@@ -337,7 +247,7 @@ class Character:
             else: 
                 self.last_loc = self.loc
                 self.loc = next_room
-                enter_room_tuple = self.enter_room()
+                enter_room_tuple = self.loc.enter_room(self)
                 actions = gl.combine_dicts(actions, enter_room_tuple[2])
                 return (enter_room_tuple[0], enter_room_tuple[1], actions)
 
@@ -392,60 +302,6 @@ class Character:
             blrf_dict[blrf_direct_list[i]] = nesw_direct_list[i]
         return blrf_dict
 
-    def drop_gen_item(self, choice, item):
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        actions['print_all'].append("You have dropped the " + item.name)
-        self.loc.add_item(item, None)
-        actions['update_inv_visual'] = self.sub_inventory(item)
-
-        return (None, None, actions)
-
-    def full_inv_drop_items(self, choice, item):
-        ##expecting y or n
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        if choice.lower() == "y":
-            actions['print_all'].append("Would you like to drop " + self.inv[0].name + " for " + item.name + "?")
-            actions['ask_y_or_n'] = True
-            return ("drop_x_for_y", [self.inv[0], item], actions)
-
-        else: 
-            return (None, None, actions)
-            
-    def drop_x_for_y(self, choice, list):
-        #list inv_item, found_item 
-        ##expecting y or n 
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        if choice.lower() == "y":
-             
-            actions['print_all'].append("You have dropped " + list[0].name + " for " + list[1].name)
-            
-            actions['update_inv_visual'] = self.add_inventory(list[1])
-            self.loc.remove_item(list[1])
-            self.loc.add_item(list[0], None)
-            actions['update_inv_visual'] = self.sub_inventory(list[0])
-            
-            return (None, None, actions)
-        
-        elif choice.lower() == "n":
-            if self.inv.index(list[0]) + 1 == len(self.inv):
-                actions['print_all'].append("You didn't drop anything or pick up " + self.loc.items[list[1]].name)
-                return (None, None, actions)
-            else:
-                next_item = self.inv[self.inv.index(list[0]) + 1]
-    
-                actions['print_all'].append("Would you like to drop " + next_item.name + " for " + list[1].name + "?")
-                actions['ask_y_or_n'] = True
-                return ("drop_x_for_y", [next_item, list[1]], actions)     
-
     def inspect_pb(self, choice):
         ##expecting y or n
         actions = {
@@ -492,59 +348,6 @@ class Character:
             return ("interact_pb", None, actions)
             
         return (None, None, actions)
-
-    def inspect_comp(self, choice): #maybe make player have to plug it in
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-
-        if choice.lower() == "y":
-            actions['print_all'].append("There is a heavy layer of dust coating the screen.")
-            actions['print_all'].append("Upon wiping it away, you notice a power button at the base.")
-            actions['print_all'].append("Would you like to press the power button?")
-            actions['ask_y_or_n'] = True
-            return ("interact_comp", None, actions)
-
-        elif choice.lower() == "n":
-            actions['print_all'].append("You did not interact with the computer.")
-            return (None, None, actions)
-        else:
-            actions['ask_y_or_n'] = True
-            return ("inspect_comp", None, actions)
-
-    def choose_fight_action(self, choice, list): 
-        # For battle step one
-        pass
-    
-    def choose_ability(self, monster):
-        # For battle
-        pass
-
-    def after_heal_combat(self, list):
-        #list: state, monster
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        damage, affect = list[1].monst_take_turn()
-        actions['print_all'].append("The " + list[1].species + " dealt " + str(damage) + " damage to you!")
-         
-        if affect == "flee":
-            return (None, None, actions)
-        self.take_damage(damage, affect)
-        
-        if self.health <= 0: 
-            actions['print_all'].append("You have died.") #how to end game
-            return (None, "dead", actions)
-
-        else: 
-            actions['print_all'].append("Choose a combat action:")
-            return ("choose_fight_action", [list[1], ["Attack", "Defend", "Heal"]], actions)
-
-    def deal_take_damage(self, choice, list):
-        #return "choose_fight_action", [list[3], ["Attack", "Defend", "Heal"]]
-        pass
 
     def open_door_key(self, choice, list):
 
@@ -625,13 +428,13 @@ class Character:
             if self.loc.doors[help_list[1]].open:
                 self.last_loc = self.loc
                 self.loc = help_list[0]
-                return_tuple = self.enter_room()
+                return_tuple = self.loc.enter_room(self)
                 dest, helper, actions = gl.parse_tuples(return_tuple, actions)
                 return (dest, helper, actions)
 
             else:
                 actions['print_all'].append("Try another way.")
-                return_tuple = self.enter_room()
+                return_tuple = self.loc.enter_room(self)
                 dest, helper, actions = gl.parse_tuples(return_tuple, actions)
                 return (dest, helper, actions)
         else:
@@ -639,19 +442,13 @@ class Character:
             if self.loc.doors[help_list[1]][i].open:
                 self.last_loc = self.loc
                 self.loc = help_list[0]
-                return_tuple = self.enter_room()
+                return_tuple = self.loc.enter_room(self)
                 dest, helper, actions = gl.parse_tuples(return_tuple, actions)
                 return (dest, helper, actions)
 
             else:
                 actions['print_all'].append("Try another way.")
-                return_tuple = self.enter_room()
+                return_tuple = self.loc.enter_room(self)
                 dest, helper, actions = gl.parse_tuples(return_tuple, actions)
                 return (dest, helper, actions)
-
-    def drop_item_choice(self, choice):
-            item_index = self.inv.index(choice)
-            dest, helper = self.drop_item(item_index, None)
-            #gui_char.update_inv_visual(self)
-            return dest, helper
 

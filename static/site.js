@@ -76,6 +76,8 @@ function load_prints(list) {
 function printtk(text) {
     if (text == null) {
         text = "null_data"
+    } else if (text.length == 0) {
+        text = "empty_string"
     }
     var par = document.createElement("p");
     par.classList.add("command_input_text");

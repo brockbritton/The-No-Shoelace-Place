@@ -6,9 +6,10 @@ class Item:
     def __init__(self, name, gen_name) -> None:
         self.name = name
         self.gen_name = gen_name
+        self.article = "a"
         self.inspect_bool = True
 
-    def inspect_item(self): 
+    def inspect_object(self): 
         actions = {
             'print_all': [],
         }
@@ -239,3 +240,4 @@ class Lockable_Door(Lockable_Interact, Door):
     def __init__(self, name, gen_name, keys_list) -> None:
         super().__init__(name, gen_name, keys_list)
         self.keyable = True
+

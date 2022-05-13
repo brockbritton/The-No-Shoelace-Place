@@ -1,7 +1,7 @@
 
 
 import num2words as n2w
-
+import random
 import game_backend.classes.item_class as item_class
 import game_backend.objects.items as item
 
@@ -24,6 +24,41 @@ class Room:
         self.has_doors = False
         self._room_registry.append(self)
         self.visited = False
+
+    def inspect_object(self):
+        actions = {
+            'print_all': [],
+        }
+
+        actions['print_all'].append(self.description)
+        if len(self.storage_containers) > 0:
+            actions['print_all'].append(self.look_storage_units())
+
+        return actions
+
+
+       
+    def look_storage_units(self):
+        if len(self.storage_containers) == 1:
+            sentence = f"In the room is a {self.storage_containers[0].name}."
+        elif len(self.storage_containers) == 2:
+            sentence = f"In the room is a {self.storage_containers[0].name} and a {self.storage_containers[1].name}."
+        else:
+            sentence = f"In the room is a {self.storage_containers[0].name}, "
+            for i in range(1, len(self.storage_containers)-2):
+                sentence += f"a {self.storage_containers[i].name}, "
+            sentence += f"and a {self.storage_containers[-1].name}."
+
+        return sentence
+    
+
+    def xray_look_storage_units(self):
+        # Storage_Spot, Storage_Bin, Storage_Box, Storage_LockBox 
+        sentences = ""
+        for sc in self.storage_containers:
+            sentences +=  (f"{sc.name}: {sc.items}. ")
+
+        return sentences
 
     def set_coordinates(self, n, e, s, w):
         self.north = n
@@ -49,7 +84,6 @@ class Room:
         for i in list:
             self.interacts.append(i)
 
-
     def set_demons(self, list):
         for i in list:
             self.monsters.append(i)
@@ -71,12 +105,6 @@ class Room:
             if item in sc.items:
                 sc.items.remove(item)
 
-    def print_room_name(self):
-        return ("You have now entered: " + self.name)
-
-    def print_description(self):
-        return ("Room Description: " + self.description)
-
     def switch_lights(self):
         if self.lights_on:
             self.lights_on = False
@@ -86,6 +114,33 @@ class Room:
     def update_storage_dict(self):
         for sc in self.storage_containers:
             self.storage_dict[sc] = sc.items
+
+    def enter_room(self, player):
+        actions = {
+            'print_all': [],
+            'update_ui_values': []
+        }
+        actions['print_all'].append(f"You have now entered {self.name}.")
+        actions['update_ui_values'].append("room_value")
+
+        if not self.visited:
+            # Updating XP for gui 
+            actions['print_all'].append(f"New Room Discovered! + {player.xp_dict['new_room']}xp")
+            actions['update_ui_values'].append(player.earn_xp(10))
+            self.visited = True
+
+        if not self.lights_on:
+            #some check about having full battery flashlight
+            stumble = random.randint(1,12)
+            if stumble == 1:
+                actions['print_all'].append("In the dark, you stumbled and fell, scraping your hands on the rough ground.")
+                actions['update_ui_values'].append("health_value")
+                player.health -= 5
+                if player.health <= 0:
+                    player.health = 0
+                    return (None, "dead", actions)
+                
+        return (None, None, actions)
 
     def print_directions(self, player, none_or_one): 
         #left, forward, right, back
