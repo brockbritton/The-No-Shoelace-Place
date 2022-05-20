@@ -73,9 +73,9 @@ def loading_game():
 
     return return_dict
 
-@app.route("/game/cheat-sheet")
+@app.route("/game/instructions")
 def cheat_sheet():
-    return render_template("cheat_sheet.html")
+    return render_template("instructions.html")
 
 
 @app.route("/api/data")

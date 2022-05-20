@@ -77,7 +77,6 @@ class Character:
             self.loc.remove_item(item)
             return (None, None, actions)
         else:
-             
             actions['print_all'].append("Your inventory is full.")
             actions['print_all'].append("Would you like to remove an item from your inventory to make space for the " + item.name + "?")
             actions['ask_y_or_n'] = True
@@ -151,13 +150,6 @@ class Character:
     def take_damage(self, damage, affect):
         self.health -= damage
         self.condition = affect
-    
-    def choose_room(self, choice, list):
-        #list: d_choice, next_rooms (plural)
-        room_index = list[1].index(choice) 
-
-        return_tuple = self.move_nesw(list[0], list[1][room_index])
-        return return_tuple
 
     def move_nesw(self, d_choice, next_room):
         #from main - choice: 'n', 's', 'e', 'w'
@@ -191,21 +183,22 @@ class Character:
                     display_rooms.append("Unknown Room")
 
             actions['build_multiple_choice'] = [display_rooms, next_room]
-            return ("choose_room", [d_choice, next_room], actions)
+            return ("move_nesw", [d_choice, next_room], actions)
 
         if self.loc.has_doors: #also check where doors have already been unlocked
             
             if not isinstance(self.loc.doors[d_choice], list): 
                 if self.loc.doors[d_choice] != None: 
-                    (dest, actions_open_close) = self.loc.doors[d_choice].open_interact(self)
+                    dest, helper, actions_open_close = self.loc.doors[d_choice].open_item()
                     actions = gl.combine_dicts(actions, actions_open_close)
-                    if dest == "open_door":
+                    if self.loc.doors[d_choice].open:
                         self.last_loc = self.loc
                         self.loc = next_room
                         enter_room_tuple = self.loc.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
-                    return (dest, [next_room, d_choice, self.loc.doors[d_choice]], actions)
+                    #return (dest, [next_room, d_choice, self.loc.doors[d_choice]], actions)
+                    return (dest, helper, actions)
         
                 else:
                     if next_room == 0:
@@ -221,14 +214,15 @@ class Character:
                 next_room_index = possible_rooms.index(next_room)
                 if self.loc.doors[d_choice][next_room_index] != None: 
                     
-                    (dest, actions_open_close) = self.loc.doors[d_choice][next_room_index].open_interact(self)
+                    dest, helper, actions_open_close = self.loc.doors[d_choice][next_room_index].open_item()
                     actions = gl.combine_dicts(actions, actions_open_close)
-                    if dest == "open_door":
+                    if self.loc.doors[d_choice][next_room_index].open:
                         self.loc = next_room
                         enter_room_tuple = self.loc.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
-                    return (dest, [next_room, d_choice, self.loc.doors[d_choice][next_room_index]], actions)
+                    #return (dest, [next_room, d_choice, self.loc.doors[d_choice][next_room_index]], actions)
+                    return (dest, helper, actions)
         
                 else:
                     if next_room == 0:
@@ -302,153 +296,12 @@ class Character:
             blrf_dict[blrf_direct_list[i]] = nesw_direct_list[i]
         return blrf_dict
 
-    def inspect_pb(self, choice):
-        ##expecting y or n
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        if choice.lower() == "y":
-            actions['print_all'].append("There is a lever attached to the box.")
-            actions['print_all'].append("There is an instruction label on the box,") 
-            actions['print_all'].append("but the words have long since faded away.")
-            actions['print_all'].append("Would you like to pull the lever?")
-            actions['ask_y_or_n'] = True
-            return ("interact_pb", None, actions)
-        elif choice.lower() == "n":
-            actions['print_all'].append("You did not interact with the power box.")
-            return (None, None, actions)
-        else:
-            actions['ask_y_or_n'] = True
-            return ("inspect_pb", None, actions)
-            
-    def interact_pb(self, choice):
-        #y or n
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        if choice.lower() == "y":
-            index = self.loc.interacts.index(item.power_box)
-             
-            if self.loc.lights_on:
-                self.loc.interacts[index].hit_switch()
-                actions['print_all'].append("You pulled the lever and the room is plunged into darkness.")
+    def ask_unlock_item(self, choice, item):
+        actions = {}
 
-            else: 
-                self.loc.interacts[index].hit_switch()
-                
-                actions['print_all'].append("You pulled the lever and the bright florescent lights flooded the room.")
-            
-        elif choice.lower() == "n":
-            actions['print_all'].append("You did not interact with the power box.")
-        
-        else:
-            actions['ask_y_or_n'] = True
-            return ("interact_pb", None, actions)
-            
+        if choice == 'y':
+            actions = item.unlock_item(self)
+        elif choice == 'n':
+            actions['print_all'] = [f"You did not try to unlock the {item.name}."]
+
         return (None, None, actions)
-
-    def open_door_key(self, choice, list):
-
-        #list: next_room, direction choice, door
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False,
-            'update_ui_values': []
-        }
-        if choice == 'y':
-            list[2].locked = False
-            list[2].open = True
-        elif choice == 'n':
-            actions['print_all'].append("The door is still locked.")
-        else: 
-            #gui_char.ask_y_n()
-            return ("open_door_key", list, actions)
-
-        return_tuple = self.check_move_through_door(list)
-        dest, helper, actions = gl.parse_tuples(return_tuple, actions)
-        return (dest, helper, actions)
-
-    def open_door_crowbar(self, choice, list): 
-        #list: next_room, direction choice, door, player
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False,
-            'update_ui_values': []
-        }
-        if choice == 'y':
-            list[2].locked = False
-            list[2].broken = True
-            list[2].open = True
-        elif choice == 'n':
-            actions['print_all'].append("The door is still locked.")
-        else:
-            actions['ask_y_or_n'] = True
-            return ("open_door_crowbar", list, actions)
-        
-        return_tuple = self.check_move_through_door(list)
-        dest, helper, actions = gl.parse_tuples(return_tuple, actions)
-        return (dest, helper, actions)
-
-    def open_electronic_door(self, choice, list):
-        #list: next_room, direction choice, door
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False,
-            'update_ui_values': []
-        }
-        if choice == '1':
-            actions['print_all'].append("Ready for Code: ")
-            list.append(self)
-            return ("enter_code", list, actions)
-
-        elif choice == '2' and item.keycard in self.inv:
-            actions['print_all'].append("You swiped your keycard and the door opened.")
-            list[2].locked = False
-            list[2].open = True
-            return_tuple = self.check_move_through_door(list)
-            dest, helper, actions = gl.parse_tuples(return_tuple, actions)
-            return (dest, helper, actions)
-
-        else:
-            actions['print_all'].append("Please enter a valid choice.")
-            return ("open_electronic_door", list, actions)
-
-    def check_move_through_door(self, help_list): 
-        #list: next_room, direction choice, door
-          
-        print(self.loc.doors)
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False,
-            'update_ui_values': []
-        }
-        if not isinstance(self.loc.doors[help_list[1]], list):
-            if self.loc.doors[help_list[1]].open:
-                self.last_loc = self.loc
-                self.loc = help_list[0]
-                return_tuple = self.loc.enter_room(self)
-                dest, helper, actions = gl.parse_tuples(return_tuple, actions)
-                return (dest, helper, actions)
-
-            else:
-                actions['print_all'].append("Try another way.")
-                return_tuple = self.loc.enter_room(self)
-                dest, helper, actions = gl.parse_tuples(return_tuple, actions)
-                return (dest, helper, actions)
-        else:
-            i = self.loc.doors[help_list[1]].index(help_list[2])
-            if self.loc.doors[help_list[1]][i].open:
-                self.last_loc = self.loc
-                self.loc = help_list[0]
-                return_tuple = self.loc.enter_room(self)
-                dest, helper, actions = gl.parse_tuples(return_tuple, actions)
-                return (dest, helper, actions)
-
-            else:
-                actions['print_all'].append("Try another way.")
-                return_tuple = self.loc.enter_room(self)
-                dest, helper, actions = gl.parse_tuples(return_tuple, actions)
-                return (dest, helper, actions)
-

@@ -1,5 +1,4 @@
 
-from tkinter import E
 import game_backend.classes.character_class as character_class
 import game_backend.classes.item_class as item_class
 import game_backend.classes.parser_class as parser_class
@@ -97,7 +96,7 @@ class Game:
             'ask_y_or_n': False,
             'rebuild_text_entry': False,
             'update_inv_visual': [],
-            'update_ui_values': ["room_value"] ###keep empty 
+            'update_ui_values': ["room_value"] ###keep list empty 
         }
 
         # Save the player input as part as the saved prints
@@ -121,17 +120,11 @@ class Game:
                 case "add_inventory_choice": return_tuple = self.player1.add_inventory_choice(input_value, self.master_helper) 
                 case "full_inv_drop_items": return_tuple = self.player1.full_inv_drop_items(input_value, self.master_helper) 
                 case "drop_x_for_y": return_tuple = self.player1.drop_x_for_y(input_value, self.master_helper) 
-                case "inspect_pb": return_tuple = self.player1.inspect_pb(input_value) 
-                case "interact_pb": return_tuple = self.player1.interact_pb(input_value)
                 case "deal_take_damage": return_tuple = self.player1.deal_take_damage(input_value, self.master_helper) 
-                case "choose_fight_action": return_tuple = self.player1.choose_fight_action(input_value, self.master_helper) 
-                case "open_door_key": return_tuple = self.player1.open_door_key(input_value, self.master_helper) 
-                case "open_door_crowbar": return_tuple = self.player1.open_door_crowbar(input_value, self.master_helper) 
-                case "choose_room": return_tuple = self.player1.choose_room(input_value, self.master_helper)
-                case "open_electronic_door": return_tuple = self.player1.open_electronic_door(input_value, self.master_helper)
-                case "drop_item": return_tuple = self.player1.drop_item_choice(input_value)
+                case "move_nesw": return_tuple = self.player1.move_nesw(self.master_helper[0], self.master_helper[1][self.master_helper[1].index(input_value)])
                 case "enter_code": return_tuple = self.master_helper[2].enter_code(input_value, self.master_helper)
                 case "execute_event": return_tuple = self.master_helper.execute_event(input_value)
+                case "ask_unlock_item": return_tuple = self.player1.ask_unlock_item(input_value, self.master_helper)
 
 
         # Otherwise, just use the input as it was given
@@ -203,7 +196,7 @@ class Game:
         self.save_prints.extend(actions['print_all'])
 
         print()
-        print("master return", self.master_dest)
+        print("master destination", self.master_dest)
         print("master helper", self.master_helper)
         print("master actions", actions)
 
@@ -233,7 +226,7 @@ class Game:
         # If the parsed dictionary has an action
         if len(parsed_dict["action"]) > 0:
             if len(parsed_dict["action"]) == 1:
-                # If there is an action and an object
+                # If there is one action and one object
                 if len(parsed_dict["nearby_objects"]) == 1:
                     if parsed_dict["action"][0] == "pick up":
                         if isinstance(parsed_dict["nearby_objects"][0], item_class.Inv_Item):
@@ -260,46 +253,51 @@ class Game:
                             actions['print_all'].append("You cannot inspect this item.")
 
                     elif parsed_dict["action"][0] == "open":
-                        if True:
-                            pass
-                        else:
-                            actions['print_all'].append("You cannot open this item")
+                        try:
+                            dest, helper, actions = gl.parse_tuples(parsed_dict["nearby_objects"][0].open_item(), actions)
+                            
+                        except AttributeError:
+                            actions['print_all'].append("You cannot open this item.")
+                    
+                    elif parsed_dict["action"][0] == "close":
+                        try:
+                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].close_item())
+                        except AttributeError:
+                            actions['print_all'].append("You cannot close this item.")
 
                     elif parsed_dict["action"][0] == "unlock":
-                        if True:
-                            pass
-                        else:
-                            actions['print_all'].append("You cannot unlock this item")
+                        try:
+                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].unlock_item(self.player1))
+                        except AttributeError:
+                            actions['print_all'].append("You cannot unlock this item.")
 
                     elif parsed_dict["action"][0] == "lock":
-                        if True:
-                            pass
-                        else:
-                            actions['print_all'].append("You cannot lock this item")
-
-                    elif parsed_dict["action"][0] == "interact":
-                        if True:
-                            pass
-                        else:
-                            actions['print_all'].append("You cannot interact with this item")
+                        try:
+                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].lock_item())
+                        except AttributeError:
+                            actions['print_all'].append("You cannot lock this item.")
 
                     elif parsed_dict["action"][0] == "break":
-                        if True:
-                            pass
-                        else:
-                            actions['print_all'].append("You cannot break this item")
+                        try:
+                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].break_item())
+                        except AttributeError:
+                            actions['print_all'].append("You cannot break this item.")
                 
-                # For if there are cases when multiple objects need to be parsed
+                # For if there are cases when an action and multiple objects need to be parsed
                 elif len(parsed_dict["nearby_objects"]) > 1:
                     # If one is a storage unit and one is an inv_item
-                    if parsed_dict["action"][0] == "drop":
-                        # check for if one is a storage unit and one is an inv_item
-                        inv_item, storage_unit = parsed_dict["nearby_objects"], parsed_dict["nearby_objects"]
+                    if parsed_dict["action"][0] == "drop" and len(parsed_dict["nearby_objects"]) == 2:
                         # Check for if one is a storage unit and one is an inv_item
-                        if parsed_dict["nearby_objects"][0] in self.player1.inv:
-                            return_tuple = self.player1.drop_item(parsed_dict["nearby_objects"][0], None) #need parsing for drop location
+                        if isinstance(parsed_dict["nearby_objects"][0], item_class.Storage_Unit) and isinstance(parsed_dict["nearby_objects"][1], item_class.Inv_Item):
+                            inv_item, storage_unit = parsed_dict["nearby_objects"][1], parsed_dict["nearby_objects"][0]
+                        elif isinstance(parsed_dict["nearby_objects"][1], item_class.Storage_Unit) and isinstance(parsed_dict["nearby_objects"][0], item_class.Inv_Item):
+                            inv_item, storage_unit = parsed_dict["nearby_objects"][0], parsed_dict["nearby_objects"][1]
+                        # If the inv_item is in the player inventory, put it in the storage unit
+                        if inv_item in self.player1.inv:
+                            return_tuple = self.player1.drop_item(inv_item, storage_unit)
                             dest, helper, actions = gl.parse_tuples(return_tuple, actions)
                         else:
+                            # allow player to move item from one storage unit to the other 
                             actions['print_all'].append("You cannot drop this item because you are not holding it.") 
 
 

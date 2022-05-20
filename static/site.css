@@ -77,7 +77,7 @@ html {
 
 .large_bordered_button:hover {
     color: #A9A9A9;
-    border: 0.125em solid #A9A9A9;
+    border: 0.125em solid #A9A9A9; 
 }
 
 .regular_bordered_button {
@@ -105,7 +105,7 @@ html {
 /* ######### */
 
 
-#image_header{
+#image_header {
     position: relative;
     margin-top: -3.125em;
     height: 15.625em;
@@ -480,4 +480,42 @@ html {
     margin-left: 3em;
     align-items: center;
     justify-content: center;
+}
+
+/* ################### */
+/* Credits Page Styles */
+/* ################### */
+
+#credits-header {
+    font-size: 3em;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#left-description {
+    float: left;
+    width: 50%;
+    height: auto;
+
+}
+
+#left-description p {
+    text-align: right;
+    margin-right: 2em;
+    font-size: 1.5em;
+}
+
+
+#right-name {
+    float: right;
+    width: 50%;
+    height: auto;
+}
+
+#right-name p {
+    text-align: left;
+    margin-left: 2em;
+    font-size: 1.5em;
+
 }

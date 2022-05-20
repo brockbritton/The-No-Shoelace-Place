@@ -9,11 +9,10 @@ class Parser:
         drop_keys = {'drop':["drop", "place", "put down", "put", "insert", "set"]}
         inspect_keys = {'inspect':["inspect", "look at", "examine", "read", "check out", "search"]}
         open_keys = {'open':["open"]}
-        unlock_keys = {'unlock':['unlock', 'unseal']}
         close_keys = {'close':["close", "shut"]}
+        unlock_keys = {'unlock':['unlock', 'unseal']}
         lock_keys = {'lock':["lock", "seal"]}
-        interact_keys = {'interact':["interact", "pull", "push"]}
-        break_keys = {'break':["break", "smash", "tear down", "rip off", "damage"]}
+        break_keys = {'break':["break", "smash", "tear down", "rip off", "damage", "destroy"]}
         move_keys = {'go':["go", "move", "walk", "turn"]}
         display_keys = {'display':["display", "view", "show", "reveal"]}
 
@@ -24,7 +23,7 @@ class Parser:
             "right" : ["right"]}
 
         self.all_actions = [pick_up_keys, drop_keys, inspect_keys, open_keys, unlock_keys,
-            close_keys, lock_keys, interact_keys, break_keys, move_keys, display_keys]
+            close_keys, lock_keys, break_keys, move_keys, display_keys]
         
     def parse_input(self, player, str_input):
         self.update_player(player)

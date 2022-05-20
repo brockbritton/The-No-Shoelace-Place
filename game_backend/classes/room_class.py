@@ -120,14 +120,15 @@ class Room:
             'print_all': [],
             'update_ui_values': []
         }
-        actions['print_all'].append(f"You have now entered {self.name}.")
-        actions['update_ui_values'].append("room_value")
 
         if not self.visited:
             # Updating XP for gui 
             actions['print_all'].append(f"New Room Discovered! + {player.xp_dict['new_room']}xp")
             actions['update_ui_values'].append(player.earn_xp(10))
             self.visited = True
+
+        actions['print_all'].append(f"You have now entered {self.name}.")
+        actions['update_ui_values'].append("room_value")
 
         if not self.lights_on:
             #some check about having full battery flashlight
