@@ -273,7 +273,7 @@ class Game:
 
                     elif parsed_dict["action"][0] == "lock":
                         try:
-                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].lock_item())
+                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].lock_item(self.player1))
                         except AttributeError:
                             actions['print_all'].append("You cannot lock this item.")
 

@@ -136,15 +136,24 @@ class Lockable_Interact(Openable_Interact):
 
         return actions
 
-    def lock_item(self, item):
+    def lock_item(self, player):
         actions = {
             'print_all': [],
             'build_multiple_choice': [],
             'ask_y_or_n': False
         }
         if not self.locked:
-            actions['print_all'].append(f"You have locked the {self.name} with the {item.name}.")
-            self.locked = True
+            locking_item = None
+            for item in self.compatible_keys:
+                if item in player.inv:
+                    locking_item = item
+                    break
+            if locking_item != None:
+                actions['print_all'].append(f"You have locked the {self.name} with the {locking_item.name}.")
+                self.locked = True
+            else:
+                actions['print_all'].append(f"You do not have anything that can lock the {self.name}.")
+            
         else:
             actions['print_all'].append(f"The {self.name} is already locked.")
 
