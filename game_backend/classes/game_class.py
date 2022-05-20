@@ -261,7 +261,7 @@ class Game:
                     
                     elif parsed_dict["action"][0] == "close":
                         try:
-                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].close_item())
+                            dest, helper, actions = gl.parse_tuples(parsed_dict["nearby_objects"][0].close_item(), actions)
                         except AttributeError:
                             actions['print_all'].append("You cannot close this item.")
 

@@ -94,7 +94,7 @@ class Openable_Interact(Interact):
         else:
             actions['print_all'].append(f"The {self.name} is already closed.")
         
-        return actions
+        return (None, None, actions)
         
 class Lockable_Interact(Openable_Interact):
     def __init__(self, name, gen_name, keys_list) -> None:
@@ -174,12 +174,12 @@ class Lockable_Interact(Openable_Interact):
             actions['ask_y_or_n'] = True
 
         else:
-            actions = gl.parse_tuples(super().open_item(), actions)
+            return super().open_item()
 
         return (dest, helper, actions)
         
     def close_item(self): 
-        return super().close_item
+        return super().close_item()
 
 
 class Storage_Unit(Interact):
