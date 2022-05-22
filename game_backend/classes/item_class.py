@@ -24,10 +24,9 @@ class Inv_Item(Item):
     # name - visible name of item  !!!! must be 17 characters or less !!!!
     # desc - description of item 
 
-    def __init__(self, name, gen_name, desc) -> None:
+    def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
         self.inv_space = 1
-        self.desc = desc  
         self.can_pick_up = True
         self.can_interact = False
         self.can_open_close = False
@@ -37,9 +36,16 @@ class Inv_Item(Item):
     def __repr__(self) -> str:
         return f'{self.name}(inv item)'
 
+    def pick_up_item(self, player):
+        pass
+
+    def drop_item(self, player):
+        pass
+    
+
 class Key(Inv_Item):
-    def __init__(self, name, gen_name , desc):
-        super().__init__(name, gen_name, desc)
+    def __init__(self, name, gen_name):
+        super().__init__(name, gen_name)
 
 
 
@@ -181,7 +187,6 @@ class Lockable_Interact(Openable_Interact):
     def close_item(self): 
         return super().close_item()
 
-
 class Storage_Unit(Interact):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
@@ -266,8 +271,7 @@ class Storage_LockBox(Lockable_Interact, Openable_Interact, Storage_Unit):
             else:
                 actions['print_all'].append(f"The {self.name} is closed.")
         return actions
-    
-      
+          
 class Door(Openable_Interact):
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
@@ -278,31 +282,43 @@ class Lockable_Door(Lockable_Interact, Door):
         super().__init__(name, gen_name, keys_list)
         self.keyable = True
 
+class Electronic_Door(Lockable_Interact, Door):
+    def __init__(self, name, gen_name, keys_list) -> None:
+        super().__init__(name, gen_name, keys_list)
+        self.keyable = False
+
+    def unlock_item(self, player):
+        #unlock using code or keyard also opens door
+        ...
+
+    def close_item(self):
+        #closing door also locks it again
+        ...
 
 #############################################
 ##### Individual Inventory Item Classes #####
 #############################################
 
 class Keycard(Inv_Item):
-    def __init__(self, name, gen_name , desc):
-        super().__init__(name, gen_name, desc)
+    def __init__(self, name, gen_name):
+        super().__init__(name, gen_name)
 
 class Plastic_Utensil(Inv_Item):
-    def __init__(self, name, gen_name , desc):
-        super().__init__(name, gen_name, desc)
+    def __init__(self, name, gen_name):
+        super().__init__(name, gen_name)
 
 class Flashlight(Inv_Item):
-    def __init__(self, name, gen_name , desc):
-        super().__init__(name, gen_name, desc)
+    def __init__(self, name, gen_name):
+        super().__init__(name, gen_name)
         self.full_power = False
 
 class Crowbar(Inv_Item):
-    def __init__(self, name, gen_name , desc):
-        super().__init__(name, gen_name, desc)
+    def __init__(self, name, gen_name):
+        super().__init__(name, gen_name)
 
 class ID_Bracelet(Inv_Item):
-    def __init__(self, name, gen_name , desc):
-        super().__init__(name, gen_name, desc)
+    def __init__(self, name, gen_name):
+        super().__init__(name, gen_name)
         self.properties = ["name", "age", "gender", "diagnosis"]
         self.values = [None, None, None, None]
 
@@ -311,8 +327,8 @@ class ID_Bracelet(Inv_Item):
         pass
 
 class Deck_of_Cards(Inv_Item, Storage_Box):
-    def __init__(self, name, gen_name, desc) -> None:
-        super().__init__(name, gen_name, desc)
+    def __init__(self, name, gen_name) -> None:
+        super().__init__(name, gen_name)
         self.items = []
         for i in (("\u2660", "spades"), ("\u2665", "hearts"), ("\u2666", "diamonds"), ("\u2663", "clubs")):
             for j in ("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"):
@@ -335,7 +351,7 @@ class Deck_of_Cards(Inv_Item, Storage_Box):
 
 class Suit_Card(Inv_Item):
     def __init__(self, number, suit_name, suit_display) -> None:
-        super().__init__(f"{number} {suit_display}", "card", "a cool card")
+        super().__init__(f"{number} {suit_display}", "card")
         self.suit = suit_display
         self.suit_name = suit_name
         self.number = number

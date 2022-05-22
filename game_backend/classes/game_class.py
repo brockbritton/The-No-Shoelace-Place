@@ -116,8 +116,6 @@ class Game:
             # and execute the desired action
             print("matching destination")
             match self.master_dest:
-                case "drop_gen_item": return_tuple = self.player1.drop_gen_item(input_value, self.master_helper) 
-                case "add_inventory_choice": return_tuple = self.player1.add_inventory_choice(input_value, self.master_helper) 
                 case "full_inv_drop_items": return_tuple = self.player1.full_inv_drop_items(input_value, self.master_helper) 
                 case "drop_x_for_y": return_tuple = self.player1.drop_x_for_y(input_value, self.master_helper) 
                 case "deal_take_damage": return_tuple = self.player1.deal_take_damage(input_value, self.master_helper) 

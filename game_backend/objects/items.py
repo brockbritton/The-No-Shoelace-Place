@@ -9,16 +9,13 @@ import game_backend.classes.item_class as item_class
     # Doors
    
 
-
-
-
 # Ward Item
 
-id_bracelet = item_class.ID_Bracelet("id bracelet", "bracelet", "") 
+id_bracelet = item_class.ID_Bracelet("id bracelet", "bracelet") 
 
-basement_key = item_class.Key("basement key", "key", "")
-cabinet_key = item_class.Key("ward cabinet keys", "key", "")
-ward_doors_key = item_class.Key("ward security key", "key", "")
+basement_key = item_class.Key("basement key", "key")
+cabinet_key = item_class.Key("ward cabinet keys", "key")
+ward_doors_key = item_class.Key("ward security key", "key")
 
 
 ##### Ward Rooms and Items #####
@@ -26,7 +23,7 @@ ward_doors_key = item_class.Key("ward security key", "key", "")
     # Storage Units
 cr_art_table = item_class.Storage_Spot("arts and crafts table", "table")
 cr_game_cabinets = item_class.Storage_LockBox("game cabinet", "cabinet", True, [cabinet_key, ward_doors_key])
-deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box", "")
+deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
 cr_ping_pong_table.set_items([deck_of_cards])
     # Doors
@@ -84,11 +81,11 @@ admissions_entrance = item_class.Lockable_Door("Admissions Exit Door", "door", N
 
 #### Basement Items ####
 
-power_room_key = item_class.Key("power room key", "key", "")
-keycard = item_class.Keycard("basement keycard", "key", "")
-crowbar = item_class.Crowbar("crowbar", "crowbar", "")
+power_room_key = item_class.Key("power room key", "key")
+keycard = item_class.Keycard("basement keycard", "key")
+crowbar = item_class.Crowbar("crowbar", "crowbar")
 
-flashlight = item_class.Flashlight("flashlight", "flashlight", "")
+flashlight = item_class.Flashlight("flashlight", "flashlight")
 
 #### Basement Interacts ####
 

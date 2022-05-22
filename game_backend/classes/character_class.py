@@ -82,18 +82,6 @@ class Character:
             actions['ask_y_or_n'] = True
             return ("full_inv_drop_items", item, actions)
 
-    def add_inventory_choice(self, choice, item):
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        if choice.lower() == "y":
-            return self.pick_up_item(item)
-
-        elif choice.lower() == "n":
-            actions['print_all'].append("You did not pick up the " + item.name)
-            return (None, None, actions)
-
     def sub_inventory(self, item):
         self.inv.remove(item)
         return self.build_inv_str_list()

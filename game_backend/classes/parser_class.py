@@ -1,7 +1,6 @@
 
 import re
 
-
 class Parser:
     def __init__(self) -> None:
         self.player = None
@@ -67,14 +66,15 @@ class Parser:
 
         ## Doors adjacent to the room
         #### It is not good to have the door name since thats not yet visibly available to the player
+        
         for door_or_doors in player.loc.doors.values():
             if isinstance(door_or_doors, list):
                 for door in door_or_doors:
                     if door != None and door.name.lower() in str_input.lower():
                         parsed_info["nearby_objects"].append(door)
             else:
-                if door != None and door.name.lower() in str_input.lower():
-                    parsed_info["nearby_objects"].append(door)
+                if door_or_doors != None and door_or_doors.name.lower() in str_input.lower():
+                    parsed_info["nearby_objects"].append(door_or_doors)
 
         # Loop over directions both for movement and displays
         for key, val in self.movement_dict.items():
