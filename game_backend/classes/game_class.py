@@ -117,8 +117,7 @@ class Game:
             print("matching destination")
             match self.master_dest:
                 case "full_inv_drop_items": return_tuple = self.player1.full_inv_drop_items(input_value, self.master_helper) 
-                case "drop_x_for_y": return_tuple = self.player1.drop_x_for_y(input_value, self.master_helper) 
-                case "deal_take_damage": return_tuple = self.player1.deal_take_damage(input_value, self.master_helper) 
+                case "drop_x_for_y": return_tuple = self.player1.multi_choice_drop_x_for_y(input_value, self.master_helper) 
                 case "move_nesw": return_tuple = self.player1.move_nesw(self.master_helper[0], self.master_helper[1][self.master_helper[1].index(input_value)])
                 case "enter_code": return_tuple = self.master_helper[2].enter_code(input_value, self.master_helper)
                 case "execute_event": return_tuple = self.master_helper.execute_event(input_value)
@@ -139,10 +138,11 @@ class Game:
                     break
         
         # Update the game destination and helper for the next input
+        # from either the case destination or the evaluated parser data
         # Also update the actions dict with the new value
         self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
-        
+        # If character health is 0, end the game
         if self.master_helper == "dead":
             #option to continue or quit to menu and start over
             #continue means new day and starting in room
@@ -174,11 +174,11 @@ class Game:
             self.wait_for_frontend_input['build_multiple_choice'] = actions['build_multiple_choice'][1] #values
             actions['build_multiple_choice'] = actions['build_multiple_choice'][0] #displays
         
-        # ask_y_or_no is just a simplistic way to note 
-        # to build a multiple choice
+        # ask_y_or_no is just a simplistic way to 
+        # to build a multiple choice option of yes or no
         elif actions['ask_y_or_n']:
             self.wait_for_frontend_input['build_multiple_choice'] = ["y", "n"] #values
-            actions['build_multiple_choice'] = ["Yes", "No"] #displays
+            actions['build_multiple_choice'] = ["Yes", "No"] #displays 
             actions.pop('ask_y_or_n')
         
         # Otherwise rebuild the text entry (no multiple choice buttons)
@@ -227,26 +227,26 @@ class Game:
                 # If there is one action and one object
                 if len(parsed_dict["nearby_objects"]) == 1:
                     if parsed_dict["action"][0] == "pick up":
-                        if isinstance(parsed_dict["nearby_objects"][0], item_class.Inv_Item):
-                            if parsed_dict["nearby_objects"][0] not in self.player1.inv:
-                                return_tuple = self.player1.pick_up_item(parsed_dict["nearby_objects"][0])
+                        if parsed_dict["nearby_objects"][0] not in self.player1.inv:
+                            try:
+                                return_tuple = parsed_dict["nearby_objects"][0].pick_up_item(self.player1)
                                 dest, helper, actions = gl.parse_tuples(return_tuple, actions)
-                            else:
-                                actions["print_all"].append("You are already holding this item.")
 
+                            except AttributeError:
+                                actions['print_all'].append("You cannot pickup this item.")
                         else:
-                            actions['print_all'].append("You cannot pick up this item.")
+                            actions["print_all"].append("You are already holding this item.")
 
                     elif parsed_dict["action"][0] == "drop":
                         if parsed_dict["nearby_objects"][0] in self.player1.inv:
-                            return_tuple = self.player1.drop_item(parsed_dict["nearby_objects"][0], None) #need parsing for drop location
+                            return_tuple = parsed_dict["nearby_objects"][0].drop_item(None, self.player1)
                             dest, helper, actions = gl.parse_tuples(return_tuple, actions)
                         else:
                             actions['print_all'].append("You cannot drop this item because you are not holding it.") 
 
                     elif parsed_dict["action"][0] == "inspect":
                         try:
-                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].inspect_object())
+                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].inspect_item())
                         except AttributeError:
                             actions['print_all'].append("You cannot inspect this item.")
 
@@ -292,7 +292,7 @@ class Game:
                             inv_item, storage_unit = parsed_dict["nearby_objects"][0], parsed_dict["nearby_objects"][1]
                         # If the inv_item is in the player inventory, put it in the storage unit
                         if inv_item in self.player1.inv:
-                            return_tuple = self.player1.drop_item(inv_item, storage_unit)
+                            return_tuple = inv_item.drop_item(storage_unit, self.player1) 
                             dest, helper, actions = gl.parse_tuples(return_tuple, actions)
                         else:
                             # allow player to move item from one storage unit to the other 

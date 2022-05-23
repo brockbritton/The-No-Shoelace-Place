@@ -10,7 +10,7 @@ class Item:
         self.article = "a"
         self.can_inspect = True
 
-    def inspect_object(self): 
+    def inspect_item(self): 
         actions = {
             'print_all': [],
         }
@@ -37,10 +37,30 @@ class Inv_Item(Item):
         return f'{self.name}(inv item)'
 
     def pick_up_item(self, player):
-        pass
+        actions = {
+            'print_all': [],
+            'ask_y_or_n': False
+        }
+        if (len(player.inv) < player.inv_cap):
+            actions['print_all'].append("You have added the " + self.name + " to your inventory.")
+            actions['update_inv_visual'] = player.add_inventory(self)
+            player.loc.remove_item(self)
+            return (None, None, actions)
+        else:
+            actions['print_all'].append("Your inventory is full.")
+            actions['print_all'].append("Would you like to remove an item from your inventory to make space for the " + self.name + "?")
+            actions['ask_y_or_n'] = True
+            return ("full_inv_drop_items", self, actions)
 
-    def drop_item(self, player):
-        pass
+    def drop_item(self, loc, player):
+        actions = {}
+        actions['update_inv_visual'] = player.sub_inventory(self)
+        player.loc.add_item(self, loc)
+        try:
+            actions['print_all'] = [f"You have dropped the {self.name} on the {loc.name}."] 
+        except AttributeError:
+            actions['print_all'] = [f"You have dropped the {self.name} on the ground."]
+        return (None, None, actions)
     
 
 class Key(Inv_Item):
@@ -206,7 +226,7 @@ class Storage_Spot(Storage_Unit):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
 
-    def inspect_object(self): 
+    def inspect_item(self): 
         actions = {
             'print_all': [],
         }
@@ -222,7 +242,7 @@ class Storage_Bin(Storage_Unit):
         self.can_lock_unlock = False
         self.can_open_close = False
 
-    def inspect_object(self): 
+    def inspect_item(self): 
         actions = {
             'print_all': [],
         }
@@ -238,7 +258,7 @@ class Storage_Box(Openable_Interact, Storage_Unit):
         self.can_lock_unlock = False
         self.can_open_close = True
     
-    def inspect_object(self): 
+    def inspect_item(self): 
         actions = {
             'print_all': [],
         }
@@ -256,7 +276,7 @@ class Storage_LockBox(Lockable_Interact, Openable_Interact, Storage_Unit):
         super().__init__(name, gen_name, keys_list)
         self.locked = locked_bool
 
-    def inspect_object(self): 
+    def inspect_item(self): 
         actions = {
             'print_all': [],
         }
@@ -299,6 +319,10 @@ class Electronic_Door(Lockable_Interact, Door):
 ##### Individual Inventory Item Classes #####
 #############################################
 
+class Default_Item(Inv_Item):
+    def __init__(self, name, gen_name):
+        super().__init__(name, gen_name)
+
 class Keycard(Inv_Item):
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
@@ -334,7 +358,7 @@ class Deck_of_Cards(Inv_Item, Storage_Box):
             for j in ("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"):
                 self.items.append(Suit_Card(j, i[1], i[0]))
     
-    def inspect_object(self):
+    def inspect_item(self):
         actions = {
             'print_all': [],
         }
@@ -359,7 +383,7 @@ class Suit_Card(Inv_Item):
     def __repr__(self) -> str:
         return f'{self.number}{self.suit}'
     
-    def inspect_object(self):
+    def inspect_item(self):
         actions = {
             'print_all': [],
         }
@@ -376,7 +400,7 @@ class Power_Box(Interact):
         for r in room_class.Room._room_registry:
             r.switch_lights()
 
-    def inspect_object(self):
+    def inspect_item(self):
         actions = {
             'print_all': [],
         }

@@ -17,7 +17,7 @@ class Character:
         self.loc = room.common_room #starting location
         self.last_loc = None
 
-        self.inv = [item.id_bracelet, item.basement_key, item.crowbar]
+        self.inv = [item.id_bracelet, item.basement_key, item.crowbar, item.block1, item.block2, item.block3]
         #self.inv = []
         self.inv_cap = 6 #current inventory capacity - maybe just keep it set
         self.inv_cap_start = 6 #starting inventory capacity
@@ -64,76 +64,52 @@ class Character:
 
     def add_inventory(self, item):
         self.inv.append(item)
+        print(self.inv)
         return self.build_inv_str_list()
-
-    def pick_up_item(self, item):
-        actions = {
-            'print_all': [],
-            'ask_y_or_n': False
-        }
-        if (len(self.inv) < self.inv_cap):
-            actions['print_all'].append("You have added the " + item.name + " to your inventory.")
-            actions['update_inv_visual'] = self.add_inventory(item)
-            self.loc.remove_item(item)
-            return (None, None, actions)
-        else:
-            actions['print_all'].append("Your inventory is full.")
-            actions['print_all'].append("Would you like to remove an item from your inventory to make space for the " + item.name + "?")
-            actions['ask_y_or_n'] = True
-            return ("full_inv_drop_items", item, actions)
 
     def sub_inventory(self, item):
         self.inv.remove(item)
+        print(self.inv)
         return self.build_inv_str_list()
-
-    def drop_item(self, item, loc):
-        actions = {}
-        self.loc.add_item(item, loc)
-        actions['update_inv_visual'] = self.sub_inventory(item)
-        ##try except for the ground
-        try:
-            actions['print_all'] = [f"You have dropped the {item.name} on the {loc.name}."] 
-        except AttributeError:
-            actions['print_all'] = [f"You have dropped the {item.name} on the ground."]
-        return (None, None, actions)
-
-    def full_inv_drop_items(self, choice, item):
-        ##expecting y or n
+        
+    def full_inv_drop_items(self, choice, item_to_pick_up):
         actions = {
             'print_all': [],
-            'ask_y_or_n': False
+            'build_multiple_choice': []
         }
         if choice.lower() == "y":
-            actions['print_all'].append("Would you like to drop " + self.inv[0].name + " for " + item.name + "?")
-            actions['ask_y_or_n'] = True
-            return ("drop_x_for_y", [self.inv[0], item], actions)
+            actions['print_all'].append(f"Please choose an item to drop in place of the {item_to_pick_up.name}:")
+            actions['build_multiple_choice'] = [[], []]
+            for item in self.inv:
+                actions['build_multiple_choice'][0].append(item.name)
+                actions['build_multiple_choice'][1].append(item)
+            actions['build_multiple_choice'][0].append("cancel")
+            actions['build_multiple_choice'][1].append("cancel")
+            return ("drop_x_for_y", item_to_pick_up, actions)
 
         else: 
             return (None, None, actions)
             
-    def drop_x_for_y(self, choice, list):
+    def multi_choice_drop_x_for_y(self, item_to_drop, item_to_pick_up):
         #list inv_item, found_item 
         ##expecting y or n 
         actions = {
             'print_all': [],
-            'ask_y_or_n': False
+            'ask_y_or_n': False,
+            'update_inv_visual': [],
         }
-        if choice.lower() == "y":
-            return_tuple1 = self.drop_item(list[0], None) #this might work but its ugly
-            return_tuple2 = self.pick_up_item(list[1])
-            return (None, None, return_tuple2[2])
+        if item_to_drop != "cancel":
+            return_tuple1 = item_to_drop.drop_item(None, self) # This will always return None, None for dest, helper
+            return_tuple2 = item_to_pick_up.pick_up_item(self) # In this situation, this will always return None, None for dest, helper
+            actions = gl.combine_dicts(actions, return_tuple1[2])
+            actions = gl.combine_dicts(actions, return_tuple2[2])
+            # This solves the problem of two different lists being built and combined
+            actions["update_inv_visual"] = self.build_inv_str_list()
             
-        
-        elif choice.lower() == "n":
-            if self.inv.index(list[0]) + 1 == len(self.inv):
-                actions['print_all'].append("You didn't drop anything or pick up " + self.loc.items[list[1]].name)
-                return (None, None, actions)
-            else:
-                next_item = self.inv[self.inv.index(list[0]) + 1]
-    
-                actions['print_all'].append("Would you like to drop " + next_item.name + " for " + list[1].name + "?")
-                actions['ask_y_or_n'] = True
-                return ("drop_x_for_y", [next_item, list[1]], actions)     
+        else:
+            actions['print_all'].append(f"You chose to not pick up the {item_to_pick_up.name}.")
+
+        return (None, None, actions)
     
     def take_damage(self, damage, affect):
         self.health -= damage

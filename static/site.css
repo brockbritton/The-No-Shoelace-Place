@@ -156,7 +156,8 @@ html {
     position: relative;
     width: 88%;
     display: flex;
-    height: 34.375em; 
+    /* height: 34.375em; */
+    height: auto;
     background-color: none !important;
     padding: 0em 6.25em 0em 6.25em;
     z-index: 2;
@@ -173,7 +174,7 @@ html {
 /* Game Page Button Styles */
 /* ####################### */
 
-.game_inline_bordered_buttons {
+.game_multiple_choice_buttons {
     background-color: black; 
     font-family: 'Courier New', monospace !important; 
     border: 0.125em solid white;
@@ -182,12 +183,12 @@ html {
     border-radius: 0.3125em;
     text-align: center;
     text-decoration: none;
-    display: inline;
+    display: inline-block;
     font-size: 1em;
     margin: 0.3125em 0.625em 0.3125em 0em;
 }
 
-.game_inline_bordered_buttons:hover {
+.game_multiple_choice_buttons:hover {
     cursor: pointer;
 }
 
@@ -238,7 +239,8 @@ html {
 
 #entry_widgets {
     height: 10%;
-    overflow: hidden;
+    /* height: auto ?*/ 
+    
 }
 
 #text_entry_div {
@@ -251,6 +253,9 @@ html {
     display: none;
     font-size: 1.5em;
     margin: 0.625em;
+    height: auto;
+    width: 100%;
+    overflow-x: scroll;
 
 }
 
@@ -275,6 +280,7 @@ html {
 #right_panel {
     flex: 4;
     margin: 0em 0em 0em 3.125em;
+    height: 34.375em;
 }
 
 .panel_rows {

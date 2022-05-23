@@ -17,6 +17,13 @@ basement_key = item_class.Key("basement key", "key")
 cabinet_key = item_class.Key("ward cabinet keys", "key")
 ward_doors_key = item_class.Key("ward security key", "key")
 
+block1 = item_class.Default_Item("block1", "block")
+block2 = item_class.Default_Item("block2", "block")
+block3 = item_class.Default_Item("block3", "block")
+block4 = item_class.Default_Item("block4", "block")
+block5 = item_class.Default_Item("block5", "block")
+block6 = item_class.Default_Item("block6", "block")
+
 
 ##### Ward Rooms and Items #####
 # Common Room #
@@ -25,7 +32,7 @@ cr_art_table = item_class.Storage_Spot("arts and crafts table", "table")
 cr_game_cabinets = item_class.Storage_LockBox("game cabinet", "cabinet", True, [cabinet_key, ward_doors_key])
 deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
-cr_ping_pong_table.set_items([deck_of_cards])
+cr_ping_pong_table.set_items([deck_of_cards, block4, block5, block6]) ########
     # Doors
 ward_to_basement_door = item_class.Lockable_Door("Basement Door", "door", [basement_key])
 
