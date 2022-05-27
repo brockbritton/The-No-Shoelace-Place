@@ -8,34 +8,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='site.css')}}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png')}}">
-    <title>Commands Cheat Sheet</title>
+    <title>Game Instructions</title>
 </head>
 <body>
-    <div id="center_welcome">
-        <img src="{{ url_for('static', filename='img/filled-header.png')}}" alt="image_header" id="cheat_sheet_header">
-        <div id="cheat_sheet_home">
-            <button class="large_bordered_button" 
-                type="button" 
-                onclick="location.href='/welcome'">
-                Go Home
-            </button>
-        </div>
+    <div id="how_to_play_header">
+        <img id="how_to_play_img" src="{{ url_for('static', filename='img/how-to-play-header.png')}}" alt="image_header">
     </div>
     
-    </div id="cheat_sheet_pars">
-        <h3 class="category_header"> Movement and Exploration </h3>
+    <div class="instruction_part">
+        <div class="instruction_text_left">
+            <h6 class="instruction_header_left">
+                Exploration
+            </h6>
+            <p>
+                The goal of the game is to escape The No-Shoelace Place. 
+                To escape you must explore the ward to find items and locations 
+                that you can use. Some of these items will be readily available for you to use,
+                while others may be locked away or hidden. As you explore, you will be rewarded 
+                experience points (xp) for finding items and completing objectives, 
+                which will be important as you progress through the game.
+            </p>
+        </div>
+        <div class="instruction_image_right">
+            <img src="{{ url_for('static', filename='img/square-holder.png') }}" alt="holder_image">
+        </div>
+    </div>
 
-        <h3 class="category_header"> Interaction with the Environment </h3>
-            <h5 class="subcategory_header"> Doors </h5>
-            <h5 class="subcategory_header"> Storage Objects </h5>
-            <h5 class="subcategory_header"> Inventory Items </h5>
+    <div class="instruction_part">
+        <div class="instruction_image_left">
+            <img src="{{ url_for('static', filename='img/square-holder.png') }}" alt="holder_image">
+        </div>
+        <div class="instruction_text_right">
+            <h6 class="instruction_header_right">
+                Interaction with the Environment
+            </h6>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt 
+                ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit 
+                in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
+                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+    </div>
 
-        <h3 class="category_header"> Interaction with NPC's </h3>
+    <div class="instruction_part">
+        <div class="instruction_text_left">
+            <h6 class="instruction_header_left">
+                Player Stats Panel
+            </h6>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt 
+                ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit 
+                in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
+                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+        <div class="instruction_image_right">
+            <img src="{{ url_for('static', filename='img/square-holder.png') }}" alt="holder_image">
+        </div>
+    </div>
 
-        <h3 class="category_header"> Puzzles </h3>
-
+    <div class="instruction_part">
+        <div class="instruction_image_left">
+            <img src="{{ url_for('static', filename='img/square-holder.png') }}" alt="holder_image">
+        </div>
+        <div class="instruction_text_right">
+            <h6 class="instruction_header_right">
+                Player Abilities
+            </h6>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt 
+                ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit 
+                in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
+                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+    </div>
 
     <div>
+        <button class="large_bordered_button" 
+        type="button" 
+        onclick="location.href=''"> Go to Something </button>
+    </div>
 
 </body>
 </html>

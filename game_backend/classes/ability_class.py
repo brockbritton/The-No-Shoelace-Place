@@ -8,6 +8,13 @@ class Ability:
         self.damage = base_damage
         self.affects = conditions_list
         self.lvl = 0
+        self.lvl_xp_reqs = {
+            1: 10, 
+            2: 20,
+            3: 30,
+            4: 40,
+            5: 50
+        }
 
     def __repr__(self) -> str:
         return f'{self.name}(ability)'

@@ -206,9 +206,6 @@ html {
     margin: 0.3125em 0.625em 0.3125em 0em;
 }
 
-
-
-
 /* Text display and Entry widgets */
 #text_and_entry_widgets {
     width: 43.75em;
@@ -430,12 +427,18 @@ html {
 
 
 /* ####################### */
-/* Game Page Button Styles */
+/* How to Play Page Styles */
 /* ####################### */
 
-#cheat_sheet_header {
+#how_to_play_header {
+    height: 500px;
+    width: auto;
+
+}
+
+#how_to_play_img {
     height: auto;
-    width: 120%;
+    width: 300px;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -443,49 +446,78 @@ html {
     width: 50%;
 }
 
-#cheat_sheet_home {
+.instruction_part {
     background-color: none !important;
     width: 100%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    position: absolute;
-    top: 31%;
+    height: 400px;
+    margin: .5em;
 }
 
-#cheat_sheet_pars {
-    background-color: green !important;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    text-align: center;
+.instruction_text_left {
+    float: left;
+    width: 60%;
+    
 }
 
-.category_header {
-    background-color: none !important;
-    width: 100%;
-    font-size: 3em;
-    text-align: center;
-
-}
-
-.subcategory_header {
-    background-color: none !important;
-    width: 100%;
-    font-size: 2em;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-}
-
-.category_pars {
-    background-color: none !important;
-    width: 100%;
-    font-size: 1.5em;
+.instruction_text_left > p {
     text-align: left;
-    margin-left: 3em;
-    align-items: center;
+    font-size: 1.75em;
+    margin-left: 2.5em;
+    margin-right: 1em;
+}
+
+.instruction_text_right {
+    float: right;
+    width: 60%;
+    
+}
+
+.instruction_text_right > p {
+    text-align: right;
+    font-size: 1.75em;
+    margin-left: 1em;
+    margin-right: 2.5em;
+}
+
+.instruction_image_left {
+    float: left;
+    width: 40%;
+    display: flex;
+    
+}
+
+.instruction_image_left > img {
+    width: auto;
+    height: auto;
     justify-content: center;
+    border: white solid 1px;
+    margin: auto;
+}
+
+.instruction_image_right {
+    float: right;
+    width: 40%;
+    display: flex;
+    
+}
+
+.instruction_image_right > img {
+    width: auto;
+    height: auto;
+    justify-content: center;
+    border: white solid 1px;
+    margin: auto;
+}
+
+.instruction_header_left {
+    font-size: 2.5em;
+    margin: 1em;
+}
+
+.instruction_header_right {
+    font-size: 2.5em;
+    margin: 1em;
+    text-align: right;
 }
 
 /* ################### */

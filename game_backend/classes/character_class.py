@@ -17,7 +17,7 @@ class Character:
         self.loc = room.common_room #starting location
         self.last_loc = None
 
-        self.inv = [item.id_bracelet, item.basement_key, item.crowbar, item.block1, item.block2, item.block3]
+        self.inv = [item.id_bracelet, item.basement_key, item.crowbar]
         #self.inv = []
         self.inv_cap = 6 #current inventory capacity - maybe just keep it set
         self.inv_cap_start = 6 #starting inventory capacity
@@ -32,6 +32,7 @@ class Character:
             'new_item': 5,
             'easter_egg': 100,
             'new_door_unlocked': 50,
+            
         }
 
         self.calendar = calendar_class.Calendar()

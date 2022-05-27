@@ -25,7 +25,7 @@ class Room:
         self._room_registry.append(self)
         self.visited = False
 
-    def inspect_object(self):
+    def inspect_item(self):
         actions = {
             'print_all': [],
         }

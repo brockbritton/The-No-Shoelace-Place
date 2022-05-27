@@ -47,13 +47,13 @@ class Calendar:
         all_guides = [event.guide_to_outside]
         if random.randint(0, 2) == 3: 
             # should be == 0, not building guides right now
-            self.activities_offered.append((all_guides[0], None))
+            self.activities_offered.append(all_guides[0])
             return all_guides[0]
         else:
             if len(self.activities_offered) < 5:
                 for act in all_groups:
                     if act not in self.activities_offered:
-                        self.activities_offered.append((act, None))
+                        self.activities_offered.append(act)
                         return act
             else:
                 act_dict = {}
@@ -67,7 +67,7 @@ class Calendar:
                 curr_act = 0
                 for act in act_dict:
                     if curr_act + (len(self.activities_offered) - act_dict[act]) >= act_num:
-                        self.activities_offered.append((act, None))
+                        self.activities_offered.append(act)
                         return act
                     
 

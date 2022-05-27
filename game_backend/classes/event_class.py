@@ -30,7 +30,6 @@ class Coping_Skill_Group(Event):
     def __repr__(self) -> str:
         return f'{self.name}(coping skill group)'
 
-
     def ask_event(self):
         actions = {
             'print_all': [],

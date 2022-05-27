@@ -17,27 +17,24 @@ class Game:
         self.parser = parser_class.Parser()
         room.basement_set_door_dictionaries()
         room.ward_set_door_dictionaries()
+
+        self.ui_values = {
+            # id for html element : (current value, method of updating)
+            "xp_value": self.player1.xp,
+            "day_value": self.player1.calendar.days_list[-1].day_number,
+            "turns_value": self.player1.calendar.days_list[-1].turns_left,
+            "room_value": self.player1.loc.display_name,
+            "health_value": self.player1.health,
+            "diagnosis_value": self.player1.diagnosis,
+            "meditation_lvl": self.player1.abilities[0].lvl,
+            "assertiveness_lvl": self.player1.abilities[1].lvl,
+            "pos_attitude_lvl": self.player1.abilities[2].lvl,
+            "opp_action_lvl": self.player1.abilities[3].lvl,
+            "catharsis_lvl":  self.player1.abilities[4].lvl,
+        }
     
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
-        
-
-    def get_ui_values(self, player, id):
-        ui_values = {
-            # id for html element : (current value, method of updating)
-            "xp_value": player.xp,
-            "day_value": player.calendar.days_list[-1].day_number,
-            "turns_value": player.calendar.days_list[-1].turns_left,
-            "room_value": player.loc.display_name,
-            "health_value": player.health,
-            "diagnosis_value": player.diagnosis,
-            "meditation_lvl": player.abilities[0].lvl,
-            "assertiveness_lvl": player.abilities[1].lvl,
-            "pos_attitude_lvl": player.abilities[2].lvl,
-            "opp_action_lvl": player.abilities[3].lvl,
-            "catharsis_lvl":  player.abilities[4].lvl,
-        }
-        return ui_values[id]
 
     def start_game(self):
         actions = {
@@ -69,7 +66,7 @@ class Game:
         if len(actions['update_ui_values']) > 0:
             values_to_update = []
             for id in actions['update_ui_values']:
-                values_to_update.append([id, str(self.get_ui_values(self.player1, id))])
+                values_to_update.append([id, str(self.ui_values[id])])
             actions['update_ui_values'] = values_to_update
 
         return actions
@@ -84,7 +81,7 @@ class Game:
         if len(actions['update_ui_values']) > 0:
             values_to_update = []
             for id in actions['update_ui_values']:
-                values_to_update.append([id, str(self.get_ui_values(self.player1, id))])
+                values_to_update.append([id, str(self.ui_values[id])])
             actions['update_ui_values'] = values_to_update
 
         return actions
@@ -154,8 +151,8 @@ class Game:
             actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(1))
             # If the remaining turns are at 1/3 or 2/3 of the max, offer an event
             if (self.player1.calendar.days_list[-1].turns_left == (self.player1.calendar.max_turns_daily // 3)) or (self.player1.calendar.days_list[-1].turns_left == ((self.player1.calendar.max_turns_daily * 2) // 3)): 
-                #return_tuple = self.player1.calendar.calculate_next_activity().ask_event()
-                #self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
+                return_tuple = self.player1.calendar.calculate_next_activity().ask_event()
+                self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
                 ...
         
         # If there are frontend values to update, 
@@ -164,7 +161,7 @@ class Game:
         if len(actions['update_ui_values']) > 0:
             values_to_update = []
             for id in actions['update_ui_values']:
-                values_to_update.append([id, str(self.get_ui_values(self.player1, id))])
+                values_to_update.append([id, str(self.ui_values[id])])
             actions['update_ui_values'] = values_to_update
 
         # If there are values to build a multiple choice option,
@@ -295,7 +292,7 @@ class Game:
                             return_tuple = inv_item.drop_item(storage_unit, self.player1) 
                             dest, helper, actions = gl.parse_tuples(return_tuple, actions)
                         else:
-                            # allow player to move item from one storage unit to the other 
+                            # allow to move item from one storage unit to the other 
                             actions['print_all'].append("You cannot drop this item because you are not holding it.") 
 
 
