@@ -1,4 +1,5 @@
 
+from ast import match_case
 import game_backend.classes.character_class as character_class
 import game_backend.classes.item_class as item_class
 import game_backend.classes.parser_class as parser_class
@@ -17,30 +18,41 @@ class Game:
         self.parser = parser_class.Parser()
         room.basement_set_door_dictionaries()
         room.ward_set_door_dictionaries()
-
-        self.ui_values = {
-            # id for html element : (current value, method of updating)
-            "xp_value": self.player1.xp,
-            "day_value": self.player1.calendar.days_list[-1].day_number,
-            "turns_value": self.player1.calendar.days_list[-1].turns_left,
-            "room_value": self.player1.loc.display_name,
-            "health_value": self.player1.health,
-            "diagnosis_value": self.player1.diagnosis,
-            "meditation_lvl": self.player1.abilities[0].lvl,
-            "assertiveness_lvl": self.player1.abilities[1].lvl,
-            "pos_attitude_lvl": self.player1.abilities[2].lvl,
-            "opp_action_lvl": self.player1.abilities[3].lvl,
-            "catharsis_lvl":  self.player1.abilities[4].lvl,
-        }
     
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
+
+    def get_curr_ui_value(self, id):
+        # must be called each time because the values change
+        match id:
+            case "xp_value": return self.player1.xp
+            case "day_value": return self.player1.calendar.days_list[-1].day_number
+            case "turns_value": return self.player1.calendar.days_list[-1].turns_left
+            case "room_value": return self.player1.loc.display_name
+            case "health_value": return self.player1.health
+            case "diagnosis_value": return self.player1.diagnosis
+            case "meditation_lvl": return self.player1.abilities[0].lvl
+            case "assertiveness_lvl": return self.player1.abilities[1].lvl
+            case "pos_attitude_lvl": return self.player1.abilities[2].lvl
+            case "opp_action_lvl": return self.player1.abilities[3].lvl
+            case "catharsis_lvl": return self.player1.abilities[4].lvl
 
     def start_game(self):
         actions = {
             'print_all': [],
             'update_inv_visual': [],
-            'update_ui_values': [],
+            'update_ui_values': [
+                "xp_value", 
+                "day_value", 
+                "turns_value", 
+                "room_value", 
+                "health_value", 
+                "diagnosis_value", 
+                "meditation_lvl", 
+                "assertiveness_lvl", 
+                "pos_attitude_lvl", 
+                "opp_action_lvl", 
+                "catharsis_lvl"],
         }
 
         actions['print_all'].append("----Intro Paragraph----") 
@@ -66,8 +78,10 @@ class Game:
         if len(actions['update_ui_values']) > 0:
             values_to_update = []
             for id in actions['update_ui_values']:
-                values_to_update.append([id, str(self.ui_values[id])])
+                values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
+
+        print(values_to_update)
 
         return actions
 
@@ -75,13 +89,24 @@ class Game:
         actions = {
             'load_prints': self.save_prints,
             'update_inv_visual': self.player1.build_inv_str_list(),
-            'update_ui_values': ["xp_value", "day_value", "turns_value", "room_value", "health_value", "diagnosis_value", "meditation_lvl", "assertiveness_lvl", "pos_attitude_lvl", "opp_action_lvl", "catharsis_lvl"],
+            'update_ui_values': [
+                "xp_value", 
+                "day_value", 
+                "turns_value", 
+                "room_value", 
+                "health_value", 
+                "diagnosis_value", 
+                "meditation_lvl", 
+                "assertiveness_lvl", 
+                "pos_attitude_lvl", 
+                "opp_action_lvl", 
+                "catharsis_lvl"],
         }
 
         if len(actions['update_ui_values']) > 0:
             values_to_update = []
             for id in actions['update_ui_values']:
-                values_to_update.append([id, str(self.ui_values[id])])
+                values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
 
         return actions
@@ -93,7 +118,7 @@ class Game:
             'ask_y_or_n': False,
             'rebuild_text_entry': False,
             'update_inv_visual': [],
-            'update_ui_values': ["room_value"] ###keep list empty 
+            'update_ui_values': [] ###keep list empty 
         }
 
         # Save the player input as part as the saved prints
@@ -111,16 +136,29 @@ class Game:
 
             # Match the destination to the input value
             # and execute the desired action
-            print("matching destination")
+            print("matching destination: " + self.master_dest)
+            return_tuple = (None, None, actions)
             match self.master_dest:
-                case "full_inv_drop_items": return_tuple = self.player1.full_inv_drop_items(input_value, self.master_helper) 
-                case "drop_x_for_y": return_tuple = self.player1.multi_choice_drop_x_for_y(input_value, self.master_helper) 
-                case "move_nesw": return_tuple = self.player1.move_nesw(self.master_helper[0], self.master_helper[1][self.master_helper[1].index(input_value)])
-                case "enter_code": return_tuple = self.master_helper[2].enter_code(input_value, self.master_helper)
-                case "execute_event": return_tuple = self.master_helper.execute_event(input_value)
-                case "ask_unlock_item": return_tuple = self.player1.ask_unlock_item(input_value, self.master_helper)
+                case "full_inv_drop_items": 
+                    return_tuple = self.player1.full_inv_drop_items(input_value, self.master_helper) 
+                case "drop_x_for_y": 
+                    return_tuple = self.player1.multi_choice_drop_x_for_y(input_value, self.master_helper) 
+                case "move_nesw": 
+                    return_tuple = self.player1.move_nesw(self.master_helper[0], self.master_helper[1][self.master_helper[1].index(input_value)])
+                case "enter_code": 
+                    return_tuple = self.master_helper[2].enter_code(input_value, self.master_helper)
+                case "execute_event": 
+                    return_tuple = self.master_helper.execute_event(input_value, self.player1)
+                case "ask_unlock_item": 
+                    return_tuple = self.player1.ask_unlock_item(input_value, self.master_helper)
+                case "level_up_ability": 
+                    if input_value == "y":
+                        for ability in self.player1.abilities:
+                            if ability.name == self.master_helper[0].name:
+                                index = self.player1.abilities.index(ability)
+                        return_tuple = self.player1.abilities[index].upgrade_ability(self.master_helper[1:], self.player1)
 
-
+            
         # Otherwise, just use the input as it was given
         else:
             print("parsing data - no destination")
@@ -139,7 +177,12 @@ class Game:
         # Also update the actions dict with the new value
         self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
 
-        # If character health is 0, end the game
+        # If the original user input did not trigger any aspects of the game,
+        # then add a message to show players their input was not successful
+        if len(actions['print_all']) == 0:
+            actions['print_all'] = ["I don't understand."]
+
+        # If character health is at 0, end the game
         if self.master_helper == "dead":
             #option to continue or quit to menu and start over
             #continue means new day and starting in room
@@ -161,7 +204,7 @@ class Game:
         if len(actions['update_ui_values']) > 0:
             values_to_update = []
             for id in actions['update_ui_values']:
-                values_to_update.append([id, str(self.ui_values[id])])
+                values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
 
         # If there are values to build a multiple choice option,
@@ -181,11 +224,6 @@ class Game:
         # Otherwise rebuild the text entry (no multiple choice buttons)
         else:
             actions['rebuild_text_entry'] = True
-
-        # If the original user input did not trigger any aspects of the game,
-        # then add a message to show players their input was not successful
-        if len(actions['print_all']) == 0:
-            actions['print_all'] = ["I don't understand."]
 
         # Save all text prints from this turn so re-loading is possible
         self.save_prints.extend(actions['print_all'])

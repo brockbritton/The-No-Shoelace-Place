@@ -1,6 +1,5 @@
 
 import random
-
 import game_backend.objects.events as event
 
 
@@ -26,13 +25,10 @@ class Calendar:
     def use_turns(self, num):
         actions = {
             'print_all': [],
-            'build_multiple_choice': [],
-            'ask_y_or_n': False,
-            'update_ui_values': []
+            'update_ui_values': [],
         }
         self.days_list[-1].turns_left -= num
-        if self.days_list[-1].turns_left == 0:
-
+        if self.days_list[-1].turns_left == 0: 
             actions['print_all'].append("The old day is ending...")
             self.next_day()
             actions['update_ui_values'].append("day_value")
@@ -50,25 +46,8 @@ class Calendar:
             self.activities_offered.append(all_guides[0])
             return all_guides[0]
         else:
-            if len(self.activities_offered) < 5:
-                for act in all_groups:
-                    if act not in self.activities_offered:
-                        self.activities_offered.append(act)
-                        return act
-            else:
-                act_dict = {}
-                for act in self.activities_offered:
-                    if act not in act_dict.keys():
-                        act_dict[act] = 1
-                    else:
-                        act_dict[act] += 1
-
-                act_num = random.randint(0, len(self.activities_offered) - 1)
-                curr_act = 0
-                for act in act_dict:
-                    if curr_act + (len(self.activities_offered) - act_dict[act]) >= act_num:
-                        self.activities_offered.append(act)
-                        return act
+            return all_groups[random.randint(0, len(all_groups) - 1)]
+            
                     
 
 class _Day:

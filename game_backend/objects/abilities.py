@@ -16,11 +16,11 @@ defenseless = 0
 attack_last = 0
 
 #### Character Attacks / Abilities ####
-catharsis = ability_class.Coping_Skill("Catharsis", 20, None)
-meditation = ability_class.Coping_Skill("Meditation", 0, [negate_stat_changes, healing])
-assertiveness = ability_class.Coping_Skill("Assert Yourself", 10, [attack_first])
-opposite_action = ability_class.Coping_Skill("Opposite Action", None, [attack_last, double_attack])
-pos_attitude = ability_class.Coping_Skill("Stay Positive", 5, [boost_attack])
+catharsis = ability_class.Coping_Skill("Catharsis", 20, None, "catharsis_lvl")
+meditation = ability_class.Coping_Skill("Meditation", 0, [negate_stat_changes, healing], "meditation_lvl")
+assertiveness = ability_class.Coping_Skill("Assertiveness", 10, [attack_first], "assertiveness_lvl")
+opposite_action = ability_class.Coping_Skill("Opposite Action", None, [attack_last, double_attack], "opp_action_lvl")
+pos_attitude = ability_class.Coping_Skill("Positive Attitude", 5, [boost_attack], "pos_attitude_lvl")
 
 
 #### Demon Attacks / Abilities ####

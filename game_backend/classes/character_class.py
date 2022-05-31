@@ -26,7 +26,7 @@ class Character:
         self.full_health = 100 #maximum player health
         self.diagnosis = None
 
-        self.xp = 0
+        self.xp = 5000
         self.xp_dict = {
             'new_room': 10,
             'new_item': 5,
@@ -56,12 +56,14 @@ class Character:
         self.xp += amount
         return "xp_value"
 
-    def gain_lose_health(self, hp, gain_lose):
-        if gain_lose == "gain":
-            self.health += hp
-        elif gain_lose == "lose":
-            self.health -= hp
-        return "health_value"
+    def gain_health(self, hp):
+        self.health += hp
+        if hp > 0:
+            message = f"You have gained {hp} health."
+        else:
+            message = f"You have lost {hp} health."
+        
+        return ("health_value", message)
 
     def add_inventory(self, item):
         self.inv.append(item)
