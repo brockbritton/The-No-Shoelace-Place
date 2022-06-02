@@ -1,6 +1,8 @@
 
 import random
+
 import game_backend.objects.events as event
+
 
 class Calendar:
     def __init__(self) -> None:
