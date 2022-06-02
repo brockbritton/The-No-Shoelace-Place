@@ -2,11 +2,10 @@
 import random
 import game_backend.objects.events as event
 
-
 class Calendar:
     def __init__(self) -> None:
         self.days_list = []
-        self.max_turns_daily = 15
+        self.max_turns_daily = 30
         self.activities_offered = []
         self.next_day()
 
@@ -41,14 +40,13 @@ class Calendar:
     def calculate_next_activity(self):
         all_groups = [event.meditation_group, event.catharsis_group, event.assert_group, event.opp_action_group, event.pos_attitude_group]
         all_guides = [event.guide_to_outside]
-        if random.randint(0, 2) == 3: 
+        if random.randint(0, 2) == 3:
             # should be == 0, not building guides right now
             self.activities_offered.append(all_guides[0])
             return all_guides[0]
         else:
             return all_groups[random.randint(0, len(all_groups) - 1)]
             
-                    
 
 class _Day:
     def __init__(self, turns, day) -> None:

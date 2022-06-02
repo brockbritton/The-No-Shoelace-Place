@@ -1,6 +1,4 @@
 
-var master_return = '';
-var master_helper = '';
 
 var rate_of_letters = 20; /* fast: 5, slow: 50, normal: 20 */
 var rate_of_header_fadein = 500;
@@ -13,11 +11,10 @@ function ajax_accept_input(data_values, route) {
         data: data_values,
         type: 'POST',
         success: function(response){
-            if (('print_all' in response) && (response['print_all'].lenght != 0)) {
+            if (('print_all' in response) && (response['print_all'].length != 0)) {
                 print_all(response['print_all']);
             } else if (('load_prints' in response)) {
                 load_prints(response['load_prints']);
-
             }
             
             if (('update_inv_visual' in response) && (response['update_inv_visual'].length != 0)) {
@@ -29,16 +26,17 @@ function ajax_accept_input(data_values, route) {
             }
 
             if (('build_multiple_choice' in response) && (response['build_multiple_choice'].length != 0)) {
+                toggle_return_listener("off");
                 build_multiple_choice(response['build_multiple_choice']);
+                
             } else if (('rebuild_text_entry' in response) && (response['rebuild_text_entry'])) {
                 toggle_entry_divs("text");
+                toggle_return_listener("on");
             }
-            
-            /* toggle dynamic input to on if the basic text entry has been enabled */
         },
         error: function(error){
             if (route == "/game/loading-game") {
-                ajax_accept_input(data_values, route)
+                ajax_accept_input(data_values, "/game/loading-game")
             } else {
                 printtk("error: " + error);
             }
@@ -55,6 +53,23 @@ function accept_entry_input(event) {
     }
     ajax_accept_input(data_values, '/game/accept-input-data');
     form.elements[0].value = "";
+}
+
+function default_return_press(event) {
+    event.preventDefault()
+}
+
+function toggle_return_listener(on_off) {
+    if (on_off == "on") {
+        document.getElementById("text_entry_enter_button").disabled = false;
+        document.getElementById('command_input_form').removeEventListener('submit', default_return_press);  
+        document.getElementById('command_input_form').addEventListener('submit', accept_entry_input);
+        document.getElementById('command_input').focus();
+    } else if (on_off == "off") {
+        document.getElementById('command_input_form').removeEventListener('submit', accept_entry_input);  
+        document.getElementById('command_input_form').addEventListener('submit', default_return_press);
+        document.getElementById("text_entry_enter_button").disabled = true;
+    }
 }
 
 function print_all(list){
@@ -98,13 +113,12 @@ function print_letter_by_letter(text, par_element) {
 }
 
 function build_multiple_choice(display_strings) {
-    text_entry_div.style.display = "none";
-    button_entry_div.style.display = "block";
+    toggle_entry_divs("button");
     for (let i=0; i < display_strings.length; i++) {
         let btn = document.createElement("btn");
         btn.classList.add("game_multiple_choice_buttons");
         btn.innerHTML = display_strings[i];
-        btn.value = i
+        btn.value = i;
         btn.onclick = accept_button_input.bind(null, display_strings[i], i);
         button_entry_div.appendChild(btn);
     }
@@ -120,6 +134,7 @@ function toggle_entry_divs(element_type) {
         text_entry_div.style.display = "block";
     }
 }
+
 
 function accept_button_input(display, button_index) {
     printtk(">   " + display)
@@ -184,11 +199,7 @@ function switch_to_outline_header() {
     foreground_header_image.style.opacity = 0;
     on_header_element = false;
 }
- 
 
-function toggle_dynamic_input(bind_or_unbind) {
-    /* pass */
-}
 
 function display_quote(quote, author) {
     /* pass */

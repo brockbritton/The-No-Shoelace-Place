@@ -81,7 +81,8 @@ class Game:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
 
-        print(values_to_update)
+        #print(values_to_update)
+
 
         return actions
 
@@ -149,14 +150,18 @@ class Game:
                     return_tuple = self.master_helper[2].enter_code(input_value, self.master_helper)
                 case "execute_event": 
                     return_tuple = self.master_helper.execute_event(input_value, self.player1)
+                    if isinstance(return_tuple[1], int):
+                        # Use n-1 turns because below another turn will be used
+                        actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(return_tuple[1] - 1))
                 case "ask_unlock_item": 
                     return_tuple = self.player1.ask_unlock_item(input_value, self.master_helper)
                 case "level_up_ability": 
-                    if input_value == "y":
-                        for ability in self.player1.abilities:
-                            if ability.name == self.master_helper[0].name:
-                                index = self.player1.abilities.index(ability)
-                        return_tuple = self.player1.abilities[index].upgrade_ability(self.master_helper[1:], self.player1)
+                    
+                    for ability in self.player1.abilities:
+                        if ability.name == self.master_helper[0].name:
+                            index = self.player1.abilities.index(ability)
+                    return_tuple = self.player1.abilities[index].upgrade_ability(input_value, self.master_helper[1:], self.player1)
+                    
 
             
         # Otherwise, just use the input as it was given

@@ -6,7 +6,7 @@ from flask_session import Session
 
 app = Flask(__name__)
 app.secret_key = "ihaveasecretkey1"
-#app.debug = True
+app.debug = True
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 app.config["SESSION_PERMANENT"] = False
@@ -50,7 +50,6 @@ def credits():
 
 @app.route("/game/", methods=('GET', 'POST'))
 def play_game():
-    session['game'].start_game()
     return render_template("game.html")
 
 
@@ -93,4 +92,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=5000, debug=True)
+    app.run(host="localhost", port=5000)

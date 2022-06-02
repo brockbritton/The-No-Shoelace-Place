@@ -49,13 +49,13 @@ class Coping_Skill_Group(Event):
                     return ("level_up_ability", [player_ability, req_xp, self.turns_spent], actions)
                 else:
                     if player_ability.lvl == 0:
-                        actions['print_all'].append(f"Unfortunately you do not have enough experience to learn {player_ability.name}?")
+                        actions['print_all'].append(f"Unfortunately you do not have enough experience to learn {player_ability.name}.")
                     else:
-                        actions['print_all'].append(f"Unfortunately you do not have enough experience to level up {player_ability.name}?")
+                        actions['print_all'].append(f"Unfortunately you do not have enough experience to level up {player_ability.name}.")
                     return (None, self.turns_spent, actions)
  
         else:
-            actions['print_all'].append("You did not attend this event")
+            actions['print_all'].append("You did not attend this event.")
             return (None, None, actions)
             
 

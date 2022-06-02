@@ -36,7 +36,7 @@
                             value="{{ request.form['command_input'] }}">
                         </input>
             
-                        <button class="game_multiple_choice_buttons" onclick=""> Enter </button>
+                        <button id="text_entry_enter_button" disabled="true" class="game_multiple_choice_buttons" onclick="accept_entry_input"> Enter </button>
                     </form>
                 </div>
 
@@ -191,8 +191,8 @@
 
     </div>
     <script>
-
-const form = document.getElementById('command_input_form');
+        // must have these variables declared here at the bottom of the page
+        const form = document.getElementById('command_input_form');
         const game_display_div = document.getElementById("game_text_display");
 
         const text_entry_div = document.getElementById("text_entry_div");
@@ -201,9 +201,9 @@ const form = document.getElementById('command_input_form');
 
         const image_header = document.getElementById("image_header");
         const foreground_header_image = document.getElementById("foreground_image");
-        foreground_header_image.style.opacity - 0;
+
+        document.getElementById("foreground_image").style.opacity - 0;  
         ajax_accept_input(null, '/game/loading-game');
-        
         window.addEventListener('beforeunload', function (e) {
             // Cancel the event
             // e.preventDefault();
@@ -211,11 +211,8 @@ const form = document.getElementById('command_input_form');
             // e.returnValue = '';
             return false;
         });
-        
-        
-
-        form.addEventListener('submit', accept_entry_input);
-        text_entry.focus();
+         
+        form.addEventListener('submit', accept_entry_input); //?
 
 
     </script>

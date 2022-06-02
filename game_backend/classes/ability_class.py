@@ -27,27 +27,33 @@ class Coping_Skill(Ability):
             5: 500,
         }
 
-    def upgrade_ability(self, helper_list, player): 
+    def upgrade_ability(self, y_or_no, helper_list, player): 
         actions = {
             'print_all': [],
             'build_multiple_choice': [],
             'ask_y_or_n': False,
             'update_ui_values': [],
         }
-        self.lvl += 1
-        if self.damage != None:
-            self.damage *= self.lvl
-        if isinstance(self.affects, list):
-            for c in self.affects:
-                #c.upgrade_condition()  #this is a condition
-                pass
-        
-        player.earn_xp(-1 * helper_list[0])
-        if self.lvl == 1:
-            actions['print_all'].append(f"You have learned {self.name}!")
+        if y_or_no == "y":
+            self.lvl += 1
+            if self.damage != None:
+                self.damage *= self.lvl
+            if isinstance(self.affects, list):
+                for c in self.affects:
+                    #c.upgrade_condition()  #this is a condition
+                    pass
+            
+            player.earn_xp(-1 * helper_list[0])
+            if self.lvl == 1:
+                actions['print_all'].append(f"You have learned {self.name}!")
+            else:
+                actions['print_all'].append(f"You have leveled up {self.name} to level {self.lvl}!")
+            actions['update_ui_values'] = ["xp_value", self.lvl_ui_value]
         else:
-            actions['print_all'].append(f"You have leveled up {self.name} to level {self.lvl}!")
-        actions['update_ui_values'] = ["xp_value", self.lvl_ui_value]
+            if self.lvl == 0:
+                actions['print_all'].append(f"You chose not learn {self.name}.")
+            else:
+                actions['print_all'].append(f"You chose not level up {self.name}.")
 
         return (None, None, actions)
 
