@@ -1,0 +1,2 @@
+requests==2.26.0
+num2words==0.5.10

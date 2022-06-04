@@ -1,7 +1,7 @@
 
-import game_backend.classes.room_class as room_class
-import game_backend.objects.items as item
-import game_backend.objects.npcs as npc
+import tnslp.game_backend.classes.room_class as room_class
+import tnslp.game_backend.objects.items as item
+import tnslp.game_backend.objects.npcs as npc
 
 ### Ward Rooms ###
 # display names must be 11 characters or less

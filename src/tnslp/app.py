@@ -1,7 +1,7 @@
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
-import game_backend.classes.game_class as game_class
+import tnslp.game_backend.classes.game_class as game_class
 from flask_session import Session
 
 app = Flask(__name__)

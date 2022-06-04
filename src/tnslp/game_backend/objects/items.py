@@ -1,5 +1,5 @@
 
-import game_backend.classes.item_class as item_class
+import tnslp.game_backend.classes.item_class as item_class
 
 # Room Name #
     # Items - declare variables

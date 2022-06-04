@@ -1,6 +1,6 @@
 
-import game_backend.classes.room_class as room_class
-import game_backend.gl_backend_functions as gl
+import tnslp.game_backend.classes.room_class as room_class
+import tnslp.game_backend.gl_backend_functions as gl
 
 
 class Item:

@@ -4,8 +4,8 @@ import random
 
 import num2words as n2w
 
-import game_backend.classes.item_class as item_class
-import game_backend.objects.items as item
+import tnslp.game_backend.classes.item_class as item_class
+import tnslp.game_backend.objects.items as item
 
 
 class Room:
