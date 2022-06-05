@@ -155,9 +155,8 @@ class Game:
                         # Use n-1 turns because below another turn will be used
                         actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(return_tuple[1] - 1))
                 case "ask_unlock_item": 
-                    return_tuple = self.player1.ask_unlock_item(input_value, self.master_helper)
+                    return_tuple = self.master_helper.ask_unlock_item(input_value)
                 case "level_up_ability": 
-                    
                     for ability in self.player1.abilities:
                         if ability.name == self.master_helper[0].name:
                             index = self.player1.abilities.index(ability)
@@ -261,7 +260,7 @@ class Game:
             "special_actions" : []
         }
         """
-        print(parsed_dict) 
+
         # If the parsed dictionary has an action
         if len(parsed_dict["action"]) > 0:
             if len(parsed_dict["action"]) == 1:
@@ -274,7 +273,7 @@ class Game:
                                 dest, helper, actions = gl.parse_tuples(return_tuple, actions)
 
                             except AttributeError:
-                                actions['print_all'].append("You cannot pickup this item.")
+                                actions['print_all'].append("You cannot pick up this item.")
                         else:
                             actions["print_all"].append("You are already holding this item.")
 
@@ -328,16 +327,29 @@ class Game:
                     if parsed_dict["action"][0] == "drop" and len(parsed_dict["nearby_objects"]) == 2:
                         # Check for if one is a storage unit and one is an inv_item
                         if isinstance(parsed_dict["nearby_objects"][0], item_class.Storage_Unit) and isinstance(parsed_dict["nearby_objects"][1], item_class.Inv_Item):
-                            inv_item, storage_unit = parsed_dict["nearby_objects"][1], parsed_dict["nearby_objects"][0]
+                            move_item, storage_unit = parsed_dict["nearby_objects"][1], parsed_dict["nearby_objects"][0]
                         elif isinstance(parsed_dict["nearby_objects"][1], item_class.Storage_Unit) and isinstance(parsed_dict["nearby_objects"][0], item_class.Inv_Item):
-                            inv_item, storage_unit = parsed_dict["nearby_objects"][0], parsed_dict["nearby_objects"][1]
-                        # If the inv_item is in the player inventory, put it in the storage unit
-                        if inv_item in self.player1.inv:
-                            return_tuple = inv_item.drop_item(storage_unit, self.player1) 
-                            dest, helper, actions = gl.parse_tuples(return_tuple, actions)
+                            move_item, storage_unit = parsed_dict["nearby_objects"][0], parsed_dict["nearby_objects"][1]
+                        
+                        #Depending on the storage unit, check necessary item attributes and add to it if possible
+                        if isinstance(storage_unit, item_class.Storage_Wall):
+                            if move_item.can_hang:
+                                if move_item in self.player1.inv:
+                                    return_tuple = move_item.drop_item(storage_unit, self.player1) 
+                                else:
+                                    return_tuple = move_item.move_item(storage_unit, self.player1)
+                                dest, helper, actions = gl.parse_tuples(return_tuple, actions) 
+                            else:
+                                actions['print_all'].append("You cannot hang this item on a wall.")
                         else:
-                            # allow to move item from one storage unit to the other 
-                            actions['print_all'].append("You cannot drop this item because you are not holding it.") 
+                            # If the inv_item is in the player inventory, put it in the storage unit
+                            if move_item in self.player1.inv:
+                                return_tuple = move_item.drop_item(storage_unit, self.player1) 
+                            # Otherwise, move the item from one storage unit to another
+                            else:
+                                return_tuple = move_item.move_item(storage_unit, self.player1) 
+
+                            dest, helper, actions = gl.parse_tuples(return_tuple, actions) 
 
 
                 # When there are no objects, and only a direction
@@ -362,7 +374,8 @@ class Game:
                 
         # If the parsed dictionary does not have an action
         # and does have a direction or a nearby object
-        elif len(parsed_dict["directions"]) > 0 or len(parsed_dict["nearby_objects"]) > 0:
+        elif len(parsed_dict["directions"]) >= 1 or len(parsed_dict["nearby_objects"]) >= 1:
+            # If there is one direction or one nearby object
             if len(parsed_dict["directions"]) + len(parsed_dict["nearby_objects"]) == 1:
                 if len(parsed_dict["directions"]) == 1:
                     if parsed_dict["directions"][0] == "cardinal":
@@ -370,7 +383,8 @@ class Game:
                     else: 
                         actions['print_all'].append(self.player1.loc.print_directions(self.player1, parsed_dict["directions"][0]))
                 elif len(parsed_dict["nearby_objects"]) == 1:
-                    pass
+                    actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].inspect_item())
+            # If there are multiple directions and/or nearby objects
             else:
                 # Please refer to one object at a time
                 pass
@@ -381,8 +395,6 @@ class Game:
                 match action:
                     case "xd" : actions["print_all"].append(self.player1.loc.print_directions(self.player1, None))
                     case "xi" : actions["print_all"].append(self.player1.loc.xray_look_storage_units())
-
-
 
         return (dest, helper, actions)
     

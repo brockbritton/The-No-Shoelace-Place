@@ -5,15 +5,15 @@ import re
 class Parser:
     def __init__(self) -> None:
         self.player = None
-        pick_up_keys = {'pick up':["pick up", "take", "retrieve", "get", "grab", "remove"]}
-        drop_keys = {'drop':["drop", "place", "put down", "put", "insert", "set"]}
+        pick_up_keys = {'pick up':["pick up", "pickup", "take", "retrieve", "get", "grab", "remove"]}
+        drop_keys = {'drop':["drop", "place", "put down", "put", "set", "move"]}
         inspect_keys = {'inspect':["inspect", "look at", "examine", "read", "check out", "search"]}
         open_keys = {'open':["open"]}
         close_keys = {'close':["close", "shut"]}
         unlock_keys = {'unlock':['unlock', 'unseal']}
         lock_keys = {'lock':["lock", "seal"]}
         break_keys = {'break':["break", "smash", "tear down", "rip off", "damage", "destroy"]}
-        move_keys = {'go':["go", "move", "walk", "turn"]}
+        move_keys = {'go':["go", "walk", "turn", "travel", "exit", "leave"]}
         display_keys = {'display':["display", "view", "show", "reveal"]}
 
         self.movement_dict = {
@@ -26,11 +26,8 @@ class Parser:
             close_keys, lock_keys, break_keys, move_keys, display_keys]
         
     def parse_input(self, player, str_input):
-        self.update_player(player)
         return self.id_action_object(player, str_input)
 
-    def update_player(self, player):
-        self.player = player
                 
     def id_action_object(self, player, str_input):
         

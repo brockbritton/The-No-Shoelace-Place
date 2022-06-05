@@ -1,9 +1,7 @@
 
 
 import random
-
 import num2words as n2w
-
 import tnslp.game_backend.classes.item_class as item_class
 import tnslp.game_backend.objects.items as item
 
@@ -16,8 +14,7 @@ class Room:
         self.display_name = display_name
         self.description = description
         
-        self.storage_containers = [item_class.Storage_Spot("ground", "ground")]
-        self.walls = [] ######
+        self.storage_containers = [item_class.Storage_Spot("ground", "ground"), item_class.Storage_Wall("wall", "walls")]
         self.storage_dict = {}
         self.interacts = []
         self.monsters = []
@@ -41,15 +38,13 @@ class Room:
 
        
     def look_storage_units(self):
-        if len(self.storage_containers) == 1:
-            sentence = f"In the room is a {self.storage_containers[0].name}."
-        elif len(self.storage_containers) == 2:
-            sentence = f"In the room is a {self.storage_containers[0].name} and a {self.storage_containers[1].name}."
+        if len(self.storage_containers) == 2:
+            sentence = f"In the room is {self.storage_containers[0].article} {self.storage_containers[0].name} and {self.storage_containers[0].article} {self.storage_containers[1].name}."
         else:
-            sentence = f"In the room is a {self.storage_containers[0].name}, "
+            sentence = f"In the room is {self.storage_containers[0].article} {self.storage_containers[0].name}, "
             for i in range(1, len(self.storage_containers)-2):
-                sentence += f"a {self.storage_containers[i].name}, "
-            sentence += f"and a {self.storage_containers[-1].name}."
+                sentence += f"{self.storage_containers[0].article} {self.storage_containers[i].name}, "
+            sentence += f"and {self.storage_containers[0].article} {self.storage_containers[-1].name}."
 
         return sentence
     

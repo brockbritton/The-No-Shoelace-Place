@@ -7,8 +7,11 @@ class Item:
     def __init__(self, name, gen_name) -> None:
         self.name = name
         self.gen_name = gen_name
-        self.article = "a"
+        self.article = "the"
         self.can_inspect = True
+        self.can_hang = False
+        self.can_pick_up = False
+        self.can_interact = False
 
     def inspect_item(self): 
         actions = {
@@ -27,6 +30,7 @@ class Inv_Item(Item):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
         self.inv_space = 1
+        self.article = "a"
         self.can_pick_up = True
         self.can_interact = False
         self.can_open_close = False
@@ -57,9 +61,27 @@ class Inv_Item(Item):
         actions['update_inv_visual'] = player.sub_inventory(self)
         player.loc.add_item(self, loc)
         try:
-            actions['print_all'] = [f"You have dropped the {self.name} on the {loc.name}."] 
+            actions['print_all'] = [f"You have dropped the {self.name} to the {loc.name}."] 
         except AttributeError:
+            # If the item is dropped with no location, it is dropped on the ground
             actions['print_all'] = [f"You have dropped the {self.name} on the ground."]
+        return (None, None, actions)
+
+    def move_item(self, new_location, player):
+        actions = {
+            'print_all': [],
+            'ask_y_or_n': False
+        }
+        for sc in player.loc.storage_containers:
+            if self in sc.items:
+                last_location = sc
+                sc.items.remove(self)
+
+        player.loc.add_item(self, new_location)
+        if last_location != new_location:
+            actions['print_all'] = [f"You have moved the {self.name} from the {last_location.name} to the {new_location.name}."] 
+        else:
+            actions['print_all'] = [f"The {self.name} is already on the {new_location.name}."] 
         return (None, None, actions)
     
 
@@ -162,6 +184,16 @@ class Lockable_Interact(Openable_Interact):
 
         return actions
 
+    def ask_unlock_item(self, choice):
+        actions = {}
+
+        if choice == 'y':
+            actions = self.unlock_item(self)
+        elif choice == 'n':
+            actions['print_all'] = [f"You did not try to unlock the {self.name}."]
+
+        return (None, None, actions)
+
     def lock_item(self, player):
         actions = {
             'print_all': [],
@@ -231,11 +263,25 @@ class Storage_Spot(Storage_Unit):
             'print_all': [],
         }
         if len(self.items) == 0:
-            actions['print_all'].append(f"There is nothing on the {self.name}.")
+            sentence = f"There is nothing on the {self.name}."
+        
+        elif len(self.items) == 1:
+            sentence = f"On the {self.name} is {self.items[0].article} {self.items[0].name}."
+        elif len(self.items) == 2:
+            sentence = f"On the {self.name} is {self.items[0].article} {self.items[0].name} and {self.items[1].article} {self.items[1].name}."
         else:
-            actions['print_all'].append(f"There is something on the {self.name}: {self.items}.")
+            sentence = f"On the {self.name} is {self.items[0].article} {self.items[0].name}, "
+            for i in range(1, len(self.storage_containers)-2):
+                sentence += f"{self.items[0].article} {self.items[0].name}, "
+            sentence += f"and {self.items[0].article} {self.items[0].name}."
+
+        actions['print_all'].append(sentence)
         return actions
 
+class Storage_Wall(Storage_Spot):
+    def __init__(self, name, gen_name) -> None:
+        super().__init__(name, gen_name)
+    
 class Storage_Bin(Storage_Unit):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
@@ -247,9 +293,18 @@ class Storage_Bin(Storage_Unit):
             'print_all': [],
         }
         if len(self.items) == 0:
-            actions['print_all'].append(f"There is nothing in the {self.name}.")
+            sentence = f"There is nothing in the {self.name}."
+        elif len(self.items) == 1:
+            sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}."
+        elif len(self.items) == 2:
+            sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name} and {self.items[1].article} {self.items[1].name}."
         else:
-            actions['print_all'].append(f"There is something in the {self.name}: {self.items}.")
+            sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}, "
+            for i in range(1, len(self.storage_containers)-2):
+                sentence += f"{self.items[0].article} {self.items[0].name}, "
+            sentence += f"and {self.items[0].article} {self.items[0].name}."
+
+        actions['print_all'].append(sentence)
         return actions
 
 class Storage_Box(Openable_Interact, Storage_Unit):
@@ -262,13 +317,19 @@ class Storage_Box(Openable_Interact, Storage_Unit):
         actions = {
             'print_all': [],
         }
-        if self.open:
-            if len(self.items) == 0:
-                actions['print_all'].append(f"There is nothing in the {self.name}.")
-            else:
-                actions['print_all'].append(f"There is something in the {self.name}: {self.items}.")
+        if len(self.items) == 0:
+            sentence = f"There is nothing in the {self.name}."
+        elif len(self.items) == 1:
+            sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}."
+        elif len(self.items) == 2:
+            sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name} and {self.items[1].article} {self.items[1].name}."
         else:
-            actions['print_all'].append(f"The {self.name} is closed.")
+            sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}, "
+            for i in range(1, len(self.storage_containers)-2):
+                sentence += f"{self.items[0].article} {self.items[0].name}, "
+            sentence += f"and {self.items[0].article} {self.items[0].name}."
+
+        actions['print_all'].append(sentence)
         return actions
 
 class Storage_LockBox(Lockable_Interact, Openable_Interact, Storage_Unit):

@@ -263,12 +263,3 @@ class Character:
             blrf_dict[blrf_direct_list[i]] = nesw_direct_list[i]
         return blrf_dict
 
-    def ask_unlock_item(self, choice, item):
-        actions = {}
-
-        if choice == 'y':
-            actions = item.unlock_item(self)
-        elif choice == 'n':
-            actions['print_all'] = [f"You did not try to unlock the {item.name}."]
-
-        return (None, None, actions)
