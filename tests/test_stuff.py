@@ -1,6 +1,6 @@
 
 
-import tnslp.game_backend.classes.character_class as character_class
+import src.tnslp.game_backend.classes.character_class as character_class
 
 player1 = character_class.Character("Tester")
 
