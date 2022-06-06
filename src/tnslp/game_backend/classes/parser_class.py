@@ -86,8 +86,7 @@ class Parser:
         # Check for special actions
         # xi : items in room
         # xd : directions
-        # xw : items on walls
-        for special in ("xi", "xd", "xw"):
+        for special in ("xi", "xd"):
             if special in str_input.lower():
                 parsed_info["special_actions"].append(special)
         

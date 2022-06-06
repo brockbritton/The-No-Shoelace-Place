@@ -21,6 +21,27 @@ class Item:
         actions['print_all'].append(f"There does not appear to be anything special about this {self.gen_name}.")
         return actions
 
+class Quote_Display:
+    def __init__(self, lines_list, author) -> None:
+        self.quote = lines_list
+        self.author = author
+
+    def format_quote(self):
+        formatted_quote = ""
+        # length of text box: 52 characters
+        for line in self.quote:
+            dynamic_spaces = " " * ((52 - len(line)) // 2)
+            formatted_quote += f"{dynamic_spaces}{line}{dynamic_spaces} "
+        
+        author_spaces = " " * ((52 - len(self.author)) // 2)
+        formatted_quote += f"{author_spaces}{line}{author_spaces}"
+        
+        return formatted_quote
+
+
+#########################
+#### Inventory Items #### 
+#########################
     
 class Inv_Item(Item):
 
@@ -83,14 +104,21 @@ class Inv_Item(Item):
         else:
             actions['print_all'] = [f"The {self.name} is already on the {new_location.name}."] 
         return (None, None, actions)
-    
 
 class Key(Inv_Item):
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
 
+class Hanging_Inv_Item(Inv_Item):
+    def __init__(self, name, gen_name) -> None:
+        super().__init__(name, gen_name)
+        self.can_hang = True
 
-
+class Hanging_Quote(Hanging_Inv_Item, Quote_Display):
+    def __init__(self, name, gen_name, lines_list, author) -> None:
+        super().__init__(name, gen_name, lines_list, author)
+        
+        
 ###################
 #### Interacts #### 
 ###################
@@ -375,6 +403,13 @@ class Electronic_Door(Lockable_Interact, Door):
     def close_item(self):
         #closing door also locks it again
         ...
+
+
+class Hanging_Wall_Item(Interact):
+    def __init__(self, name, gen_name) -> None:
+        super().__init__(name, gen_name)
+        self.can_hang = True
+
 
 #############################################
 ##### Individual Inventory Item Classes #####

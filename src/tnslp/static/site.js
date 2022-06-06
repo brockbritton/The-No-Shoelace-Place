@@ -34,11 +34,11 @@ function ajax_accept_input(data_values, route) {
                 toggle_return_listener("on");
             }
         },
-        error: function(error){
+        error: function(request){
             if (route == "/game/loading-game") {
                 ajax_accept_input(data_values, "/game/loading-game")
             } else {
-                printtk("error: " + error);
+                printtk("error: " + request.responseText);
             }
         }
     }); 

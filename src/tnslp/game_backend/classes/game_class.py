@@ -397,7 +397,7 @@ class Game:
                     case "xi" : actions["print_all"].append(self.player1.loc.xray_look_storage_units())
 
         return (dest, helper, actions)
-    
+
 
 
         

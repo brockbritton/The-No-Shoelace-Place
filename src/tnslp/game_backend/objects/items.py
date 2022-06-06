@@ -17,13 +17,7 @@ basement_key = item_class.Key("basement key", "key")
 cabinet_key = item_class.Key("ward cabinet keys", "key")
 ward_doors_key = item_class.Key("ward security key", "key")
 
-# These are test items
-block1 = item_class.Default_Item("block1", "block")
-block2 = item_class.Default_Item("block2", "block")
-block3 = item_class.Default_Item("block3", "block")
-block4 = item_class.Default_Item("block4", "block")
-block5 = item_class.Default_Item("block5", "block")
-block6 = item_class.Default_Item("block6", "block")
+
 
 
 ##### Ward Rooms and Items #####
