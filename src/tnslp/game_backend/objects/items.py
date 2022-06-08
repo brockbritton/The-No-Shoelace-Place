@@ -7,17 +7,22 @@ import tnslp.game_backend.classes.item_class as item_class
         # Storage Unit 1.set_items(items)
         # Storage Unit 2.set_items(items)
     # Doors
-   
 
-# Ward Item
+#More Items:
+# power_room_key
+# crowbar, keycard
+# antidote
+# compass
+# bandages
 
+# Ward Items
 id_bracelet = item_class.ID_Bracelet("id bracelet", "bracelet") 
 
 basement_key = item_class.Key("basement key", "key")
 cabinet_key = item_class.Key("ward cabinet keys", "key")
 ward_doors_key = item_class.Key("ward security key", "key")
 
-
+deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
 
 
 ##### Ward Rooms and Items #####
@@ -25,7 +30,6 @@ ward_doors_key = item_class.Key("ward security key", "key")
     # Storage Units
 cr_art_table = item_class.Storage_Spot("arts and crafts table", "table")
 cr_game_cabinets = item_class.Storage_LockBox("game cabinet", "cabinet", True, [cabinet_key, ward_doors_key])
-deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
 cr_ping_pong_table.set_items([deck_of_cards])
     # Doors

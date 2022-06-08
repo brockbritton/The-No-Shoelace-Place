@@ -17,8 +17,8 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
-        room.basement_set_door_dictionaries()
-        room.ward_set_door_dictionaries()
+        #room.basement_set_door_dictionaries()
+        #room.ward_set_door_dictionaries()
     
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'

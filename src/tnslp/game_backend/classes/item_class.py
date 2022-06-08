@@ -38,6 +38,10 @@ class Quote_Display:
         
         return formatted_quote
 
+class Multi_Name_Item:
+    def __init__(self, alternate_names) -> None:
+        self.alt_names = alternate_names 
+
 
 #########################
 #### Inventory Items #### 
@@ -114,9 +118,16 @@ class Hanging_Inv_Item(Inv_Item):
         super().__init__(name, gen_name)
         self.can_hang = True
 
-class Hanging_Quote(Hanging_Inv_Item, Quote_Display):
+class Hanging_Quote_Poster(Hanging_Inv_Item, Quote_Display):
     def __init__(self, name, gen_name, lines_list, author) -> None:
         super().__init__(name, gen_name, lines_list, author)
+
+    def inspect_item(self):
+        actions = {
+            'print_all': [],
+        }
+        actions["print_all"].append(super().format_quote()) 
+        return actions
         
         
 ###################

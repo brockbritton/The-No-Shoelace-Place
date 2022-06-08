@@ -9,10 +9,11 @@ import tnslp.game_backend.objects.items as item
 class Room:
     _room_registry = []
 
-    def __init__(self, name, display_name, description) -> None:
+    def __init__(self, name, display_name, description, room_label) -> None:
         self.name = name
         self.display_name = display_name
         self.description = description
+        self.label = room_label
         
         self.storage_containers = [item_class.Storage_Spot("ground", "ground"), item_class.Storage_Wall("wall", "walls")]
         self.storage_dict = {}
@@ -414,27 +415,37 @@ class Room:
         return full_sentence
 
 class Ward_Room(Room):
-    def __init__(self, name, display_name, description, door_label) -> None:
-        super().__init__(name, display_name, description)
-        self.label = door_label
+    # room name, display name, description, room label, storage units, doors
+    def __init__(self, name, display_name, description, room_label, storage_units, doors) -> None:
+        super().__init__(name, display_name, description, room_label)
         self.lights_on = True
-    
+        if storage_units != None:
+            self.add_storage_units(storage_units)
+        if doors != None:
+            self.create_door_dict(doors)
+        
     def __repr__(self) -> str:
         return f'{self.name}(ward room)'
 
 
 class Basement_Room(Room):
-    def __init__(self, name, display_name, description) -> None:
-        super().__init__(name, display_name, description)
+    def __init__(self, name, display_name, description, room_label, storage_units, doors) -> None:
+        super().__init__(name, display_name, description, room_label)
         self.lights_on = False
+        if storage_units != None:
+            self.add_storage_units(storage_units)
+        if doors != None:
+            self.create_door_dict(doors)
     
     def __repr__(self) -> str:
         return f'{self.name}(basement room)'
 
 class Maze_Room(Room):
-    def __init__(self, name, description) -> None:
-        super().__init__(name, "unclear", description)
+    def __init__(self, name, description, doors) -> None:
+        super().__init__(name, "Boiler room", description, None)
         self.lights_on = False
+        if doors != None:
+            self.create_door_dict(doors)
 
     def __repr__(self) -> str:
         return f'{self.name}(maze room)'
@@ -447,6 +458,17 @@ class Maze_Room(Room):
                 return "The flashlight's light is barely strong enough to see even a few steps."
         else:
             return "It is completely dark here. There is no light to see by."
+
+class Final_Room(Room):
+    def __init__(self, name, display_name, description, room_label, doors) -> None:
+        super().__init__(name, display_name, description, room_label)
+        self.lights_on = False
+        if doors != None:
+            self.create_door_dict(doors)
+
+    def __repr__(self) -> str:
+        return f'{self.name}(final room)'
+
         
         
 
