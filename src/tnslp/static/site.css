@@ -234,6 +234,13 @@ html {
     background-color: none !important;
 }
 
+.quote_text {
+    font-size: 1em;
+    font-family: 'Courier New', monospace !important; 
+    background-color: none !important;
+    text-align: center;
+}
+
 #entry_widgets {
     height: 10%;
     /* height: auto ?*/ 

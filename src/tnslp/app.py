@@ -1,8 +1,8 @@
 
 from flask import Flask, redirect, render_template, request, session, url_for
-
-import tnslp.game_backend.classes.game_class as game_class
 from flask_session import Session
+import tnslp.game_backend.classes.game_class as game_class
+
 
 app = Flask(__name__)
 app.secret_key = "ihaveasecretkey1"

@@ -1,5 +1,4 @@
 
-from ast import match_case
 
 import tnslp.game_backend.classes.character_class as character_class
 import tnslp.game_backend.classes.item_class as item_class
@@ -17,8 +16,6 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
-        #room.basement_set_door_dictionaries()
-        #room.ward_set_door_dictionaries()
     
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
@@ -166,11 +163,10 @@ class Game:
             
         # Otherwise, just use the input as it was given
         else:
-            print("parsing data - no destination")
-            input_value = frontend_input.strip()
-
             # Begin parsing the input
+            input_value = frontend_input.strip()
             parsed_dict = self.parser.parse_input(self.player1, input_value)
+            print("parsed data:", parsed_dict)
             # Check the parsed dictionary for existing values
             for value in parsed_dict.values():
                 if len(value) > 0:

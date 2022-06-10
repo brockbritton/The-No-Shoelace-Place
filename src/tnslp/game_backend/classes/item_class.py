@@ -21,22 +21,6 @@ class Item:
         actions['print_all'].append(f"There does not appear to be anything special about this {self.gen_name}.")
         return actions
 
-class Quote_Display:
-    def __init__(self, lines_list, author) -> None:
-        self.quote = lines_list
-        self.author = author
-
-    def format_quote(self):
-        formatted_quote = ""
-        # length of text box: 52 characters
-        for line in self.quote:
-            dynamic_spaces = " " * ((52 - len(line)) // 2)
-            formatted_quote += f"{dynamic_spaces}{line}{dynamic_spaces} "
-        
-        author_spaces = " " * ((52 - len(self.author)) // 2)
-        formatted_quote += f"{author_spaces}{line}{author_spaces}"
-        
-        return formatted_quote
 
 class Multi_Name_Item:
     def __init__(self, alternate_names) -> None:
@@ -118,15 +102,27 @@ class Hanging_Inv_Item(Inv_Item):
         super().__init__(name, gen_name)
         self.can_hang = True
 
-class Hanging_Quote_Poster(Hanging_Inv_Item, Quote_Display):
+class Hanging_Quote_Poster(Hanging_Inv_Item):
     def __init__(self, name, gen_name, lines_list, author) -> None:
-        super().__init__(name, gen_name, lines_list, author)
+        super().__init__(name, gen_name)
+        self.quote = lines_list
+        self.author = author
+
+    def format_quote(self):
+        formatted_quote = []
+        # length of text box: 52 characters
+        for line in self.quote:
+            formatted_quote.append([line, "quote"])
+        
+        formatted_quote.append([self.author, "quote"])
+        return formatted_quote
 
     def inspect_item(self):
         actions = {
             'print_all': [],
         }
-        actions["print_all"].append(super().format_quote()) 
+        actions["print_all"].append("The poster reads:")
+        actions["print_all"].extend(self.format_quote()) 
         return actions
         
         
@@ -371,7 +367,7 @@ class Storage_Box(Openable_Interact, Storage_Unit):
         actions['print_all'].append(sentence)
         return actions
 
-class Storage_LockBox(Lockable_Interact, Openable_Interact, Storage_Unit):
+class Storage_LockBox(Lockable_Interact, Storage_Box):
     def __init__(self, name, gen_name, locked_bool, keys_list) -> None:
         super().__init__(name, gen_name, keys_list)
         self.locked = locked_bool

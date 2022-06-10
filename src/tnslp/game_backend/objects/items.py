@@ -24,6 +24,15 @@ ward_doors_key = item_class.Key("ward security key", "key")
 
 deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
 
+poster1 = item_class.Hanging_Quote_Poster("friendship poster", 
+    "poster", 
+    ["Why did you do all this for me?",
+        "he asked. I don't deserve it.",
+        "I've never done anything for you.",
+        "You have been my friend, replied Charlotte.",
+        "That in itself is a tremendous thing."],
+    "E.B. White, Charlotte's Web")
+
 
 ##### Ward Rooms and Items #####
 # Common Room #
@@ -31,7 +40,7 @@ deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
 cr_art_table = item_class.Storage_Spot("arts and crafts table", "table")
 cr_game_cabinets = item_class.Storage_LockBox("game cabinet", "cabinet", True, [cabinet_key, ward_doors_key])
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
-cr_ping_pong_table.set_items([deck_of_cards])
+cr_ping_pong_table.set_items([deck_of_cards, poster1])
     # Doors
 ward_to_basement_door = item_class.Lockable_Door("Basement Door", "door", [basement_key])
 
