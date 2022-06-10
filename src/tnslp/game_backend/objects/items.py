@@ -48,9 +48,10 @@ stories_poster = item_class.Hanging_Quote_Poster("stories poster",
 # Common Room #
     # Storage Units
 cr_art_table = item_class.Storage_Spot("arts and crafts table", "table")
+cr_art_table.set_items([deck_of_cards])
 cr_game_cabinets = item_class.Storage_LockBox("game cabinet", "cabinet", True, [cabinet_key, ward_doors_key])
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
-cr_ping_pong_table.set_items([deck_of_cards, friendship_poster, stories_poster])
+cr_ping_pong_table.set_items([friendship_poster, stories_poster]) ###cannot inspect a storage spot with 3 items
     # Doors
 ward_to_basement_door = item_class.Lockable_Door("Basement Door", "door", [basement_key])
 

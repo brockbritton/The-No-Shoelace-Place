@@ -123,7 +123,7 @@ class Hanging_Quote_Poster(Hanging_Inv_Item):
         }
         actions["print_all"].append("The poster reads:")
         actions["print_all"].extend(self.format_quote()) 
-        return actions
+        return actions 
         
         
 ###################
@@ -299,16 +299,15 @@ class Storage_Spot(Storage_Unit):
         }
         if len(self.items) == 0:
             sentence = f"There is nothing on the {self.name}."
-        
         elif len(self.items) == 1:
             sentence = f"On the {self.name} is {self.items[0].article} {self.items[0].name}."
         elif len(self.items) == 2:
             sentence = f"On the {self.name} is {self.items[0].article} {self.items[0].name} and {self.items[1].article} {self.items[1].name}."
         else:
             sentence = f"On the {self.name} is {self.items[0].article} {self.items[0].name}, "
-            for i in range(1, len(self.storage_containers)-2):
-                sentence += f"{self.items[0].article} {self.items[0].name}, "
-            sentence += f"and {self.items[0].article} {self.items[0].name}."
+            for i in range(1, len(self.items)-1):
+                sentence += f"{self.items[i].article} {self.items[i].name}, "
+            sentence += f"and {self.items[-1].article} {self.items[-1].name}."
 
         actions['print_all'].append(sentence)
         return actions
@@ -335,9 +334,9 @@ class Storage_Bin(Storage_Unit):
             sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name} and {self.items[1].article} {self.items[1].name}."
         else:
             sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}, "
-            for i in range(1, len(self.storage_containers)-2):
-                sentence += f"{self.items[0].article} {self.items[0].name}, "
-            sentence += f"and {self.items[0].article} {self.items[0].name}."
+            for i in range(1, len(self.items)-1):
+                sentence += f"{self.items[i].article} {self.items[i].name}, "
+            sentence += f"and {self.items[-1].article} {self.items[-1].name}."
 
         actions['print_all'].append(sentence)
         return actions
@@ -360,9 +359,9 @@ class Storage_Box(Openable_Interact, Storage_Unit):
             sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name} and {self.items[1].article} {self.items[1].name}."
         else:
             sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}, "
-            for i in range(1, len(self.storage_containers)-2):
-                sentence += f"{self.items[0].article} {self.items[0].name}, "
-            sentence += f"and {self.items[0].article} {self.items[0].name}."
+            for i in range(1, len(self.items)-1):
+                sentence += f"{self.items[i].article} {self.items[i].name}, "
+            sentence += f"and {self.items[-1].article} {self.items[-1].name}."
 
         actions['print_all'].append(sentence)
         return actions
