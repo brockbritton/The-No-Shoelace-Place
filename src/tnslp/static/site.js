@@ -86,14 +86,24 @@ function print_all(list){
         } else {
             setTimeout(print_all.bind(null, list.slice(1)), rate_of_letters*list[0].length);
         }
-        
     }
 }
 
 function load_prints(list) {
     for (let text in list) {
-        printtk(list[text]);
+        var par = document.createElement("p");
+        if (list[text] instanceof Array) {
+            if (list[text][1] == "quote") {
+                par.classList.add("quote_text");
+                par.innerHTML = list[text][0];
+            } 
+        } else {
+            par.classList.add("command_input_text");
+            par.innerHTML = list[text];
+        }
+        document.getElementById("game_text_display").appendChild(par);
     }
+    game_display_div.scrollTop = game_display_div.scrollHeight;
 }
 
 function printtk(text) {
