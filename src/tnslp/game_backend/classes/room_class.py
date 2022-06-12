@@ -16,6 +16,8 @@ class Room:
         self.display_name = display_name
         self.description = description
         self.label = room_label
+        self.doors = {}
+        self.has_doors = False
         if doors != None:
             self.create_door_dict(doors)
         
@@ -25,10 +27,7 @@ class Room:
                 self.storage_containers[i].set_items(floor_wall_items[i])
         
         self.storage_dict = {}
-        self.interacts = []
         self.monsters = []
-        self.interacts = []
-        self.has_doors = False
         self._room_registry.append(self)
         self.visited = False
 
@@ -94,7 +93,6 @@ class Room:
 
     def create_door_dict(self, door_list):
         direct_list = ["n", "e", "s", "w"]
-        self.doors = {}
         for i in range(0, len(door_list)):
             self.doors[direct_list[i]] = door_list[i]
         self.has_doors = True

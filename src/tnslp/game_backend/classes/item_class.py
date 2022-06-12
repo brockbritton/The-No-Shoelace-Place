@@ -93,11 +93,6 @@ class Inv_Item(Item):
             actions['print_all'] = [f"The {self.name} is already on the {new_location.name}."] 
         return (None, None, actions)
 
-class Key(Inv_Item):
-    def __init__(self, name, gen_name):
-        super().__init__(name, gen_name)
-
-
 class Quote_Note(Inv_Item):
     def __init__(self, name, gen_name, lines_list, author) -> None:
         super().__init__(name, gen_name)
@@ -220,11 +215,11 @@ class Lockable_Interact(Openable_Interact):
 
         return actions
 
-    def ask_unlock_item(self, choice):
+    def ask_unlock_item(self, choice, player):
         actions = {}
 
         if choice == 'y':
-            actions = self.unlock_item(self)
+            actions = self.unlock_item(player)
         elif choice == 'n':
             actions['print_all'] = [f"You did not try to unlock the {self.name}."]
 
@@ -315,7 +310,7 @@ class Storage_Spot(Storage_Unit):
         actions = {
             'print_all': [],
         }
-        print("working?")
+        
         if len(self.items) == 0:
             sentence = f"There is nothing on the {self.name}."
         elif len(self.items) == 1:
@@ -440,15 +435,15 @@ class Hanging_Wall_Item(Interact):
 ##### Individual Inventory Item Classes #####
 #############################################
 
-class Default_Item(Inv_Item):
+class Basic_Item(Inv_Item):
+    def __init__(self, name, gen_name):
+        super().__init__(name, gen_name)
+
+class Key(Inv_Item):
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
 
 class Keycard(Inv_Item):
-    def __init__(self, name, gen_name):
-        super().__init__(name, gen_name)
-
-class Plastic_Utensil(Inv_Item):
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
 
@@ -458,8 +453,10 @@ class Flashlight(Inv_Item):
         self.full_power = False
 
 class Crowbar(Inv_Item):
+    # Necessary to be able to use the crowbar to open/close doors
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
+
 
 class ID_Bracelet(Inv_Item):
     def __init__(self, name, gen_name):
@@ -539,6 +536,7 @@ class Chess_Set(Storage_Box):
                 "note", 
                 ["No one ever won a game by resigning."],
                 "Savielly Tartakower"),
+            Basic_Item("chess board", "board"),
         ]
 
         

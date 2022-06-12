@@ -150,9 +150,12 @@ class Character:
             display_rooms = [] #check for doors too
             for i in range(0, len(next_room)):
                 if self.loc.has_doors and self.loc.doors[d_choice][i] != None:
+                    print(1)
                     if self.loc.doors[d_choice][i].locked:
+                        print(2)
                         display_rooms.append("Locked Door")
                     else:
+                        print(3)
                         display_rooms.append(next_room[i].name)
 
                 elif next_room[i].visited:

@@ -39,7 +39,7 @@ function ajax_accept_input(data_values, route) {
             if (route == "/game/loading-game") {
                 ajax_accept_input(data_values, "/game/loading-game")
             } else {
-                printtk("error: " + request.responseText);
+                printtk("Error " + request.status + ": see terminal for more information." );
             }
         }
     }); 

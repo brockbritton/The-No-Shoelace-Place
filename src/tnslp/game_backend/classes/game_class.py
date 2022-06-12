@@ -120,6 +120,7 @@ class Game:
             'update_ui_values': [] ###keep list empty 
         }
 
+
         # Save the player input as part as the saved prints
         self.save_prints.append("> " + frontend_input) ####doesnt work for multiple choice
 
@@ -152,7 +153,7 @@ class Game:
                         # Use n-1 turns because below another turn will be used
                         actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(return_tuple[1] - 1))
                 case "ask_unlock_item": 
-                    return_tuple = self.master_helper.ask_unlock_item(input_value)
+                    return_tuple = self.master_helper.ask_unlock_item(input_value, self.player1)
                 case "level_up_ability": 
                     for ability in self.player1.abilities:
                         if ability.name == self.master_helper[0].name:
