@@ -315,6 +315,7 @@ class Storage_Spot(Storage_Unit):
         actions = {
             'print_all': [],
         }
+        print("working?")
         if len(self.items) == 0:
             sentence = f"There is nothing on the {self.name}."
         elif len(self.items) == 1:

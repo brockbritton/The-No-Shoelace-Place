@@ -53,14 +53,20 @@ class Parser:
         else:
             more_info = False
         for sc in player.loc.storage_containers:
-            if sc.name.lower() in str_input.lower():
-                parsed_info["nearby_objects"].append((sc, None))
-            contents = sc.build_flat_list_of_contents(more_info)
-            for item in contents:
-                if more_info:
+            if more_info:
+                if sc.name.lower() in str_input.lower():
+                    parsed_info["nearby_objects"].append((sc, None))
+
+                contents = sc.build_flat_list_of_contents(more_info)
+                for item in contents:
                     if item[0].name.lower() in str_input.lower():
                         parsed_info["nearby_objects"].append(item)
-                else:
+            else:
+                if sc.name.lower() in str_input.lower():
+                    parsed_info["nearby_objects"].append(sc)
+                
+                contents = sc.build_flat_list_of_contents(more_info)
+                for item in contents:
                     if item.name.lower() in str_input.lower():
                         parsed_info["nearby_objects"].append(item)
                 

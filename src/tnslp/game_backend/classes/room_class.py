@@ -11,17 +11,22 @@ import tnslp.game_backend.objects.items as item
 class Room:
     _room_registry = []
 
-    def __init__(self, name, display_name, description, room_label) -> None:
+    def __init__(self, name, display_name, description, room_label, doors, floor_wall_items) -> None:
         self.name = name
         self.display_name = display_name
         self.description = description
         self.label = room_label
+        if doors != None:
+            self.create_door_dict(doors)
         
         self.storage_containers = [item_class.Storage_Spot("ground", "ground"), item_class.Storage_Wall("wall", "walls")]
+        for i in range(0, len(floor_wall_items)):
+            if floor_wall_items[i] != None:
+                self.storage_containers[i].set_items(floor_wall_items[i])
+        
         self.storage_dict = {}
         self.interacts = []
         self.monsters = []
-        self.doors = {}
         self.interacts = []
         self.has_doors = False
         self._room_registry.append(self)
@@ -39,7 +44,6 @@ class Room:
         return actions
 
 
-       
     def look_storage_units(self):
         if len(self.storage_containers) == 2:
             sentence = f"In the room is {self.storage_containers[0].article} {self.storage_containers[0].name} and {self.storage_containers[0].article} {self.storage_containers[1].name}."
@@ -90,6 +94,7 @@ class Room:
 
     def create_door_dict(self, door_list):
         direct_list = ["n", "e", "s", "w"]
+        self.doors = {}
         for i in range(0, len(door_list)):
             self.doors[direct_list[i]] = door_list[i]
         self.has_doors = True
@@ -413,36 +418,32 @@ class Room:
 
 class Ward_Room(Room):
     # room name, display name, description, room label, storage units, doors
-    def __init__(self, name, display_name, description, room_label, storage_units, doors) -> None:
-        super().__init__(name, display_name, description, room_label)
+    def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
+        super().__init__(name, display_name, description, room_label, doors, floor_wall_items)
         self.lights_on = True
         if storage_units != None:
             self.add_storage_units(storage_units)
-        if doors != None:
-            self.create_door_dict(doors)
+        
         
     def __repr__(self) -> str:
         return f'{self.name}(ward room)'
 
 
 class Basement_Room(Room):
-    def __init__(self, name, display_name, description, room_label, storage_units, doors) -> None:
-        super().__init__(name, display_name, description, room_label)
+    def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
+        super().__init__(name, display_name, description, room_label, doors, floor_wall_items)
         self.lights_on = False
         if storage_units != None:
             self.add_storage_units(storage_units)
-        if doors != None:
-            self.create_door_dict(doors)
+
     
     def __repr__(self) -> str:
         return f'{self.name}(basement room)'
 
 class Maze_Room(Room):
-    def __init__(self, name, description, doors) -> None:
-        super().__init__(name, "Boiler room", description, None)
+    def __init__(self, name, description, floor_wall_items, doors) -> None:
+        super().__init__(name, "Boiler room", description, None, doors, floor_wall_items)
         self.lights_on = False
-        if doors != None:
-            self.create_door_dict(doors)
 
     def __repr__(self) -> str:
         return f'{self.name}(maze room)'
@@ -458,10 +459,9 @@ class Maze_Room(Room):
 
 class Final_Room(Room):
     def __init__(self, name, display_name, description, room_label, doors) -> None:
-        super().__init__(name, display_name, description, room_label)
+        super().__init__(name, display_name, description, room_label, doors, (None, None))
         self.lights_on = False
-        if doors != None:
-            self.create_door_dict(doors)
+    
 
     def __repr__(self) -> str:
         return f'{self.name}(final room)'

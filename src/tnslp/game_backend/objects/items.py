@@ -53,7 +53,6 @@ cr_art_table.set_items([deck_of_cards])
 cr_game_cabinets = item_class.Storage_LockBox("game cabinet", "cabinet", False, [cabinet_key, ward_doors_key])
 cr_game_cabinets.set_items([chess_set])
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
-cr_ping_pong_table.set_items([friendship_poster, stories_poster]) 
     # Doors
 ward_to_basement_door = item_class.Lockable_Door("Basement Door", "door", [basement_key])
 
