@@ -102,8 +102,19 @@ class Character:
             'update_inv_visual': [],
         }
         if item_to_drop != "cancel":
-            return_tuple1 = item_to_drop.drop_item(None, self) # This will always return None, None for dest, helper
-            return_tuple2 = item_to_pick_up.pick_up_item(self) # In this situation, this will always return None, None for dest, helper
+            return_tuple1 = item_to_drop.drop_item(None, self) 
+
+            item_to_pick_up_loc = None
+            for sc in self.loc.storage_containers:
+                if item_to_pick_up_loc == None:
+                    for tup in sc.build_flat_list_of_contents(True):
+                        if tup[0] == item_to_pick_up:
+                            item_to_pick_up_loc = tup[1]
+                            break
+                else:
+                    break
+
+            return_tuple2 = item_to_pick_up.pick_up_item(self, item_to_pick_up_loc)
             actions = gl.combine_dicts(actions, return_tuple1[2])
             actions = gl.combine_dicts(actions, return_tuple2[2])
             # This solves the problem of two different lists being built and combined

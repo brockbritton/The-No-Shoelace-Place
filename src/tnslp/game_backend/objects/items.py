@@ -23,8 +23,9 @@ cabinet_key = item_class.Key("ward cabinet keys", "key")
 ward_doors_key = item_class.Key("ward security key", "key")
 
 deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
+chess_set = item_class.Chess_Set("chess box", "box")
 
-friendship_poster = item_class.Hanging_Quote_Poster("friendship poster", 
+friendship_poster = item_class.Hanging_Quote_Note("friendship poster", 
     "poster", 
     ["\"Why did you do all this for me?\"",
         "he asked. \"I don't deserve it.\"",
@@ -33,7 +34,7 @@ friendship_poster = item_class.Hanging_Quote_Poster("friendship poster",
         "\"That in itself is a tremendous thing.\""],
     "E.B. White, Charlotte's Web")
 
-stories_poster = item_class.Hanging_Quote_Poster("stories poster",
+stories_poster = item_class.Hanging_Quote_Note("stories poster",
     "poster",
     ["\"Do you have a magic spell to return someone to life?\" she said.",
         "\"No,\" the witch said, \"I'm sorry.\"",
@@ -49,9 +50,10 @@ stories_poster = item_class.Hanging_Quote_Poster("stories poster",
     # Storage Units
 cr_art_table = item_class.Storage_Spot("arts and crafts table", "table")
 cr_art_table.set_items([deck_of_cards])
-cr_game_cabinets = item_class.Storage_LockBox("game cabinet", "cabinet", True, [cabinet_key, ward_doors_key])
+cr_game_cabinets = item_class.Storage_LockBox("game cabinet", "cabinet", False, [cabinet_key, ward_doors_key])
+cr_game_cabinets.set_items([chess_set])
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
-cr_ping_pong_table.set_items([friendship_poster, stories_poster]) ###cannot inspect a storage spot with 3 items
+cr_ping_pong_table.set_items([friendship_poster, stories_poster]) 
     # Doors
 ward_to_basement_door = item_class.Lockable_Door("Basement Door", "door", [basement_key])
 

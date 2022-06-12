@@ -263,9 +263,9 @@ class Game:
                 # If there is one action and one object
                 if len(parsed_dict["nearby_objects"]) == 1:
                     if parsed_dict["action"][0] == "pick up":
-                        if parsed_dict["nearby_objects"][0] not in self.player1.inv:
+                        if parsed_dict["nearby_objects"][0][0] not in self.player1.inv:
                             try:
-                                return_tuple = parsed_dict["nearby_objects"][0].pick_up_item(self.player1)
+                                return_tuple = parsed_dict["nearby_objects"][0][0].pick_up_item(self.player1, parsed_dict["nearby_objects"][0][1])
                                 dest, helper, actions = gl.parse_tuples(return_tuple, actions)
 
                             except AttributeError:

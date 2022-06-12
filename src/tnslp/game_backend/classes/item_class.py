@@ -49,7 +49,7 @@ class Inv_Item(Item):
     def __repr__(self) -> str:
         return f'{self.name}(inv item)'
 
-    def pick_up_item(self, player):
+    def pick_up_item(self, player, item_loc):
         actions = {
             'print_all': [],
             'ask_y_or_n': False
@@ -57,7 +57,7 @@ class Inv_Item(Item):
         if (len(player.inv) < player.inv_cap):
             actions['print_all'].append("You have added the " + self.name + " to your inventory.")
             actions['update_inv_visual'] = player.add_inventory(self)
-            player.loc.remove_item(self)
+            item_loc.items.remove(self)
             return (None, None, actions)
         else:
             actions['print_all'].append("Your inventory is full.")
@@ -97,17 +97,13 @@ class Key(Inv_Item):
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
 
-class Hanging_Inv_Item(Inv_Item):
-    def __init__(self, name, gen_name) -> None:
-        super().__init__(name, gen_name)
-        self.can_hang = True
 
-class Hanging_Quote_Poster(Hanging_Inv_Item):
+class Quote_Note(Inv_Item):
     def __init__(self, name, gen_name, lines_list, author) -> None:
         super().__init__(name, gen_name)
         self.quote = lines_list
         self.author = author
-
+    
     def format_quote(self):
         formatted_quote = []
         # length of text box: 52 characters
@@ -121,9 +117,14 @@ class Hanging_Quote_Poster(Hanging_Inv_Item):
         actions = {
             'print_all': [],
         }
-        actions["print_all"].append("The poster reads:")
+        actions["print_all"].append(f"The {self.gen_name} reads:")
         actions["print_all"].extend(self.format_quote()) 
         return actions 
+
+class Hanging_Quote_Note(Quote_Note):
+    def __init__(self, name, gen_name, lines_list, author) -> None:
+        super().__init__(name, gen_name, lines_list, author)
+        self.can_hang = True
         
         
 ###################
@@ -288,6 +289,23 @@ class Storage_Unit(Interact):
 
     def remove_item(self, item):
         self.items.remove(item)
+
+    def build_flat_list_of_contents(self, more_info):
+        flat_list = []
+        for item in self.items:
+            if more_info:
+                if isinstance(item, Storage_Unit):
+                    flat_list.append((item, self))
+                    flat_list.extend(item.build_flat_list_of_contents(more_info))
+                else:
+                    flat_list.append((item, self))
+            else:
+                if isinstance(item, Storage_Unit):
+                    flat_list.append(item)
+                    flat_list.extend(item.build_flat_list_of_contents(more_info))
+                else:
+                    flat_list.append(item)
+        return flat_list
 
 class Storage_Spot(Storage_Unit):
     def __init__(self, name, gen_name) -> None:
@@ -511,3 +529,15 @@ class Power_Box(Interact):
         actions['print_all'].append("There is an instruction label on the box, but the words have long since faded away.") 
 
         return actions
+
+class Chess_Set(Storage_Box):
+    def __init__(self, name, gen_name) -> None:
+        super().__init__(name, gen_name)
+        self.items = [
+            Quote_Note("chess note", 
+                "note", 
+                ["No one ever won a game by resigning."],
+                "Savielly Tartakower"),
+        ]
+
+        

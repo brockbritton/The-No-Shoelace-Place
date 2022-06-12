@@ -48,12 +48,22 @@ class Parser:
 
         # Build a dictionary of all items in the room and inventory and the room itself
         ## Items in storage units in the room
+        if 'pick up' in parsed_info["action"]:
+            more_info = True
+        else:
+            more_info = False
         for sc in player.loc.storage_containers:
             if sc.name.lower() in str_input.lower():
-                parsed_info["nearby_objects"].append(sc)
-            for item in sc.items:
-                if item.name.lower() in str_input.lower():
-                    parsed_info["nearby_objects"].append(item)
+                parsed_info["nearby_objects"].append((sc, None))
+            contents = sc.build_flat_list_of_contents(more_info)
+            for item in contents:
+                if more_info:
+                    if item[0].name.lower() in str_input.lower():
+                        parsed_info["nearby_objects"].append(item)
+                else:
+                    if item.name.lower() in str_input.lower():
+                        parsed_info["nearby_objects"].append(item)
+                
         ## Items in inventory
         for item in player.inv:
             if item.name.lower() in str_input.lower():

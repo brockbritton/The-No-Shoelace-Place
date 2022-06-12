@@ -100,11 +100,6 @@ class Room:
         else:
             spot.items.append(item)
 
-    def remove_item(self, item):
-        for sc in self.storage_containers:
-            if item in sc.items:
-                sc.items.remove(item)
-
     def switch_lights(self):
         if self.lights_on:
             self.lights_on = False
