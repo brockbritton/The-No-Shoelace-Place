@@ -15,17 +15,16 @@ import tnslp.game_backend.classes.item_class as item_class
 # compass
 # bandages
 
-# Ward Items
+### Character Starting Items ###
 id_bracelet = item_class.ID_Bracelet("id bracelet", "bracelet") 
 
+### All Keys ###
 basement_key = item_class.Key("basement key", "key")
 cabinet_key = item_class.Key("ward cabinet keys", "key")
 ward_doors_key = item_class.Key("ward security key", "key")
 
-deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
-chess_set = item_class.Chess_Set("chess box", "box")
-
-friendship_poster = item_class.Hanging_Quote_Note("friendship poster", 
+### All Posters ###
+friends_poster = item_class.Hanging_Quote_Note("friends poster", 
     "poster", 
     ["\"Why did you do all this for me?\"",
         "he asked. \"I don't deserve it.\"",
@@ -44,14 +43,58 @@ stories_poster = item_class.Hanging_Quote_Note("stories poster",
         "\"For us. For a little while. Stories are a different kind of magic.\""],
     "James Miller, A Small Fiction")
 
+doors_poster = item_class.Hanging_Quote_Note("doors poster",
+    "poster",
+    ["In the universe, there are things that are known,", 
+    "and things that are unknown,", 
+    "and in between,",
+    "there are doors."],
+    "William Blake")
 
+frienship_poster = item_class.Hanging_Quote_Note("friendship poster",
+    "poster",
+    ["There are good ships,",
+    "and there are wood ships,",
+    "and ships that sail the sea.",
+    "But the best ships are frienships,",
+    "and may they always be."],
+    "Old Maritime Blessing")
+
+monsters_poster = item_class.Hanging_Quote_Note("monsters poster",
+    "poster",
+    ["Whoever fights monsters should see to it that in the process he does not become a monster.",
+    "And if you gaze long enough into an abyss, the abyss will gaze back into you."],
+    "Friedrich Nietzsche")
+
+oxygen_poster = item_class.Hanging_Quote_Note("oxygen poster",
+    "poster",
+    ["Freedom is the oxygen of the soul."],
+    "Moshe Dayan")
+
+alone_poster = item_class.Hanging_Quote_Note("alone poster",
+    "poster",
+    ["It's beautiful to be alone,",
+    "To be alone does not mean to be lonely.", 
+    "It means the mind is not influenced and comtaminated by society."],
+    "Jiddu Krishnamurti")
+
+hope_poster = item_class.Hanging_Quote_Note("hope poster",
+    "poster",
+    ["Once you choose hope, anything's possible."],
+    "Christopher Reeve")
+
+
+################################
 ##### Ward Rooms and Items #####
+################################
+
 # Common Room #
+deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
+chess_set = item_class.Chess_Set("chess box", "box")
     # Storage Units
 cr_art_table = item_class.Storage_Spot("arts and crafts table", "table")
-cr_art_table.set_items([deck_of_cards])
 cr_game_cabinets = item_class.Storage_LockBox("game cabinet", "cabinet", False, [cabinet_key, ward_doors_key])
-cr_game_cabinets.set_items([chess_set])
+cr_game_cabinets.set_items([chess_set, deck_of_cards])
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
     # Doors
 ward_to_basement_door = item_class.Lockable_Door("Basement Door", "door", [basement_key])
@@ -105,8 +148,9 @@ outside_time_n = item_class.Lockable_Door("Outside Recreation Door", "door", [wa
 admissions_entrance = item_class.Lockable_Door("Admissions Exit Door", "door", None) 
 
 
-
-#### Basement Items ####
+##########################
+##### Basement Items #####
+##########################
 
 power_room_key = item_class.Key("power room key", "key")
 keycard = item_class.Keycard("basement keycard", "key")
