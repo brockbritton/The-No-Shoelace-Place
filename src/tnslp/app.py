@@ -6,9 +6,8 @@ import tnslp.game_backend.classes.game_class as game_class
 
 app = Flask(__name__)
 app.secret_key = "ihaveasecretkey1"
-#app.debug = True
-app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_COOKIE_SECURE"] = False
@@ -92,4 +91,5 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=5000, debug=True)
+    app.debug = True
+    app.run()

@@ -30,8 +30,11 @@ class Room:
         self.monsters = []
         self._room_registry.append(self)
         self.visited = False
+        self.item_actions = {
+            'inspect': self.inspect_room,
+        }
 
-    def inspect_item(self):
+    def inspect_room(self):
         actions = {
             'print_all': [],
         }

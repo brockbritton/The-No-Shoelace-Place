@@ -300,7 +300,7 @@ class Game:
                         elif isinstance(parsed_dict["nearby_objects"][1], item_class.Storage_Unit) and isinstance(parsed_dict["nearby_objects"][0], item_class.Inv_Item):
                             move_item, storage_unit = parsed_dict["nearby_objects"][0], parsed_dict["nearby_objects"][1]
                         
-                        #Depending on the storage unit, check necessary item attributes and add to it if possible
+                        # Depending on the storage unit, check necessary item attributes and add to it if possible
                         if isinstance(storage_unit, item_class.Storage_Wall):
                             if move_item.can_hang:
                                 if move_item in self.player1.inv:
@@ -339,7 +339,7 @@ class Game:
 
             else:
                 # Print error message if there are multiple actions
-                pass
+                actions["print_all"].append("Please only use one action at a time.")
                 
         # If the parsed dictionary does not have an action
         # and does have a direction or a nearby object
@@ -356,7 +356,7 @@ class Game:
             # If there are multiple directions and/or nearby objects
             else:
                 # Please refer to one object at a time
-                pass
+                actions["print_all"].append("Please only refer to only one item at a time.")
         # If the parsed dictionary does not have an action, or a direction, or a nearby object
         # but does have a special action
         elif len(parsed_dict["special_actions"]) > 0:

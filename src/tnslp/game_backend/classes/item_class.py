@@ -480,8 +480,20 @@ class ID_Bracelet(Inv_Item):
         self.values = [None, None, None, None]
 
     def inspect_item(self):
+        actions = {
+            'print_all': [],
+        }
+        actions['print_all'].append(f"The following data is printed on the bracelet:")
         # How to visually print it all
-        pass
+        for i in range(0, len(self.properties)):
+            if self.values[i] is not None:
+                actions['print_all'].append(f"{self.properties[i]}: {self.values[i]}")
+            else:
+                actions['print_all'].append(f"{self.properties[i]}: unknown")
+
+        return actions
+
+        
 
 class Deck_of_Cards(Inv_Item, Storage_Box):
     def __init__(self, name, gen_name) -> None:
