@@ -7,6 +7,7 @@ var on_header_element = false;
 
 
 function ajax_accept_input(data_values, route) {
+    toggle_return_listener("off");
     $.ajax({
         url: route,
         data: data_values,
@@ -32,7 +33,6 @@ function ajax_accept_input(data_values, route) {
                 
             } else if (('rebuild_text_entry' in response) && (response['rebuild_text_entry'])) {
                 toggle_entry_divs("text");
-                toggle_return_listener("on");
             }
         },
         error: function(request){
@@ -76,7 +76,7 @@ function toggle_return_listener(on_off) {
 function print_all(list){
     if (list.length == 1) {
         printtk(list[0]);
-        setTimeout(document.getElementById("command_input").focus(), rate_of_letters*list[0].length);
+        setTimeout(toggle_return_listener.bind(null, "on"), rate_of_letters*list[0].length);
     } else {
         printtk(list[0]);
         if (list[0] instanceof Array) {

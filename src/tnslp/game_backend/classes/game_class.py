@@ -157,7 +157,7 @@ class Game:
                     return_tuple = self.master_helper.execute_event(input_value, self.player1)
                     if isinstance(return_tuple[1], int):
                         # Use n-1 turns because below another turn will be used
-                        actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(return_tuple[1] - 1))
+                        actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(return_tuple[1] - 1, self.player1))
                 case "ask_unlock_item": 
                     return_tuple = self.master_helper.ask_unlock_item(input_value, self.player1)
                 case "level_up_ability": 
@@ -199,7 +199,7 @@ class Game:
         # If there is no destination for the next input,
         # then spend one turn of this day
         if self.master_dest == None:
-            actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(1))
+            actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(1, self.player1))
             # If the remaining turns are at 1/3 or 2/3 of the max, offer an event
             if (self.player1.calendar.days_list[-1].turns_left == (self.player1.calendar.max_turns_daily // 3)) or (self.player1.calendar.days_list[-1].turns_left == ((self.player1.calendar.max_turns_daily * 2) // 3)): 
                 return_tuple = self.player1.calendar.calculate_next_activity().ask_event()

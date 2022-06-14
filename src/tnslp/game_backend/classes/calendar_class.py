@@ -1,39 +1,40 @@
 
 import random
-
 import tnslp.game_backend.objects.events as event
+import tnslp.game_backend.objects.rooms as room
 
 
 class Calendar:
-    def __init__(self) -> None:
+    def __init__(self, player) -> None:
         self.days_list = []
         self.max_turns_daily = 30
         self.activities_offered = []
-        self.next_day()
+        self.next_day(player)
 
     def __repr__(self) -> str:
         return f'(calendar)'
 
-    def next_day(self):
+    def next_day(self, player):
         # Player stats values are updated on initialized Day object
         new_day = _Day(self.max_turns_daily, len(self.days_list))
         self.days_list.append(new_day)
+        player.loc = room.pat_room_201
 
     def _get_curr_day_data(self):
         #return current day, turns left
         return self.days_list[-1].day_number, self.days_list[-1].turns_left
 
-    def use_turns(self, num):
+    def use_turns(self, num, player):
         actions = {
             'print_all': [],
             'update_ui_values': [],
         }
         self.days_list[-1].turns_left -= num
         if self.days_list[-1].turns_left == 0: 
-            actions['print_all'].append("The old day is ending...")
-            self.next_day()
+            actions['print_all'].append(f"Day {self.days_list[-1].day_number} is ending. You have no more turns left. You have returned to your room and have fallen asleep.")
+            self.next_day(player)
             actions['update_ui_values'].append("day_value")
-            actions['print_all'].append("The new day is beginning...")
+            actions['print_all'].append(f"Day {self.days_list[-1].day_number} is beginning. You have {self.days_list[-1].turns_left} turns left. You are currently in {player.loc.name}.")
 
         actions['update_ui_values'].append("turns_value")
         return actions

@@ -35,7 +35,7 @@ class Character:
             
         }
 
-        self.calendar = calendar_class.Calendar()
+        self.calendar = calendar_class.Calendar(self)
         self.abilities = [ability.meditation, ability.assertiveness, ability.pos_attitude, ability.opposite_action, ability.catharsis]
 
         self.guided = False #for outside time or from admissions to common room

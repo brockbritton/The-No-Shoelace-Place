@@ -162,8 +162,8 @@ red_hallway = room_class.Ward_Room(
     None)
 
 pat_room_202 = room_class.Ward_Room(
-    "Room 201", 
-    "Room 201", 
+    "Room 202", 
+    "Room 202", 
     "A common patient room with two beds.", 
     "",
     None, 
@@ -171,8 +171,8 @@ pat_room_202 = room_class.Ward_Room(
     None) #randomize player room
 
 pat_room_204 = room_class.Ward_Room(
-    "Room 202", 
-    "Room 202", 
+    "Room 204", 
+    "Room 204", 
     "A common patient room with two beds.", 
     "",
     None, 
@@ -180,8 +180,8 @@ pat_room_204 = room_class.Ward_Room(
     None)
 
 pat_room_201 = room_class.Ward_Room(
-    "Room 203", 
-    "Room 203", 
+    "Room 201", 
+    "Room 201", 
     "A common patient room with two beds.", 
     "",
     None, 
@@ -189,8 +189,8 @@ pat_room_201 = room_class.Ward_Room(
     None)
 
 pat_room_203 = room_class.Ward_Room(
-    "Room 204", 
-    "Room 204", 
+    "Room 203", 
+    "Room 203", 
     "A common patient room with two beds.", 
     "",
     None, 
