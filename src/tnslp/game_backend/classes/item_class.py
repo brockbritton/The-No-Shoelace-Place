@@ -8,10 +8,9 @@ class Item:
         self.name = name
         self.gen_name = gen_name
         self.article = "the"
-        self.can_inspect = True
-        self.can_hang = False
-        self.can_pick_up = False
-        self.can_interact = False
+        self.item_actions = {
+            'inspect': self.inspect_item,
+        }
 
     def inspect_item(self): 
         actions = {
@@ -20,10 +19,11 @@ class Item:
 
         actions['print_all'].append(f"There does not appear to be anything special about this {self.gen_name}.")
         return actions
+            
 
-
-class Multi_Name_Item:
-    def __init__(self, alternate_names) -> None:
+class Multi_Name_Item(Item):
+    def __init__(self, name, gen_name, alternate_names) -> None:
+        super().__init__(name, gen_name)
         self.alt_names = alternate_names 
 
 
@@ -40,40 +40,52 @@ class Inv_Item(Item):
         super().__init__(name, gen_name)
         self.inv_space = 1
         self.article = "a"
-        self.can_pick_up = True
-        self.can_interact = False
-        self.can_open_close = False
-        self.can_lock_unlock = False
-        self.can_break = False
+        self.item_actions.update({
+            'inspect': self.inspect_item,
+            'pick up': self.pick_up_item,
+            'drop': self.drop_item,
+        })
 
     def __repr__(self) -> str:
         return f'{self.name}(inv item)'
 
-    def pick_up_item(self, player, item_loc):
+    def pick_up_item(self, player):
         actions = {
             'print_all': [],
             'ask_y_or_n': False
         }
-        if (len(player.inv) < player.inv_cap):
-            actions['print_all'].append("You have added the " + self.name + " to your inventory.")
-            actions['update_inv_visual'] = player.add_inventory(self)
-            item_loc.items.remove(self)
-            return (None, None, actions)
+        if self not in player.inv:
+            if (len(player.inv) < player.inv_cap):
+                actions['print_all'].append("You have added the " + self.name + " to your inventory.")
+                actions['update_inv_visual'] = player.add_inventory(self)
+                for sc in player.loc.storage_containers:
+                    contents = sc.build_flat_list_of_contents(True)
+                    for item_loc in contents:
+                        if item_loc[0] == self:
+                            item_loc[1].items.remove(self)
+                            break
+                return (None, None, actions)
+            else:
+                actions['print_all'].append("Your inventory is full.")
+                actions['print_all'].append("Would you like to remove an item from your inventory to make space for the " + self.name + "?")
+                actions['ask_y_or_n'] = True
+                return ("full_inv_drop_items", self, actions)
         else:
-            actions['print_all'].append("Your inventory is full.")
-            actions['print_all'].append("Would you like to remove an item from your inventory to make space for the " + self.name + "?")
-            actions['ask_y_or_n'] = True
-            return ("full_inv_drop_items", self, actions)
+            actions['print_all'].append("You are already holding this item.")
+            return (None, None, actions)
 
     def drop_item(self, loc, player):
         actions = {}
-        actions['update_inv_visual'] = player.sub_inventory(self)
-        player.loc.add_item(self, loc)
-        try:
-            actions['print_all'] = [f"You have dropped the {self.name} to the {loc.name}."] 
-        except AttributeError:
-            # If the item is dropped with no location, it is dropped on the ground
-            actions['print_all'] = [f"You have dropped the {self.name} on the ground."]
+        if self in player.inv:
+            actions['update_inv_visual'] = player.sub_inventory(self)
+            player.loc.add_item(self, loc)
+            try:
+                actions['print_all'] = [f"You have dropped the {self.name} to the {loc.name}."] 
+            except AttributeError:
+                # If the item is dropped with no location, it is dropped on the ground
+                actions['print_all'] = [f"You have dropped the {self.name} on the ground."]
+        else:
+            actions['print_all'].append("You cannot drop this item because you are not holding it.") 
         return (None, None, actions)
 
     def move_item(self, new_location, player):
@@ -129,12 +141,7 @@ class Hanging_Quote_Note(Quote_Note):
 class Interact(Item):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
-        self.can_pick_up = False
-        self.can_interact = True
-        self.can_open_close = False
-        self.can_lock_unlock = False
-        self.can_break = False
-
+        
     def __repr__(self) -> str:
         return f'{self.name}(interact item)'
 
@@ -142,7 +149,11 @@ class Openable_Interact(Interact):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
         self.open = False
-        self.can_open_close = True
+        self.item_actions.update({
+            'open': self.open_item,
+            'close': self.close_item,
+        })
+
 
     def open_item(self):
         actions = {
@@ -179,11 +190,15 @@ class Lockable_Interact(Openable_Interact):
     def __init__(self, name, gen_name, keys_list) -> None:
         super().__init__(name, gen_name)
         self.locked = True
-        self.can_lock_unlock = True
         self.compatible_keys = keys_list # list keys in most general effectiveness to most specific effectiveness
         self.key_unlock = True
         self.crowbar_unlock = True
         self.electronic_unlock = False 
+        self.item_actions.update({
+            'lock': self.lock_item,
+            'unlock': self.unlock_item,
+        })
+
     
     def unlock_item(self, player):
         actions = {
@@ -464,14 +479,13 @@ class ID_Bracelet(Inv_Item):
         self.properties = ["name", "age", "gender", "diagnosis"]
         self.values = [None, None, None, None]
 
-    def print_values(self):
+    def inspect_item(self):
         # How to visually print it all
         pass
 
 class Deck_of_Cards(Inv_Item, Storage_Box):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
-        self.items = []
         for i in (("\u2660", "spades"), ("\u2665", "hearts"), ("\u2666", "diamonds"), ("\u2663", "clubs")):
             for j in ("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"):
                 self.items.append(Suit_Card(j, i[1], i[0]))

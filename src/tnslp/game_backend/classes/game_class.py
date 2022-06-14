@@ -5,6 +5,7 @@ import tnslp.game_backend.classes.item_class as item_class
 import tnslp.game_backend.classes.parser_class as parser_class
 import tnslp.game_backend.gl_backend_functions as gl
 import tnslp.game_backend.objects.rooms as room
+import tnslp.game_backend.objects.items as item
 
 
 class Game:
@@ -16,6 +17,13 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
+        self.item_actions_params = {
+            'pick up': ['player'],
+            'drop': [None, 'player'],
+            'unlock': ['player'],
+            'lock': ['player'],
+
+        }
     
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
@@ -78,8 +86,6 @@ class Game:
             for id in actions['update_ui_values']:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
-
-        #print(values_to_update)
 
 
         return actions
@@ -263,60 +269,26 @@ class Game:
             if len(parsed_dict["action"]) == 1:
                 # If there is one action and one object
                 if len(parsed_dict["nearby_objects"]) == 1:
-                    if parsed_dict["action"][0] == "pick up":
-                        if parsed_dict["nearby_objects"][0][0] not in self.player1.inv:
-                            try:
-                                return_tuple = parsed_dict["nearby_objects"][0][0].pick_up_item(self.player1, parsed_dict["nearby_objects"][0][1])
-                                dest, helper, actions = gl.parse_tuples(return_tuple, actions)
-
-                            except AttributeError:
-                                actions['print_all'].append("You cannot pick up this item.")
-                        else:
-                            actions["print_all"].append("You are already holding this item.")
-
-                    elif parsed_dict["action"][0] == "drop":
-                        if parsed_dict["nearby_objects"][0] in self.player1.inv:
-                            return_tuple = parsed_dict["nearby_objects"][0].drop_item(None, self.player1)
-                            dest, helper, actions = gl.parse_tuples(return_tuple, actions)
-                        else:
-                            actions['print_all'].append("You cannot drop this item because you are not holding it.") 
-
-                    elif parsed_dict["action"][0] == "inspect":
+                    if parsed_dict["action"][0] in parsed_dict["nearby_objects"][0].item_actions:
+                        function_params = []
                         try:
-                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].inspect_item())
-                        except AttributeError:
-                            actions['print_all'].append("You cannot inspect this item.")
+                            for param in self.item_actions_params[parsed_dict["action"][0]]:
+                                if param == 'player':
+                                    function_params.append(self.player1)
+                                else:
+                                    function_params.append(param)
 
-                    elif parsed_dict["action"][0] == "open":
-                        try:
-                            dest, helper, actions = gl.parse_tuples(parsed_dict["nearby_objects"][0].open_item(), actions)
-                            
-                        except AttributeError:
-                            actions['print_all'].append("You cannot open this item.")
+                            return_data = parsed_dict["nearby_objects"][0].item_actions[parsed_dict["action"][0]](*function_params)
+                        except KeyError:
+                            return_data = parsed_dict["nearby_objects"][0].item_actions[parsed_dict["action"][0]]()
+                        
+                        if isinstance(return_data, tuple):
+                            dest, helper, actions = gl.parse_tuples(return_data, actions)
+                        elif isinstance(return_data, dict):
+                            actions = gl.combine_dicts(actions, return_data)
+                    else:
+                        actions['print_all'].append(f"You cannot {parsed_dict['action'][0]} this item.")
                     
-                    elif parsed_dict["action"][0] == "close":
-                        try:
-                            dest, helper, actions = gl.parse_tuples(parsed_dict["nearby_objects"][0].close_item(), actions)
-                        except AttributeError:
-                            actions['print_all'].append("You cannot close this item.")
-
-                    elif parsed_dict["action"][0] == "unlock":
-                        try:
-                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].unlock_item(self.player1))
-                        except AttributeError:
-                            actions['print_all'].append("You cannot unlock this item.")
-
-                    elif parsed_dict["action"][0] == "lock":
-                        try:
-                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].lock_item(self.player1))
-                        except AttributeError:
-                            actions['print_all'].append("You cannot lock this item.")
-
-                    elif parsed_dict["action"][0] == "break":
-                        try:
-                            actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].break_item())
-                        except AttributeError:
-                            actions['print_all'].append("You cannot break this item.")
                 
                 # For if there are cases when an action and multiple objects need to be parsed
                 elif len(parsed_dict["nearby_objects"]) > 1:

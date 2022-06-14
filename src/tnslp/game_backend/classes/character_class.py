@@ -67,12 +67,10 @@ class Character:
 
     def add_inventory(self, item):
         self.inv.append(item)
-        print(self.inv)
         return self.build_inv_str_list()
 
     def sub_inventory(self, item):
         self.inv.remove(item)
-        print(self.inv)
         return self.build_inv_str_list()
         
     def full_inv_drop_items(self, choice, item_to_pick_up):
