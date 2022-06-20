@@ -58,25 +58,18 @@ class Game:
                 "assertiveness_lvl", 
                 "pos_attitude_lvl", 
                 "opp_action_lvl", 
-                "catharsis_lvl"],
+                "catharsis_lvl"
+                ],
         }
 
-        actions['print_all'].append("----Intro Paragraph----") 
-        actions['print_all'].append("...")
-
-        #Update inventory visual
-        actions['update_inv_visual'] = self.player1.build_inv_str_list()
+        actions['print_all'].append("As you open your eyes, you find yourself laying on a bed in a non descript bedroom.") 
+        actions['print_all'].append("A person on the bed next to you welcomes you to this new place, and suggests that you spend some time exploring as there's a lot to find.")
+        actions['print_all'].append("For help playing, use the game help button in the bottom right corner.")
         
-
-        actions['print_all'].append("Welcome " + self.player1.name + "!")
-        
-        actions['print_all'].append("----Secondary Intro Paragraph----")
-        actions['print_all'].append("...")
-
-        actions['print_all'].append("For help, use the game help button in the bottom right corner.")
-
         return_tuple = self.player1.loc.enter_room(self.player1)
         self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
+        #Update inventory visual
+        actions['update_inv_visual'] = self.player1.build_inv_str_list()
         
         if len(self.save_prints) == 0:
             self.save_prints.extend(actions['print_all'])
@@ -329,7 +322,7 @@ class Game:
                         else: 
                             i = ["backward", "left", "right", "forward"].index(parsed_dict["directions"][0])
                             direction_choice = ["b", "l", "r", "f"][i]
-                            blrf_dict = self.player1.check_blrf_directions()
+                            blrf_dict = self.player1.build_blrf_dict()
 
                             next_rooms = [self.player1.loc.north, self.player1.loc.east, self.player1.loc.south, self.player1.loc.west]
                             i = ['n', 'e', 's', 'w'].index(blrf_dict[direction_choice])

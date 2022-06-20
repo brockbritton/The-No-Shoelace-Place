@@ -48,7 +48,9 @@ class Room:
 
     def look_storage_units(self):
         if len(self.storage_containers) == 2:
-            sentence = f"In the room is {self.storage_containers[0].article} {self.storage_containers[0].name} and {self.storage_containers[0].article} {self.storage_containers[1].name}."
+            if len(self.storage_containers[0].items) == 0 and len(self.storage_containers[1].items) == 0:
+                sentence = f"There are no items on the ground or the walls." 
+            
         else:
             sentence = f"In the room is {self.storage_containers[0].article} {self.storage_containers[0].name}, "
             for i in range(1, len(self.storage_containers)-2):
@@ -121,6 +123,11 @@ class Room:
             'print_all': [],
             'update_ui_values': []
         }
+        if self != player.loc:
+            player.last_loc = player.loc
+        else:
+            player.last_loc = None
+        player.loc = self
 
         if not self.visited:
             # Updating XP for gui 
@@ -128,7 +135,7 @@ class Room:
             actions['update_ui_values'].append(player.earn_xp(10))
             self.visited = True
 
-        actions['print_all'].append(f"You have now entered {self.name}.")
+        actions['print_all'].append(f"You are now in {self.name}.")
         actions['update_ui_values'].append("room_value")
 
         if not self.lights_on:
@@ -146,9 +153,8 @@ class Room:
 
     def print_directions(self, player, none_or_one): 
         #left, forward, right, back
-        
         if player.last_loc != None:
-            lfrb_rooms, lfrb_cardinality = self._find_positional_rooms(player)
+            lfrb_rooms, lfrb_cardinality = self.find_positional_rooms(player)
         else:
             lfrb_rooms = [self.east, self.south, self.west, self.north] 
             lfrb_cardinality = ["e", "s", "w", "n"]
@@ -188,7 +194,7 @@ class Room:
             elif r == player.last_loc:
                 return blfr_rooms.index(r)
 
-    def _find_positional_rooms(self, player):
+    def find_positional_rooms(self, player):
         # identify in what positional directions which real rooms are
         nesw_rooms = [self.north, self.east, self.south, self.west] 
         nesw_letters = ["n", "e", "s", "w"] 
@@ -196,6 +202,8 @@ class Room:
         lfrb_rooms = []
         lfrb_cardinality = []
         last_room_index = self._find_back_index(player, nesw_rooms)
+        if last_room_index == None:
+            last_room_index = 0
         
         for i in range(1, 4):
             if last_room_index + i > 3:
@@ -457,6 +465,17 @@ class Maze_Room(Room):
                 return "The flashlight's light is barely strong enough to see even a few steps."
         else:
             return "It is completely dark here. There is no light to see by."
+
+
+class Stairwell(Room):
+    def __init__(self, name, display_name, room_label, to_room) -> None:
+        super().__init__(name, display_name, None, room_label, None, (None, None))
+        self.to_room = to_room
+        self.visited = True
+
+    def enter_room(self, player):
+        return self.to_room.enter_room(player)
+    
 
 class Final_Room(Room):
     def __init__(self, name, display_name, description, room_label, doors) -> None:

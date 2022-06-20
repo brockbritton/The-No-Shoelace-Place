@@ -3,6 +3,30 @@ import tnslp.game_backend.classes.room_class as room_class
 import tnslp.game_backend.objects.items as item
 import tnslp.game_backend.objects.npcs as npc
 
+# Stairwells
+ward_landing = room_class.Ward_Room(
+    "Ward Landing", 
+    "Stairs 1",
+    "A dimly lit stairwell, leading to a floor below.", 
+    "",
+    None, 
+    (None, None),
+    None)
+
+basement_landing = room_class.Basement_Room(
+    "Basement Landing", #room name
+    "Stairs B", #display name
+    "", #description
+    "", #room label or none
+    None, #storage units or none
+    (None, None),
+    None #doors or none
+    )
+
+basement_to_ward_stairs = room_class.Stairwell("Stairs Up", "Stairs Up", "", ward_landing)
+ward_to_basement_stairs = room_class.Stairwell("Stairs Down", "Stairs Down", "", basement_landing)
+
+
 ### Ward Rooms ###
 # display names must be 11 characters or less
 
@@ -99,14 +123,6 @@ med_station = room_class.Ward_Room(
     (None, None), 
     None)
 
-ward_stairs = room_class.Ward_Room(
-    "Stairs Level 1", 
-    "Stairs 1",
-    "A dimly lit stairwell, leading to a floor below.", 
-    "",
-    None, 
-    (None, None),
-    None)
 bathroom_cr = room_class.Ward_Room(
     "Common Room Bathroom", 
     "CR Bathroom", 
@@ -210,20 +226,9 @@ bathroom_p = room_class.Ward_Room(
 ### Basement Rooms ###
 ######################   
 
-
-basement_stairs = room_class.Basement_Room(
-    "Stairs Level B", #room name
-    "Stairs B", #display name
-    "", #description
-    "", #room label or none
-    None, #storage units or none
-    (None, None),
-    None #doors or none
-    )
-
-basement_landing = room_class.Basement_Room(
-    "Basement Landing", 
-    "B. Landing", 
+basement_lobby = room_class.Basement_Room(
+    "Basement Lobby", 
+    "B. Lobby", 
     "",
     "",
     None,
@@ -445,7 +450,9 @@ plexiglass_cell = room_class.Final_Room(
     )
 
 
-
+## Landing Coordinates ##
+basement_landing.set_coordinates(basement_to_ward_stairs, 0, 0, basement_lobby)
+ward_landing.set_coordinates(ward_to_basement_stairs, 0, 0, common_room)
 
 ## Ward Coordinates ##
 
@@ -454,7 +461,7 @@ service_hallway.set_coordinates(0, common_room, outside_time, [utility_closet, a
 utility_closet.set_coordinates(0, service_hallway, 0, 0)
 outside_time.set_coordinates(service_hallway, 0, 0, 0)
 
-common_room.set_coordinates([tv_room, staff_breakroom, med_station], [blue_hallway, ward_stairs], [library, bathroom_cr], service_hallway) ###
+common_room.set_coordinates([tv_room, staff_breakroom, med_station], [blue_hallway, ward_landing], [library, bathroom_cr], service_hallway) ###
 tv_room.set_coordinates(0, 0, common_room, 0)
 staff_breakroom.set_coordinates(0, med_station, common_room, 0)
 med_station.set_coordinates(0, 0, common_room, staff_breakroom)
@@ -475,12 +482,12 @@ pat_room_204.set_coordinates(0, 0, 0, red_hallway)
 
 ## Basement Coordinates ##
 
-basement_landing.set_coordinates(residential_hallway, basement_stairs, waiting_room, [old_nurses_station, old_med_window])
-old_nurses_station.set_coordinates(old_med_window, basement_landing, 0, old_medical_storage)
-old_med_window.set_coordinates(0, basement_landing, old_nurses_station, 0)
+basement_lobby.set_coordinates(residential_hallway, basement_landing, waiting_room, [old_nurses_station, old_med_window])
+old_nurses_station.set_coordinates(old_med_window, basement_lobby, 0, old_medical_storage)
+old_med_window.set_coordinates(0, basement_lobby, old_nurses_station, 0)
 old_medical_storage.set_coordinates(0, old_nurses_station, 0, 0)
 
-residential_hallway.set_coordinates(old_residential_bedroom, sedation_room, basement_landing, maze_int1)
+residential_hallway.set_coordinates(old_residential_bedroom, sedation_room, basement_lobby, maze_int1)
 sedation_room.set_coordinates(0, 0, 0, residential_hallway)
 old_residential_bedroom.set_coordinates(0, 0, residential_hallway, 0)
 
@@ -499,7 +506,7 @@ maze_east_end2.set_coordinates(0, 0, 0, maze_int6)
 
 power_room.set_coordinates(0, maze_int6, 0, 0)
 
-waiting_room.set_coordinates(basement_landing, 0, old_therapy_room, clinical_hallway)
+waiting_room.set_coordinates(basement_lobby, 0, old_therapy_room, clinical_hallway)
 clinical_hallway.set_coordinates(0, waiting_room, [straightjacket_storage, tanning_bed_cell], high_security_area)
 old_therapy_room.set_coordinates(waiting_room, 0, 0, 0)
 straightjacket_storage.set_coordinates(clinical_hallway, 0, 0, 0)
@@ -508,7 +515,3 @@ tanning_bed_cell.set_coordinates(clinical_hallway, 0, 0, 0)
 high_security_area.set_coordinates(shock_therapy_room, clinical_hallway, 0, plexiglass_cell)
 shock_therapy_room.set_coordinates(0, 0, high_security_area, 0)
 plexiglass_cell.set_coordinates(0, high_security_area, 0, 0)
-
-# Connect ward level and basement level
-basement_stairs.set_coordinates(ward_stairs, 0, 0, basement_landing)
-ward_stairs.set_coordinates(basement_stairs, 0, 0, common_room)

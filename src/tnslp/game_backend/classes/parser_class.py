@@ -15,15 +15,19 @@ class Parser:
         break_keys = {'break':["break", "smash", "tear down", "rip off", "damage", "destroy"]}
         move_keys = {'go':["go", "walk", "turn", "travel", "exit", "leave"]}
         display_keys = {'display':["display", "view", "show", "reveal"]}
-
+        
         self.movement_dict = {
             "forward" : ["forward", "forwards", "straight", "front "],
             "backward" : ["backward", "backwards", "back", "behind"],
             "left" : ["left"],
             "right" : ["right"]}
 
+        self.item_specific_actions = ["sleep", "sit"]
+
         self.all_actions = [pick_up_keys, drop_keys, inspect_keys, open_keys, unlock_keys,
             close_keys, lock_keys, break_keys, move_keys, display_keys]
+
+        
         
     def parse_input(self, player, str_input):
         return self.id_action_object(player, str_input)
@@ -45,6 +49,11 @@ class Parser:
                 for phrase in val:
                     if re.search(r'\b' + phrase + r'\b', str_input.lower()):
                         parsed_info["action"].append(key)
+
+        # Loop over item specific actions and store matches in action_list
+        for action in self.item_specific_actions:
+            if re.search(r'\b' + action + r'\b', str_input.lower()):
+                parsed_info["special_actions"].append(action)
 
         # Build a dictionary of all items in the room and inventory and the room itself
         ## Items in storage units in the room

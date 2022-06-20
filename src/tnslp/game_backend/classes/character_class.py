@@ -14,7 +14,7 @@ class Character:
 
     def __init__(self, name) -> None:
         self.name = name
-        self.loc = room.common_room #starting location
+        self.loc = room.common_room #Starting location is set in the calendar class
         self.last_loc = None
 
         self.inv = [item.id_bracelet, item.basement_key, item.crowbar]
@@ -26,7 +26,7 @@ class Character:
         self.full_health = 100 #maximum player health
         self.diagnosis = None
 
-        self.xp = 0
+        self.xp = 500
         self.xp_dict = {
             'new_room': 10,
             'new_item': 5,
@@ -148,13 +148,13 @@ class Character:
             display_rooms = [] #check for doors too
             for i in range(0, len(next_room)):
                 if self.loc.has_doors and self.loc.doors[d_choice][i] != None:
-                    print(1)
                     if self.loc.doors[d_choice][i].locked:
-                        print(2)
                         display_rooms.append("Locked Door")
                     else:
-                        print(3)
-                        display_rooms.append(next_room[i].name)
+                        if next_room[i].visited:
+                            display_rooms.append(f"Unlocked Door: {next_room[i].name}")
+                        else:
+                            display_rooms.append(f"Unlocked Door: Unknown Room")
 
                 elif next_room[i].visited:
                     display_rooms.append(next_room[i].name)
@@ -171,9 +171,7 @@ class Character:
                     dest, helper, actions_open_close = self.loc.doors[d_choice].open_item()
                     actions = gl.combine_dicts(actions, actions_open_close)
                     if self.loc.doors[d_choice].open:
-                        self.last_loc = self.loc
-                        self.loc = next_room
-                        enter_room_tuple = self.loc.enter_room(self)
+                        enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
                     #return (dest, [next_room, d_choice, self.loc.doors[d_choice]], actions)
@@ -183,9 +181,7 @@ class Character:
                     if next_room == 0:
                         actions['print_all'].append(invalid_direction[random.randint(0, len(invalid_direction)-1)])
                     else: 
-                        self.last_loc = self.loc
-                        self.loc = next_room
-                        enter_room_tuple = self.loc.enter_room(self)
+                        enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
             else:
@@ -196,8 +192,7 @@ class Character:
                     dest, helper, actions_open_close = self.loc.doors[d_choice][next_room_index].open_item()
                     actions = gl.combine_dicts(actions, actions_open_close)
                     if self.loc.doors[d_choice][next_room_index].open:
-                        self.loc = next_room
-                        enter_room_tuple = self.loc.enter_room(self)
+                        enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
                     #return (dest, [next_room, d_choice, self.loc.doors[d_choice][next_room_index]], actions)
@@ -207,9 +202,7 @@ class Character:
                     if next_room == 0:
                         actions['print_all'].append(invalid_direction[random.randint(0, len(invalid_direction)-1)])
                     else: 
-                        self.last_loc = self.loc
-                        self.loc = next_room
-                        enter_room_tuple = self.loc.enter_room(self)
+                        enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
 
@@ -218,60 +211,17 @@ class Character:
                 actions['print_all'].append(invalid_direction[random.randint(0, len(invalid_direction)-1)])
                 return (None, None, actions)
             else: 
-                self.last_loc = self.loc
-                self.loc = next_room
-                enter_room_tuple = self.loc.enter_room(self)
+                enter_room_tuple = next_room.enter_room(self)
                 actions = gl.combine_dicts(actions, enter_room_tuple[2])
                 return (enter_room_tuple[0], enter_room_tuple[1], actions)
 
-    def check_blrf_directions(self):
-        rooms_list = [self.loc.north, self.loc.east, self.loc.south, self.loc.west]
-        direct_list = ["n", "e", "s", "w"]
-        if self.last_loc == None:
-            print("Last Location M: None")
-        else: 
-            print("Last Location M:", self.last_loc.name)
-        
-        if self.last_loc != None:
-            for r in rooms_list:
-                    if isinstance(r, list):
-                        for x in r:
-                            if x == self.last_loc:
-                                last_room_index = rooms_list.index(r)
-                                #second = r.index(x)
-                                #issue because its two indexes?
-                    elif r == self.last_loc:
-                        last_room_index = rooms_list.index(r)
+    def build_blrf_dict(self):
+        lfrb_cardinality = self.loc.find_positional_rooms(self)[1]
 
-                    #can also be 0 - for wall     
-            
-            nesw_direct_list = []
+        lfrb_direct_list = ["l", "f", "r", "b"]
+        lfrb_dict = {}
+        for i in range(0, len(lfrb_cardinality)):
+            lfrb_dict[lfrb_direct_list[i]] = lfrb_cardinality[i]
 
-            nesw_direct_list.append(direct_list[last_room_index]) #back
-
-            if last_room_index + 1 > 3: #left
-                nesw_direct_list.append(direct_list[0])
-            else:
-                nesw_direct_list.append(direct_list[last_room_index + 1])
-
-            
-            if last_room_index - 1 < 0: #right
-                nesw_direct_list.append(direct_list[3])
-            else:
-                nesw_direct_list.append(direct_list[last_room_index - 1])
-
-            if last_room_index + 2 > 3: #forward
-                nesw_direct_list.append(direct_list[last_room_index - 2])
-            else:
-                nesw_direct_list.append(direct_list[last_room_index + 2])
-
-        else: 
-            nesw_direct_list = ["n", "e", "w", "s"]
-            last_room_index = 0
-
-        blrf_direct_list = ["b", "l", "r", "f"]
-        blrf_dict = {}
-        for i in range(0, len(direct_list)):
-            blrf_dict[blrf_direct_list[i]] = nesw_direct_list[i]
-        return blrf_dict
+        return lfrb_dict
 

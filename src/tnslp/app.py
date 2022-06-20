@@ -5,8 +5,6 @@ import tnslp.game_backend.classes.game_class as game_class
 
 
 app = Flask(__name__)
-app.secret_key = "ihaveasecretkey1"
-
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -14,9 +12,10 @@ app.config["SESSION_COOKIE_SECURE"] = False
 Session(app)
 
 
+
 @app.before_first_request
 def before_first_request():
-    app.logger.info("before_first_request")
+    #app.logger.info("before_first_request")
     session.clear()
 
     session['current_js_actions'] = {
@@ -64,11 +63,10 @@ def accept_input_data():
 @app.route("/game/loading-game", methods=['POST'])
 def loading_game():
     
-    if len(session['game'].save_prints) <= 9:
-        session['game'].save_prints = []
+    if len(session['game'].save_prints) == 0: ##### this will change when 
         return_dict = session['game'].start_game()
     else:
-        return_dict = session['game'].load_game()
+        return_dict = session['game'].load_game() 
 
     return return_dict
 
@@ -92,4 +90,5 @@ def page_not_found(error):
 
 if __name__ == '__main__':
     app.debug = True
+    app.secret_key = "ihaveasecretkey5"
     app.run()
