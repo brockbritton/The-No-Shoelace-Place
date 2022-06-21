@@ -68,7 +68,6 @@ class Game:
         
         return_tuple = self.player1.loc.enter_room(self.player1)
         self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-        #Update inventory visual
         actions['update_inv_visual'] = self.player1.build_inv_str_list()
         
         if len(self.save_prints) == 0:
@@ -79,7 +78,6 @@ class Game:
             for id in actions['update_ui_values']:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
-
 
         return actions
 
@@ -120,8 +118,7 @@ class Game:
         }
 
 
-        # Save the player input as part as the saved prints
-        self.save_prints.append("> " + frontend_input) ####doesnt work for multiple choice
+        
 
         # Set a default return tuple if nothing connects
         return_tuple = (None, None, {})
@@ -130,9 +127,9 @@ class Game:
         # If there is a list of variables in waiting vars and the input is numeric, 
         # convert to integer so that the correct variable from waiting vars is accessed
         if frontend_input.isnumeric() and self.wait_for_frontend_input['build_multiple_choice'] != None:
-            input_value = self.wait_for_frontend_input['build_multiple_choice'][int(frontend_input)]
+            input_value = self.wait_for_frontend_input['build_multiple_choice'][1][int(frontend_input)]
+            self.save_prints.append("> " + self.wait_for_frontend_input['build_multiple_choice'][0][int(frontend_input)]) 
             self.wait_for_frontend_input['build_multiple_choice'] = None
-
             # Match the destination to the input value
             # and execute the desired action
             print("matching destination: " + self.master_dest)
@@ -163,6 +160,9 @@ class Game:
             
         # Otherwise, just use the input as it was given
         else:
+            # Save the player input as part as the saved prints
+            self.save_prints.append("> " + frontend_input) 
+
             # Begin parsing the input
             input_value = frontend_input.strip()
             parsed_dict = self.parser.parse_input(self.player1, input_value)
@@ -212,13 +212,13 @@ class Game:
         # take the underlying values and place the in the waiting for the next frontend input
         # and take the display vales and place them in the actions dict
         if len(actions['build_multiple_choice']) != 0:
-            self.wait_for_frontend_input['build_multiple_choice'] = actions['build_multiple_choice'][1] #values
+            self.wait_for_frontend_input['build_multiple_choice'] = actions['build_multiple_choice'] #displays and values 
             actions['build_multiple_choice'] = actions['build_multiple_choice'][0] #displays
         
         # ask_y_or_no is just a simplistic way to 
         # to build a multiple choice option of yes or no
         elif actions['ask_y_or_n']:
-            self.wait_for_frontend_input['build_multiple_choice'] = ["y", "n"] #values
+            self.wait_for_frontend_input['build_multiple_choice'] = [["Yes", "No"], ["y", "n"]] #displays and values
             actions['build_multiple_choice'] = ["Yes", "No"] #displays 
             actions.pop('ask_y_or_n')
         
