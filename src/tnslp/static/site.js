@@ -14,7 +14,19 @@ function ajax_accept_input(data_values, route) {
         type: 'POST',
         success: function(response){
             if (('print_all' in response) && (response['print_all'].length != 0)) {
-                print_all(response['print_all']);
+                if (('build_multiple_choice' in response) && (response['build_multiple_choice'].length != 0)) {
+                    print_all(response['print_all'], response['build_multiple_choice'], false)
+                    
+                } else if (('rebuild_text_entry' in response) && (response['rebuild_text_entry'])) {
+                    print_all(response['print_all'], [], true)
+        
+                } else {
+                    print_all(response['print_all'], [], false);
+                }
+                
+                
+
+
             } else if (('load_prints' in response)) {
                 load_prints(response['load_prints']);
             }
@@ -27,13 +39,7 @@ function ajax_accept_input(data_values, route) {
                 update_ui_values(response['update_ui_values']);
             }
 
-            if (('build_multiple_choice' in response) && (response['build_multiple_choice'].length != 0)) {
-                toggle_return_listener("off");
-                build_multiple_choice(response['build_multiple_choice']);
-                
-            } else if (('rebuild_text_entry' in response) && (response['rebuild_text_entry'])) {
-                toggle_entry_divs("text");
-            }
+            
         },
         error: function(request){
             if (route == "/game/loading-game") {
@@ -73,18 +79,23 @@ function toggle_return_listener(on_off) {
     }
 }
 
-function print_all(list){
-    if (list.length == 1) {
-        printtk(list[0]);
-        setTimeout(toggle_return_listener.bind(null, "on"), rate_of_letters*list[0].length);
+function print_all(pars_list, bmc_list, rebuild_text){
+    if (pars_list.length == 0) {
+        if (bmc_list.length > 0) {
+            build_multiple_choice(bmc_list);
+        } else {
+            toggle_entry_divs("text");
+            toggle_return_listener("on")
+        }
+        
     } else {
-        printtk(list[0]);
-        if (list[0] instanceof Array) {
-            if (list[0][1] == "quote") {
-                setTimeout(print_all.bind(null, list.slice(1)), quote_fadein_rate);
+        printtk(pars_list[0]);
+        if (pars_list[0] instanceof Array) {
+            if (pars_list[0][1] == "quote") {
+                setTimeout(print_all.bind(null, pars_list.slice(1), bmc_list, rebuild_text), quote_fadein_rate);
             }
         } else {
-            setTimeout(print_all.bind(null, list.slice(1)), rate_of_letters*list[0].length);
+            setTimeout(print_all.bind(null, pars_list.slice(1), bmc_list, rebuild_text), rate_of_letters*pars_list[0].length);
         }
     }
 }
@@ -161,7 +172,6 @@ function build_multiple_choice(display_strings) {
         btn.onclick = accept_button_input.bind(null, display_strings[i], i);
         button_entry_div.appendChild(btn);
     }
-
 }
 
 function toggle_entry_divs(element_type) {
@@ -186,7 +196,6 @@ function accept_button_input(display, button_index) {
     while (button_entry_div.firstChild) {
         button_entry_div.removeChild(button_entry_div.firstChild);
     } 
-
 }
 
 function update_inv_visual(inv_strings) {

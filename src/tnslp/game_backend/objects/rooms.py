@@ -3,7 +3,7 @@ import tnslp.game_backend.classes.room_class as room_class
 import tnslp.game_backend.objects.items as item
 import tnslp.game_backend.objects.npcs as npc
 
-# Stairwells
+# Stairwells to connect the ward and basement
 ward_landing = room_class.Ward_Room(
     "Ward Landing", 
     "Stairs 1",
@@ -36,7 +36,7 @@ game_entrance = room_class.Ward_Room(
     "", #description
     "", #room label or none
     None, #extra storage units or none
-    (None, None), #items for ground, walls
+    (None, None), #items for ground, walls - must be lists of items
     None #doors or none
     )
 
@@ -129,7 +129,7 @@ bathroom_cr = room_class.Ward_Room(
     "A safety-proofed bathroom, with sloped handles and polished metal for mirrors.", 
     "",
     None, 
-    (None, None),
+    (None, [item.faucets_poster]),
     None)
 
 blue_hallway = room_class.Ward_Room(

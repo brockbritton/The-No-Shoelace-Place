@@ -84,6 +84,13 @@ hope_poster = item_class.Hanging_Quote_Note("hope poster",
     ["Once you choose hope, anything's possible."],
     "Christopher Reeve")
 
+faucets_poster = item_class.Hanging_Quote_Note("faucets poster",
+    "poster",
+    ["Feelings",
+    "are not like faucets", 
+    "you can turn on and off."],
+    "Richard Lessor")
+
 
 ################################
 ##### Ward Rooms and Items #####

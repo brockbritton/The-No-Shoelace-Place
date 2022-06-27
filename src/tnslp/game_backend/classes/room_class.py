@@ -40,6 +40,7 @@ class Room:
         }
 
         actions['print_all'].append(self.description)
+        
         if len(self.storage_containers) > 0:
             actions['print_all'].append(self.look_storage_units())
 
@@ -47,18 +48,36 @@ class Room:
 
 
     def look_storage_units(self):
-        if len(self.storage_containers) == 2:
-            if len(self.storage_containers[0].items) == 0 and len(self.storage_containers[1].items) == 0:
-                sentence = f"There are no items on the ground or the walls." 
-            
-        else:
-            sentence = f"In the room is {self.storage_containers[0].article} {self.storage_containers[0].name}, "
-            for i in range(1, len(self.storage_containers)-2):
-                sentence += f"{self.storage_containers[0].article} {self.storage_containers[i].name}, "
-            sentence += f"and {self.storage_containers[0].article} {self.storage_containers[-1].name}."
+        sc_dict = {
+            True: [],
+            False: []
+        }
 
-        return sentence
-    
+        for sc in self.storage_containers: 
+            sc_dict[(len(sc.items) > 0)].append(sc)
+
+        full_sentence = ""
+        for key, value in sc_dict.items():
+            if len(value) > 0:
+                sentence = ""
+                if key:
+                    sentence += "There are items stored on or within "
+                    conjoiner = "and"
+                else:
+                    sentence += "There are no items stored on or within "
+                    conjoiner = "or"
+
+                if len(value) == 1:
+                    sentence += f"{value[0].article} {value[0].name}."
+                elif len(value) == 2:
+                    sentence += f"{value[0].article} {value[0].name} {conjoiner} {value[1].article} {value[1].name}."
+                else:
+                    for i in range(0, len(value)-1):
+                        sentence += f"{value[i].article} {value[i].name}, "
+                    sentence += f"{conjoiner} {value[-1].article} {value[-1].name}."
+                    
+                full_sentence += (sentence + " ")
+        return full_sentence
 
     def xray_look_storage_units(self):
         # Storage_Spot, Storage_Bin, Storage_Box, Storage_LockBox 
@@ -131,7 +150,7 @@ class Room:
 
         if not self.visited:
             # Updating XP for gui 
-            actions['print_all'].append(f"New Room Discovered! + {player.xp_dict['new_room']}xp")
+            actions['print_all'].append(f"New Room Discovered! +{player.xp_dict['new_room']}xp")
             actions['update_ui_values'].append(player.earn_xp(10))
             self.visited = True
 

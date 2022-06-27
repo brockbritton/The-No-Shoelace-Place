@@ -78,7 +78,7 @@ class Game:
             for id in actions['update_ui_values']:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
-
+        #print("start game actions", actions)
         return actions
 
     def load_game(self):
@@ -220,11 +220,12 @@ class Game:
         elif actions['ask_y_or_n']:
             self.wait_for_frontend_input['build_multiple_choice'] = [["Yes", "No"], ["y", "n"]] #displays and values
             actions['build_multiple_choice'] = ["Yes", "No"] #displays 
-            actions.pop('ask_y_or_n')
         
         # Otherwise rebuild the text entry (no multiple choice buttons)
         else:
             actions['rebuild_text_entry'] = True
+        # Remove this useless key that doesn't need to be sent to the frontend 
+        actions.pop('ask_y_or_n')
 
         # Save all text prints from this turn so re-loading is possible
         self.save_prints.extend(actions['print_all'])
@@ -264,6 +265,7 @@ class Game:
                 if len(parsed_dict["nearby_objects"]) == 1:
                     if parsed_dict["action"][0] in parsed_dict["nearby_objects"][0].item_actions:
                         function_params = []
+                        # if the action requires function parameters
                         try:
                             for param in self.item_actions_params[parsed_dict["action"][0]]:
                                 if param == 'player':

@@ -320,6 +320,7 @@ class Storage_Unit(Interact):
 class Storage_Spot(Storage_Unit):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
+        self.storage_type = "on"
 
     def inspect_item(self): 
         actions = {
@@ -348,8 +349,7 @@ class Storage_Wall(Storage_Spot):
 class Storage_Bin(Storage_Unit):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
-        self.can_lock_unlock = False
-        self.can_open_close = False
+        self.storage_type = "in"
 
     def inspect_item(self): 
         actions = {
@@ -368,17 +368,16 @@ class Storage_Bin(Storage_Unit):
             sentence += f"and {self.items[-1].article} {self.items[-1].name}."
 
         actions['print_all'].append(sentence)
-        return actions
+        return actions 
 
 class Storage_Box(Openable_Interact, Storage_Unit):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
-        self.can_lock_unlock = False
-        self.can_open_close = True
+        self.storage_type = "in"
     
     def inspect_item(self): 
         actions = {
-            'print_all': [],
+            'print_all': [], 
         }
         if len(self.items) == 0:
             sentence = f"There is nothing in the {self.name}."
