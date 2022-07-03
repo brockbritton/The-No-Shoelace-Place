@@ -24,9 +24,6 @@ function ajax_accept_input(data_values, route) {
                     print_all(response['print_all'], [], false);
                 }
                 
-                
-
-
             } else if (('load_prints' in response)) {
                 load_prints(response['load_prints']);
             }
@@ -87,7 +84,6 @@ function print_all(pars_list, bmc_list, rebuild_text){
             toggle_entry_divs("text");
             toggle_return_listener("on")
         }
-        
     } else {
         printtk(pars_list[0]);
         if (pars_list[0] instanceof Array) {

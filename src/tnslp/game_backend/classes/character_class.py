@@ -174,7 +174,6 @@ class Character:
                         enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
-                    #return (dest, [next_room, d_choice, self.loc.doors[d_choice]], actions)
                     return (dest, helper, actions)
         
                 else:
@@ -195,7 +194,6 @@ class Character:
                         enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
-                    #return (dest, [next_room, d_choice, self.loc.doors[d_choice][next_room_index]], actions)
                     return (dest, helper, actions)
         
                 else:

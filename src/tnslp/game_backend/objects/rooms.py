@@ -5,7 +5,7 @@ import tnslp.game_backend.objects.npcs as npc
 
 # Stairwells to connect the ward and basement
 ward_landing = room_class.Ward_Room(
-    "Ward Landing", 
+    "the Ward Landing", 
     "Stairs 1",
     "A dimly lit stairwell, leading to a floor below.", 
     "",
@@ -14,7 +14,7 @@ ward_landing = room_class.Ward_Room(
     None)
 
 basement_landing = room_class.Basement_Room(
-    "Basement Landing", #room name
+    "the Basement Landing", #room name
     "Stairs B", #display name
     "", #description
     "", #room label or none
@@ -31,7 +31,7 @@ ward_to_basement_stairs = room_class.Stairwell("Stairs Down", "Stairs Down", "",
 # display names must be 11 characters or less
 
 game_entrance = room_class.Ward_Room(
-    "Game Entrance", #room name
+    "the Game Entrance", #room name
     "Game Ent.", #display name
     "", #description
     "", #room label or none
@@ -51,7 +51,7 @@ admissions = room_class.Ward_Room(
     [item.admissions_entrance, item.service_hallway_w, None, None])
 
 service_hallway = room_class.Ward_Room(
-    "Service Hallway", 
+    "the Service Hallway", 
     "Serv. Hall", 
     "A clean hallway, clearly used purely for servicing the various rooms along the hall", 
     "",
@@ -60,7 +60,7 @@ service_hallway = room_class.Ward_Room(
     [None, item.service_hallway_e, item.outside_time_n, [None, item.service_hallway_w]])
 
 outside_time = room_class.Ward_Room(
-    "Outside Courtyard", 
+    "the Outside Courtyard", 
     "Outside",
     "A brick courtyard, with walls twelve feet tall, and no way to climb them. A park bench sits off to one side with a large open space taking up the majority.", 
     "",
@@ -70,7 +70,7 @@ outside_time = room_class.Ward_Room(
 
 
 utility_closet = room_class.Ward_Room(
-    "Utility Closet", 
+    "the Utility Closet", 
     "Utilities",
     "", 
     "",
@@ -79,7 +79,7 @@ utility_closet = room_class.Ward_Room(
     None)
 
 common_room = room_class.Ward_Room(
-    "Common Room", 
+    "the Common Room", 
     "Common Room", 
     "A common area filled with tables and chairs, with cabinets lining a few walls.", 
     "",
@@ -88,7 +88,7 @@ common_room = room_class.Ward_Room(
     [[None, None, None], [None, item.ward_to_basement_door], [None, None], item.service_hallway_e])
 
 tv_room = room_class.Ward_Room(
-    "TV Room", 
+    "the TV Room", 
     "TV Room", 
     "A small room with a few chairs facing a tv mounted on the far wall.", 
     "",
@@ -97,7 +97,7 @@ tv_room = room_class.Ward_Room(
     None)
 
 library = room_class.Ward_Room(
-    "Library", 
+    "the Library", 
     "Library", 
     "", 
     "",
@@ -106,7 +106,7 @@ library = room_class.Ward_Room(
     None)
 
 staff_breakroom = room_class.Ward_Room(
-    "Staff Breakroom", 
+    "the Staff Breakroom", 
     "Staff Break",
     "", 
     "",
@@ -115,7 +115,7 @@ staff_breakroom = room_class.Ward_Room(
     None)
 
 med_station = room_class.Ward_Room(
-    "Medication Room", 
+    "the Medication Room", 
     "Meds Room", 
     "A window at which patients can receive medications.", 
     "",
@@ -124,7 +124,7 @@ med_station = room_class.Ward_Room(
     None)
 
 bathroom_cr = room_class.Ward_Room(
-    "Common Room Bathroom", 
+    "the Common Room Bathroom", 
     "CR Bathroom", 
     "A safety-proofed bathroom, with sloped handles and polished metal for mirrors.", 
     "",
@@ -133,7 +133,7 @@ bathroom_cr = room_class.Ward_Room(
     None)
 
 blue_hallway = room_class.Ward_Room(
-    "Blue Hallway", 
+    "the Blue Hallway", 
     "Blue Hall", 
     "A clean hallway with blue floor tiling.", 
     "",
@@ -142,7 +142,7 @@ blue_hallway = room_class.Ward_Room(
     None)
 
 kitchen = room_class.Ward_Room(
-    "Servery", 
+    "the Servery", 
     "Servery", 
     "A small dining room, also used as a place to receive food at mealtimes.", 
     "",
@@ -151,7 +151,7 @@ kitchen = room_class.Ward_Room(
     None) #adds happiness
 
 sensory_room = room_class.Ward_Room(
-    "Sensory Room", 
+    "the Sensory Room", 
     "Sensory", 
     "A well-decorated room, full of comfortable seating and pillows, along with toys and gadgets to keep patients busy.", 
     "",
@@ -160,7 +160,7 @@ sensory_room = room_class.Ward_Room(
     None)
 
 linen_closet = room_class.Ward_Room(
-    "Linens", 
+    "the Linen Closet", 
     "Linens", 
     "", 
     "",
@@ -169,7 +169,7 @@ linen_closet = room_class.Ward_Room(
     None)
 
 red_hallway = room_class.Ward_Room(
-    "Red Hallway", 
+    "the Red Hallway", 
     "Red Hall", 
     "A clean hallway with red floor tiling", 
     "",
@@ -214,7 +214,7 @@ pat_room_203 = room_class.Ward_Room(
     None)
 
 bathroom_p = room_class.Ward_Room(
-    "Patient Bathroom", 
+    "the Patient Bathroom", 
     "P. Bathroom", 
     "A small bathroom for patient use.", 
     "",
@@ -227,7 +227,7 @@ bathroom_p = room_class.Ward_Room(
 ######################   
 
 basement_lobby = room_class.Basement_Room(
-    "Basement Lobby", 
+    "the Basement Lobby", 
     "B. Lobby", 
     "",
     "",
@@ -236,7 +236,7 @@ basement_lobby = room_class.Basement_Room(
     None)
 
 old_nurses_station = room_class.Basement_Room(
-    "Old Nursing Station", 
+    "the Old Nursing Station", 
     "Nursing", 
     "",
     "",
@@ -245,7 +245,7 @@ old_nurses_station = room_class.Basement_Room(
     None)
 
 old_med_window = room_class.Basement_Room(
-    "Old Medication Window", 
+    "the Old Medication Window", 
     "B. Meds", 
     "",
     "",
@@ -254,7 +254,7 @@ old_med_window = room_class.Basement_Room(
     None)
 
 old_medical_storage = room_class.Basement_Room(
-    "Old Medical Storage", 
+    "the Old Medical Storage", 
     "Med. Storage", 
     "",
     "",
@@ -263,7 +263,7 @@ old_medical_storage = room_class.Basement_Room(
     None)
 
 sedation_room = room_class.Basement_Room(
-    "Sedation Room", 
+    "the Sedation Room", 
     "Sedation",
     "",
     "",
@@ -272,7 +272,7 @@ sedation_room = room_class.Basement_Room(
     None)
 
 residential_hallway = room_class.Basement_Room(
-    "Residential Hallway", 
+    "the Residential Hallway", 
     "Res. Hall", 
     "",
     "",
@@ -281,7 +281,7 @@ residential_hallway = room_class.Basement_Room(
     None)
 
 old_residential_bedroom = room_class.Basement_Room(
-    "Old Residential Bedroom", 
+    "the Old Residential Bedroom", 
     "Res. Bed.", 
     "",
     "",
@@ -290,7 +290,7 @@ old_residential_bedroom = room_class.Basement_Room(
     None)
 
 power_room = room_class.Basement_Room(
-    "Power Room", 
+    "the Power Room", 
     "Power Room", 
     "",
     "",
@@ -299,8 +299,8 @@ power_room = room_class.Basement_Room(
     [None, item.power_room_door, None, None])
 
 waiting_room = room_class.Basement_Room(
-    "Waiting Room", 
-    "Waiting R.", 
+    "the Waiting Room", 
+    "Wait Room", 
     "",
     "",
     None,
@@ -308,7 +308,7 @@ waiting_room = room_class.Basement_Room(
     None)
 
 old_therapy_room = room_class.Basement_Room(
-    "Old Therapy Room", 
+    "the Old Therapy Room", 
     "Therapy R.", 
     "",
     "",
@@ -317,7 +317,7 @@ old_therapy_room = room_class.Basement_Room(
     None)
 
 clinical_hallway = room_class.Basement_Room(
-    "Clinical Hallway", 
+    "the Clinical Hallway", 
     "Clin. Hall", 
     "",
     "",
@@ -344,7 +344,7 @@ tanning_bed_cell = room_class.Basement_Room(
     None)
 
 high_security_area = room_class.Basement_Room(
-    "High Security Wing", 
+    "the High Security Wing", 
     "High Sec.", 
     "",
     "",
@@ -353,7 +353,7 @@ high_security_area = room_class.Basement_Room(
     None)
 
 shock_therapy_room = room_class.Basement_Room(
-    "Shock Therapy Room", 
+    "the Shock Therapy Room", 
     "Shk. Therapy",
     "",
     "",

@@ -136,8 +136,8 @@ lr_bedding_shelf = item_class.Storage_Spot("bedding shelf", "shelf")
 # Service Hallway #
     # Storage Units
     # Doors
-service_hallway_w = item_class.Lockable_Door("Service Hallway W Door", "door", [ward_doors_key])
-service_hallway_e = item_class.Lockable_Door("Service Hallway E Door", "door", [ward_doors_key])
+service_hallway_w = item_class.Lockable_Door("Door J331", "door", [ward_doors_key])
+service_hallway_e = item_class.Lockable_Door("Door J332", "door", [ward_doors_key])
 
 # Utility Closet #
     # Storage Units
@@ -149,11 +149,11 @@ uc_hygiene_shelf = item_class.Storage_Spot("hygiene supplies shelf", "shelf")
 park_bench = item_class.Storage_Spot("park bench", "table")
 toys_bag = item_class.Storage_Bin("toys bin", "bin")
     # Doors
-outside_time_n = item_class.Lockable_Door("Outside Recreation Door", "door", [ward_doors_key])
+outside_time_n = item_class.Lockable_Door("Door J3333", "door", [ward_doors_key])
 
 # Admissions Office #
     # Storage Units
-admissions_entrance = item_class.Lockable_Door("Admissions Exit Door", "door", None) 
+admissions_entrance = item_class.Lockable_Door("Exit Door", "door", None) 
 
 
 ##########################
@@ -172,7 +172,7 @@ power_box = item_class.Power_Box("fuse box", "fuse box")
 
 # Basement Doors
 power_room_door = item_class.Lockable_Door("Power Room Door", "door", [power_room_key])
-high_security_door = item_class.Lockable_Door("High Security Door", "door", [keycard, "2525"])
+high_security_door = item_class.Lockable_Door("Door J331", "door", [keycard, "2525"])
 
 # Storage Containers
 # Cabinets

@@ -4,8 +4,6 @@ import tnslp.game_backend.classes.character_class as character_class
 import tnslp.game_backend.classes.item_class as item_class
 import tnslp.game_backend.classes.parser_class as parser_class
 import tnslp.game_backend.gl_backend_functions as gl
-import tnslp.game_backend.objects.rooms as room
-import tnslp.game_backend.objects.items as item
 
 
 class Game:
