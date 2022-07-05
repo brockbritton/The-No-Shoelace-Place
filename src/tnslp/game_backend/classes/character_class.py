@@ -3,18 +3,16 @@
 import random
 
 import tnslp.game_backend.classes.calendar_class as calendar_class
-import tnslp.game_backend.classes.room_class as room_class
 import tnslp.game_backend.gl_backend_functions as gl
 import tnslp.game_backend.objects.abilities as ability
 import tnslp.game_backend.objects.items as item
-import tnslp.game_backend.objects.rooms as room
 
 
 class Character:
 
     def __init__(self, name) -> None:
         self.name = name
-        self.loc = room.common_room #Starting location is set in the calendar class
+        self.loc = None
         self.last_loc = None
 
         self.inv = [item.id_bracelet, item.basement_key, item.crowbar]
@@ -32,7 +30,6 @@ class Character:
             'new_item': 5,
             'easter_egg': 100,
             'new_door_unlocked': 50,
-            
         }
 
         self.calendar = calendar_class.Calendar(self)

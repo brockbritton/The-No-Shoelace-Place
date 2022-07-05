@@ -34,9 +34,7 @@ function ajax_accept_input(data_values, route) {
 
             if (('update_ui_values' in response) && (response['update_ui_values'].length != 0)) {
                 update_ui_values(response['update_ui_values']);
-            }
-
-            
+            } 
         },
         error: function(request){
             if (route == "/game/loading-game") {

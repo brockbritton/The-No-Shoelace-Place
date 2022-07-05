@@ -11,7 +11,7 @@ ward_landing = room_class.Ward_Room(
     "",
     None, 
     (None, None),
-    None)
+    [None, None, None, item.ward_to_basement_door])
 
 basement_landing = room_class.Basement_Room(
     "the Basement Landing", #room name

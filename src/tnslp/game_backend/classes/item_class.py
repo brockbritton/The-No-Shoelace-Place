@@ -34,7 +34,6 @@ class Multi_Name_Item(Item):
 class Inv_Item(Item):
 
     # name - visible name of item  !!!! must be 17 characters or less !!!!
-    # desc - description of item 
 
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
