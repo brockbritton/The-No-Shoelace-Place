@@ -108,7 +108,7 @@ class Character:
                             break
                 else:
                     break
-
+            
             return_tuple2 = item_to_pick_up.pick_up_item(self, item_to_pick_up_loc)
             actions = gl.combine_dicts(actions, return_tuple1[2])
             actions = gl.combine_dicts(actions, return_tuple2[2])

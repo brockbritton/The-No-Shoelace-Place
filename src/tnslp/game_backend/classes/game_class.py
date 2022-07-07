@@ -20,7 +20,6 @@ class Game:
             'drop': [None, 'player'],
             'unlock': ['player'],
             'lock': ['player'],
-
         }
     
     def __repr__(self) -> str:
@@ -45,6 +44,8 @@ class Game:
         actions = {
             'print_all': [],
             'update_inv_visual': [],
+            'build_multiple_choice': [],
+            'rebuild_text_entry': False,
             'update_ui_values': [
                 "xp_value", 
                 "day_value", 
@@ -76,7 +77,7 @@ class Game:
             for id in actions['update_ui_values']:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
-        #print("start game actions", actions)
+        #print("start game actions", actions) 
         return actions
 
     def load_game(self):
@@ -103,20 +104,20 @@ class Game:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
 
+        if self.wait_for_frontend_input['build_multiple_choice'] != None:
+            actions['build_multiple_choice'] = self.wait_for_frontend_input['build_multiple_choice'][0]
+
         return actions
 
     def organize_raw_input(self, frontend_input):
         actions = {
             'print_all': [],
             'build_multiple_choice': [],
-            'ask_y_or_n': False,
+            'ask_y_or_n': False, 
             'rebuild_text_entry': False,
             'update_inv_visual': [],
             'update_ui_values': [] ###keep list empty 
         }
-
-
-        
 
         # Set a default return tuple if nothing connects
         return_tuple = (None, None, {})
@@ -195,7 +196,7 @@ class Game:
             if (self.player1.calendar.days_list[-1].turns_left == (self.player1.calendar.max_turns_daily // 3)) or (self.player1.calendar.days_list[-1].turns_left == ((self.player1.calendar.max_turns_daily * 2) // 3)): 
                 return_tuple = self.player1.calendar.calculate_next_activity().ask_event()
                 self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-                ...
+                
         
         # If there are frontend values to update, 
         # access the data found the gui_ui_values dict 

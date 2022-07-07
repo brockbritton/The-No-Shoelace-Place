@@ -13,19 +13,11 @@ function ajax_accept_input(data_values, route) {
         data: data_values,
         type: 'POST',
         success: function(response){
-            if (('print_all' in response) && (response['print_all'].length != 0)) {
-                if (('build_multiple_choice' in response) && (response['build_multiple_choice'].length != 0)) {
-                    print_all(response['print_all'], response['build_multiple_choice'], false)
-                    
-                } else if (('rebuild_text_entry' in response) && (response['rebuild_text_entry'])) {
-                    print_all(response['print_all'], [], true)
-        
-                } else {
-                    print_all(response['print_all'], [], false);
-                }
+            if ('print_all' in response) {
+                print_all.apply(null, [response['print_all'], response['build_multiple_choice'], response['rebuild_text_entry']])
                 
             } else if (('load_prints' in response)) {
-                load_prints(response['load_prints']);
+                load_prints(response['load_prints'], response['build_multiple_choice']);
             }
             
             if (('update_inv_visual' in response) && (response['update_inv_visual'].length != 0)) {
@@ -80,7 +72,7 @@ function print_all(pars_list, bmc_list, rebuild_text){
             build_multiple_choice(bmc_list);
         } else {
             toggle_entry_divs("text");
-            toggle_return_listener("on")
+            toggle_return_listener("on");
         }
     } else {
         printtk(pars_list[0]);
@@ -94,7 +86,7 @@ function print_all(pars_list, bmc_list, rebuild_text){
     }
 }
 
-function load_prints(list) {
+function load_prints(list, bmc_list) {
     for (let text in list) {
         var par = document.createElement("p");
         if (list[text] instanceof Array) {
@@ -109,6 +101,14 @@ function load_prints(list) {
         document.getElementById("game_text_display").appendChild(par);
     }
     game_display_div.scrollTop = game_display_div.scrollHeight;
+
+    if (bmc_list != undefined) {
+        build_multiple_choice(bmc_list);
+    } else {
+        toggle_entry_divs("text");
+        toggle_return_listener("on");
+    }
+    
 }
 
 function printtk(text) {

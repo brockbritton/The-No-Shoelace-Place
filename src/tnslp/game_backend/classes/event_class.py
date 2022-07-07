@@ -49,9 +49,9 @@ class Coping_Skill_Group(Event):
                     return ("level_up_ability", [player_ability, req_xp, self.turns_spent], actions)
                 else:
                     if player_ability.lvl == 0:
-                        actions['print_all'].append(f"Unfortunately you do not have enough experience to learn {player_ability.name}.")
+                        actions['print_all'].append(f"Unfortunately you need {req_xp} experience to learn {player_ability.name}. To gain experience, explore the ward to find new locations and items.")
                     else:
-                        actions['print_all'].append(f"Unfortunately you do not have enough experience to level up {player_ability.name}.")
+                        actions['print_all'].append(f"Unfortunately you need {req_xp} experience to level up {player_ability.name}.")
                     return (None, self.turns_spent, actions)
  
         else:
