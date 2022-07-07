@@ -56,6 +56,8 @@ function default_return_press(event) {
 function toggle_return_listener(on_off) {
     if (on_off == "on") {
         document.getElementById("text_entry_enter_button").disabled = false;
+        document.getElementById("text_entry_enter_button").style.color = 'white';
+        document.getElementById("text_entry_enter_button").style.borderColor = 'white';
         document.getElementById('command_input_form').removeEventListener('submit', default_return_press);  
         document.getElementById('command_input_form').addEventListener('submit', accept_entry_input);
         document.getElementById('command_input').focus();
@@ -63,6 +65,9 @@ function toggle_return_listener(on_off) {
         document.getElementById('command_input_form').removeEventListener('submit', accept_entry_input);  
         document.getElementById('command_input_form').addEventListener('submit', default_return_press);
         document.getElementById("text_entry_enter_button").disabled = true;
+        document.getElementById("text_entry_enter_button").style.color = 'darkgrey';
+        document.getElementById("text_entry_enter_button").style.borderColor = 'darkgrey';
+        
     }
 }
 
