@@ -113,13 +113,12 @@ function load_prints(list, bmc_list) {
         toggle_entry_divs("text");
         toggle_return_listener("on");
     }
-    
 }
 
 function printtk(text) {
     if (text == null) {
         text = "null_data";
-    }
+    } 
     
     var par = document.createElement("p");
     if (text instanceof Array) {
@@ -230,7 +229,6 @@ function update_ui_values(list_pairs) {
     }
 }
 
-
 function fade_to_fill_header() {
     if (parseFloat(foreground_header_image.style.opacity) == 0) {
         on_header_element = true;
@@ -250,4 +248,8 @@ function switch_to_outline_header() {
 
 function display_quote(quote, author) {
     /* pass */
+}
+
+function saveGame() {
+    alert("feature does not yet exist")
 }

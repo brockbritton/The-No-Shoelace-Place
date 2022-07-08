@@ -16,12 +16,12 @@ ward_landing = room_class.Ward_Room(
 basement_landing = room_class.Basement_Room(
     "Basement Landing", #room name #add article "the"
     "Stairs B", #display name
-    "", #description
+    "No Room Description", #description
     "", #room label or none
     None, #storage units or none
     (None, None),
     None #doors or none
-    )
+    ) 
 
 basement_to_ward_stairs = room_class.Stairwell("Stairs Up", "Stairs Up", "", ward_landing)
 ward_to_basement_stairs = room_class.Stairwell("Stairs Down", "Stairs Down", "", basement_landing)
@@ -33,7 +33,7 @@ ward_to_basement_stairs = room_class.Stairwell("Stairs Down", "Stairs Down", "",
 game_entrance = room_class.Ward_Room(
     "Game Entrance", #room name #add article "the"
     "Game Ent.", #display name
-    "", #description
+    "No Room Description", #description
     "", #room label or none
     None, #extra storage units or none
     (None, None), #items for ground, walls - must be lists of items
@@ -72,7 +72,7 @@ outside_time = room_class.Ward_Room(
 utility_closet = room_class.Ward_Room(
     "Utility Closet", #add article "the"
     "Utilities",
-    "", 
+    "No Room Description", 
     "",
     [item.uc_cleaning_shelf, item.uc_hygiene_shelf], 
     (None, None),
@@ -99,7 +99,7 @@ tv_room = room_class.Ward_Room(
 library = room_class.Ward_Room(
     "Library", #add article "the"
     "Library", 
-    "", 
+    "No Room Description", 
     "",
     [item.lib_classic_bookshelf, item.lib_nf_bookshelf, item.lib_fant_bookshelf, item.lib_help_bookshelf], 
     (None, None),
@@ -108,7 +108,7 @@ library = room_class.Ward_Room(
 staff_breakroom = room_class.Ward_Room(
     "Staff Breakroom", #add article "the"
     "Staff Break",
-    "", 
+    "No Room Description", 
     "",
     None, 
     (None, None),
@@ -162,7 +162,7 @@ sensory_room = room_class.Ward_Room(
 linen_closet = room_class.Ward_Room(
     "Linen Closet", #add article "the"
     "Linens", 
-    "", 
+    "No Room Description", 
     "",
     [item.lr_bedding_shelf, item.lr_towels_shelf], 
     (None, None),
@@ -229,7 +229,7 @@ bathroom_p = room_class.Ward_Room(
 basement_lobby = room_class.Basement_Room(
     "Basement Lobby", #add article "the"
     "B. Lobby", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -238,7 +238,7 @@ basement_lobby = room_class.Basement_Room(
 old_nurses_station = room_class.Basement_Room(
     "Old Nursing Station", #add article "the"
     "B. Nursing", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -247,7 +247,7 @@ old_nurses_station = room_class.Basement_Room(
 old_med_window = room_class.Basement_Room(
     "Old Medication Window", #add article "the"
     "B. Meds", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -256,7 +256,7 @@ old_med_window = room_class.Basement_Room(
 old_medical_storage = room_class.Basement_Room(
     "Old Medical Storage", #add article "the"
     "Med. Storage", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -265,7 +265,7 @@ old_medical_storage = room_class.Basement_Room(
 sedation_room = room_class.Basement_Room(
     "Sedation Room", #add article "the"
     "Sedation",
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -274,7 +274,7 @@ sedation_room = room_class.Basement_Room(
 residential_hallway = room_class.Basement_Room(
     "Residential Hallway", #add article "the"
     "Res. Hall", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -283,7 +283,7 @@ residential_hallway = room_class.Basement_Room(
 old_residential_bedroom = room_class.Basement_Room(
     "Old Residential Bedroom", #add article "the"
     "Res. Bed.", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -292,7 +292,7 @@ old_residential_bedroom = room_class.Basement_Room(
 power_room = room_class.Basement_Room(
     "Power Room", #add article "the"
     "Power Room", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -301,7 +301,7 @@ power_room = room_class.Basement_Room(
 waiting_room = room_class.Basement_Room(
     "Waiting Room", #add article "the"
     "Wait Room", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -310,7 +310,7 @@ waiting_room = room_class.Basement_Room(
 old_therapy_room = room_class.Basement_Room(
     "Old Therapy Room", #add article "the"
     "Therapy R.", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -319,7 +319,7 @@ old_therapy_room = room_class.Basement_Room(
 clinical_hallway = room_class.Basement_Room(
     "Clinical Hallway", #add article "the"
     "Clin. Hall", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -328,7 +328,7 @@ clinical_hallway = room_class.Basement_Room(
 straightjacket_storage = room_class.Basement_Room(
     "Straightjacket Storage", 
     "SJ Storage", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -337,7 +337,7 @@ straightjacket_storage = room_class.Basement_Room(
 tanning_bed_cell = room_class.Basement_Room(
     "Confinement", 
     "Confinement", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -346,7 +346,7 @@ tanning_bed_cell = room_class.Basement_Room(
 high_security_area = room_class.Basement_Room(
     "High Security Wing", #add article "the"
     "High Sec.", 
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -355,7 +355,7 @@ high_security_area = room_class.Basement_Room(
 shock_therapy_room = room_class.Basement_Room(
     "Shock Therapy Room", #add article "the"
     "Shk. Therapy",
-    "",
+    "No Room Description",
     "",
     None,
     (None, None),
@@ -444,7 +444,7 @@ maze_east_end2 = room_class.Maze_Room(
 plexiglass_cell = room_class.Final_Room(
     "Plexiglass Cell", #name
     "", #display name 
-    "", #description
+    "No Room Description", #description
     "", #room label
     None #doors
     ) 
