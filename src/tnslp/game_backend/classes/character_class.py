@@ -24,7 +24,7 @@ class Character:
         self.full_health = 100 #maximum player health
         self.diagnosis = None
 
-        self.xp = 500
+        self.xp = 150
         self.xp_dict = {
             'new_room': 10,
             'new_item': 5,

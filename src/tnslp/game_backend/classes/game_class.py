@@ -15,12 +15,6 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
-        self.item_actions_params = {
-            'pick up': ['player'],
-            'drop': [None, 'player'],
-            'unlock': ['player'],
-            'lock': ['player'],
-        }
     
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
@@ -39,6 +33,16 @@ class Game:
             case "pos_attitude_lvl": return self.player1.abilities[2].lvl
             case "opp_action_lvl": return self.player1.abilities[3].lvl
             case "catharsis_lvl": return self.player1.abilities[4].lvl
+
+    def get_item_action_params(self, action):
+        # must be called each time because the values change
+        match action:
+            case "pick up": return [self.player1]
+            case "drop": return [None, self.player1]
+            case "unlock": return [self.player1]
+            case "lock": return [self.player1]
+
+        return []
 
     def start_game(self):
         actions = {
@@ -263,18 +267,9 @@ class Game:
                 # If there is one action and one object
                 if len(parsed_dict["nearby_objects"]) == 1:
                     if parsed_dict["action"][0] in parsed_dict["nearby_objects"][0].item_actions:
-                        function_params = []
-                        # if the action requires function parameters
-                        try:
-                            for param in self.item_actions_params[parsed_dict["action"][0]]:
-                                if param == 'player':
-                                    function_params.append(self.player1)
-                                else:
-                                    function_params.append(param)
-
-                            return_data = parsed_dict["nearby_objects"][0].item_actions[parsed_dict["action"][0]](*function_params)
-                        except KeyError:
-                            return_data = parsed_dict["nearby_objects"][0].item_actions[parsed_dict["action"][0]]()
+                        
+                        function_params = self.get_item_action_params(parsed_dict["action"][0])
+                        return_data = parsed_dict["nearby_objects"][0].item_actions[parsed_dict["action"][0]](*function_params)
                         
                         if isinstance(return_data, tuple):
                             dest, helper, actions = gl.parse_tuples(return_data, actions)
