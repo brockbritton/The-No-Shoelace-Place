@@ -278,7 +278,6 @@ class Game:
                     else:
                         actions['print_all'].append(f"You cannot {parsed_dict['action'][0]} this item.")
                     
-                
                 # For if there are cases when an action and multiple objects need to be parsed
                 elif len(parsed_dict["nearby_objects"]) > 1:
                     # If one is a storage unit and one is an inv_item

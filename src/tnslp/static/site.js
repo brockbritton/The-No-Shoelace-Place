@@ -1,6 +1,6 @@
 
 
-var rate_of_letters = 20; /* fast: 5, slow: 50, normal: 20 */
+var rate_of_letters = 20; /* fast: 5, normal: 20, slow: 50 */
 var rate_of_header_fadein = 500;
 var quote_fadein_rate = 2000;
 var on_header_element = false;
