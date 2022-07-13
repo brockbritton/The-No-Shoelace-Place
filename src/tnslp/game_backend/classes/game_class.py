@@ -15,6 +15,7 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
+        self.game_state = "normal"
     
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
@@ -151,16 +152,12 @@ class Game:
                     if isinstance(return_tuple[1], int):
                         # Use n-1 turns because below another turn will be used
                         actions = gl.combine_dicts(actions, self.player1.calendar.use_turns(return_tuple[1] - 1, self.player1))
-                case "ask_unlock_item": 
-                    return_tuple = self.master_helper.ask_unlock_item(input_value, self.player1)
                 case "level_up_ability": 
                     for ability in self.player1.abilities:
                         if ability.name == self.master_helper[0].name:
                             index = self.player1.abilities.index(ability)
                     return_tuple = self.player1.abilities[index].upgrade_ability(input_value, self.master_helper[1:], self.player1)
                     
-
-            
         # Otherwise, just use the input as it was given
         else:
             # Save the player input as part as the saved prints

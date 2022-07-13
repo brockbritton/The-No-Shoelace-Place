@@ -229,16 +229,6 @@ class Lockable_Interact(Openable_Interact):
 
         return actions
 
-    def ask_unlock_item(self, choice, player):
-        actions = {}
-
-        if choice == 'y':
-            actions = self.unlock_item(player)
-        elif choice == 'n':
-            actions['print_all'] = [f"You did not try to unlock the {self.name}."]
-
-        return (None, None, actions)
-
     def lock_item(self, player):
         actions = {
             'print_all': [],
@@ -272,9 +262,6 @@ class Lockable_Interact(Openable_Interact):
 
         if self.locked:
             actions['print_all'].append(f"The {self.name} is locked.")
-            actions['print_all'].append(f"Would you like to try to unlock the {self.name}?")
-            dest, helper = "ask_unlock_item", self
-            actions['ask_y_or_n'] = True
 
         else:
             return super().open_item()

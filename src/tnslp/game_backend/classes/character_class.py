@@ -146,12 +146,15 @@ class Character:
             for i in range(0, len(next_room)):
                 if self.loc.has_doors and self.loc.doors[d_choice][i] != None:
                     if self.loc.doors[d_choice][i].locked:
-                        display_rooms.append("Locked Door")
+                        display_rooms.append(f"{self.loc.doors[d_choice][i].name} (locked)")
                     else:
-                        if next_room[i].visited:
-                            display_rooms.append(f"Unlocked Door: {next_room[i].name}")
+                        if self.loc.doors[d_choice][i].open:
+                            if next_room[i].visited:
+                                display_rooms.append(f"{self.loc.doors[d_choice][i].name} (open): {next_room[i].name}")
+                            else:
+                                display_rooms.append(f"{self.loc.doors[d_choice][i].name} (open): Unknown Room")
                         else:
-                            display_rooms.append(f"Unlocked Door: Unknown Room")
+                            display_rooms.append(f"{self.loc.doors[d_choice][i].name} (unlocked)")
 
                 elif next_room[i].visited:
                     display_rooms.append(next_room[i].name)

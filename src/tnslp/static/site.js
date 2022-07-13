@@ -245,11 +245,6 @@ function switch_to_outline_header() {
     on_header_element = false;
 }
 
-
-function display_quote(quote, author) {
-    /* pass */
-}
-
 function saveGame() {
     alert("feature does not yet exist")
 }

@@ -11,8 +11,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_COOKIE_SECURE"] = False
 Session(app)
 
-
-
 @app.before_first_request
 def before_first_request():
     #app.logger.info("before_first_request")
@@ -38,7 +36,7 @@ def home():
 def welcome():
     return render_template("welcome.html")
 
-@app.route("/quotes/")
+@app.route("/unlocked-quotes/")
 def quotes():
     return render_template("quotes.html")
 
