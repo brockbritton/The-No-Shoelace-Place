@@ -15,7 +15,11 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
-        self.game_state = "normal"
+        self.game_state = 0
+        self.game_state_funcs = {
+            0: self.play_normal_game,
+            1: self.fight_demon,
+        }
     
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
@@ -114,7 +118,10 @@ class Game:
 
         return actions
 
-    def organize_raw_input(self, frontend_input):
+    def fight_demon(self, frontend_input):
+        pass
+
+    def play_normal_game(self, frontend_input):
         actions = {
             'print_all': [],
             'build_multiple_choice': [],
