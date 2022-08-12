@@ -443,7 +443,7 @@ maze_east_end2 = room_class.Maze_Room(
 
 plexiglass_cell = room_class.Final_Room(
     "Plexiglass Cell", #name
-    "", #display name 
+    "Demon Cell", #display name 
     "No Room Description", #description
     "", #room label
     None #doors

@@ -3,7 +3,9 @@
 import random
 import num2words as n2w
 import tnslp.game_backend.classes.item_class as item_class
+import tnslp.game_backend.classes.npc_class as npc_class
 import tnslp.game_backend.objects.items as item
+import tnslp.game_backend.gl_backend_functions as gl
 
 
 class Room:
@@ -25,7 +27,6 @@ class Room:
                 self.storage_containers[i].set_items(floor_wall_items[i])
         
         self.storage_dict = {}
-        self.monsters = []
         self._room_registry.append(self)
         self.visited = False
         self.item_actions = {
@@ -43,7 +44,6 @@ class Room:
             actions['print_all'].append(self.look_storage_units())
 
         return actions
-
 
     def look_storage_units(self):
         sc_dict = {
@@ -108,10 +108,6 @@ class Room:
     def set_interacts(self, list):
         for i in list:
             self.interacts.append(i)
-
-    def set_demons(self, list):
-        for i in list:
-            self.monsters.append(i)
 
     def create_door_dict(self, door_list):
         direct_list = ["n", "e", "s", "w"]
@@ -324,12 +320,14 @@ class Room:
             "visited room", 
             "door visited", 
             "door unknown", 
-            "unknown room"]
+            "unknown room",
+            "wall"
+            ]
         sentence_parts = []
         sentence_parts.append(sentence_start)
         for adj_type in sentence_guide:
             if adj_type in state_freq.keys():
-                if adj_type == "unknown room":
+                if adj_type in ["unknown room", "wall"]:
                     # build a sentence using the keys and values from above
                     freq_text = n2w.num2words(state_freq[adj_type])
                     vowels = ["a", "e", "i", "o", "u"]
@@ -342,7 +340,8 @@ class Room:
                     else: 
                         verb_value = (f"are {freq_text}")
                         plural = "s"
-                    sentence_parts.append(f"{verb_value} unknown room{plural}")
+                    sentence_parts.append(f"{verb_value} {adj_type}{plural}")
+
                 else:
                     while len(state_rooms[adj_type]) > 0:
                         if adj_type == "visited room":
@@ -391,7 +390,6 @@ class Room:
 
         return full_sentence
                     
-
     def print_items_loc_desc(self):
         paragraph_parts = []
         for sc in self.storage_containers:
@@ -410,7 +408,6 @@ class Room:
         full_paragraph = " ".join(paragraph_parts)
         
         return full_paragraph
-
 
     def build_container_sentence(self, container):
         sentence_parts = []
@@ -501,10 +498,48 @@ class Final_Room(Room):
     def __init__(self, name, display_name, description, room_label, doors) -> None:
         super().__init__(name, display_name, description, room_label, doors, (None, None))
         self.lights_on = False
+        self.demon = npc_class.Depression_Demon()
     
 
     def __repr__(self) -> str:
         return f'{self.name}(final room)'
+
+    def enter_room(self, player):
+        actions = {
+            'print_all': [],
+            'update_ui_values': [],
+            'build_multiple_choice': []
+        }
+        
+        if not self.visited:
+            # Updating XP for gui 
+            actions['print_all'].append(f"New Room Discovered! +{player.xp_dict['new_room']}xp")
+            actions['update_ui_values'].append(player.earn_xp(10))
+            self.visited = True
+
+        actions['print_all'].append(f"You have now encountered your demon of {self.demon.name}. ")
+        actions['print_all'].append(f"It has trapped you in this room. You cannot escape. It is time to face your demon!")
+
+        player_avail_abilities = player.build_available_abilities_list()
+        if len(player_avail_abilities) == 0:
+            actions['print_all'].append(f"Unfortunately you have not learned any skills to fight your demon. The demon of {self.demon.name} has incapacitated you.")
+            actions['print_all'].append("You have been returned to your room.")
+            player.last_loc = None
+            player.loc = player.personal_room
+            enter_tuple = player.personal_room.enter_room(player)
+
+            actions = gl.combine_dicts(actions, enter_tuple[2])
+            return (enter_tuple[0], enter_tuple[1], actions)
+            
+        else:
+            actions['print_all'].append(f"Please choose a skill to use against your demon:")
+            displays = []
+            for ability in player_avail_abilities:
+                displays.append(ability.name)
+            actions['build_multiple_choice'] = [displays, player_avail_abilities]
+            return ("face_demon", None, actions)
+
+
 
         
         

@@ -41,10 +41,10 @@ avoidance = ability_class.Demon_Skill("Avoidance", 0, [lose_turn])
 trauma = ability_class.Demon_Skill("Trauma", 30, None)
 emotional_distress = ability_class.Demon_Skill("Emotional Distress", 5, [reduce_attack]) ##
 nightmares = ability_class.Demon_Skill("Nightmares", 30, None) #requires the attacked to to be asleep #is recurring while the attacked stays asleep
-lethargy = ability_class.Demon_Skill("Lethargy", 0, [fatigue])  
+#lethargy = ability_class.Demon_Skill("Lethargy", 0, [fatigue]) #lethargy is already defined
 
 ## Apathy Demon ##
-lethargy = ability_class.Demon_Skill("Lethargy", 0, [fatigue]) 
 numbness = ability_class.Demon_Skill("Numbness", 15, [reduce_attack, negate_stat_changes]) 
 passiveness = ability_class.Demon_Skill("Passiveness", 20, [defenseless]) 
 dependence = ability_class.Demon_Skill("Dependence", 10, [attack_last]) 
+#lethargy = ability_class.Demon_Skill("Lethargy", 0, [fatigue]) #lethargy is already defined

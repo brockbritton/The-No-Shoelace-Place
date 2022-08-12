@@ -15,11 +15,7 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
-        self.game_state = 0
-        self.game_state_funcs = {
-            0: self.play_normal_game,
-            1: self.fight_demon,
-        }
+
     
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
@@ -86,7 +82,8 @@ class Game:
             for id in actions['update_ui_values']:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
-        #print("start game actions", actions) 
+        
+
         return actions
 
     def load_game(self):
@@ -118,10 +115,8 @@ class Game:
 
         return actions
 
-    def fight_demon(self, frontend_input):
-        pass
-
-    def play_normal_game(self, frontend_input):
+    
+    def organize_raw_input(self, frontend_input):
         actions = {
             'print_all': [],
             'build_multiple_choice': [],
@@ -164,6 +159,8 @@ class Game:
                         if ability.name == self.master_helper[0].name:
                             index = self.player1.abilities.index(ability)
                     return_tuple = self.player1.abilities[index].upgrade_ability(input_value, self.master_helper[1:], self.player1)
+                case "face_demon":
+                    return_tuple = self.player1.face_demon(input_value) ############
                     
         # Otherwise, just use the input as it was given
         else:

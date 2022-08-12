@@ -6,6 +6,7 @@ import tnslp.game_backend.classes.calendar_class as calendar_class
 import tnslp.game_backend.gl_backend_functions as gl
 import tnslp.game_backend.objects.abilities as ability
 import tnslp.game_backend.objects.items as item
+import tnslp.game_backend.objects.rooms as room
 
 
 class Character:
@@ -14,6 +15,7 @@ class Character:
         self.name = name
         self.loc = None
         self.last_loc = None
+        self.personal_room = room.common_room
 
         self.inv = [item.id_bracelet, item.basement_key, item.crowbar]
         #self.inv = []
@@ -222,4 +224,28 @@ class Character:
             lfrb_dict[lfrb_direct_list[i]] = lfrb_cardinality[i]
 
         return lfrb_dict
+
+
+    def build_available_abilities_list(self):
+        abilities = []
+        for ability in self.abilities:
+            if ability.lvl > 0:
+                abilities.append(ability)
+
+        return abilities
+
+    def face_demon(self, skill_used):
+        actions = {
+            'print_all': [],
+            'ask_y_or_n': False,
+            'build_multiple_choice': [],
+            'update_ui_values': ["health_value"]
+        }
+
+        actions['print_all'].append(f"Your skill of {skill_used.name} has dealt {skill_used.damage} to your demon.")
+        actions['print_all'].append(f"---build not complete---")
+        #self.loc.demon 
+
+
+        return (None, None, actions)
 
