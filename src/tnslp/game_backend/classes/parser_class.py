@@ -1,4 +1,5 @@
 
+from ast import parse
 import re
 
 
@@ -32,6 +33,14 @@ class Parser:
     def parse_input(self, player, str_input):
         return self.id_action_object(player, str_input)
 
+    def update_gen_dict(self, dict, item):
+        try:
+            dict[item.gen_name].append(item)
+        except KeyError:
+            dict[item.gen_name] = [item]
+
+        return dict
+
                 
     def id_action_object(self, player, str_input):
         
@@ -39,8 +48,10 @@ class Parser:
         parsed_info = {
             "action" : [],
             "nearby_objects" : [],
+            "nearby_gen_dict" : {},
             "directions" : [],
-            "special_actions" : []
+            "special_actions" : [],
+            "original_input" : str_input,
         }
 
         # Loop over actions and store matches in action_list
@@ -61,30 +72,48 @@ class Parser:
             if sc.name.lower() in str_input.lower():
                 parsed_info["nearby_objects"].append(sc)
             
+            if sc.gen_name.lower() in str_input.lower():
+                parsed_info["nearby_gen_dict"] = self.update_gen_dict(parsed_info["nearby_gen_dict"], sc)
+            
             contents = sc.build_flat_list_of_contents(False)
             for item in contents:
                 if item.name.lower() in str_input.lower():
                     parsed_info["nearby_objects"].append(item)
                 
+                if item.gen_name.lower() in str_input.lower():
+                    parsed_info["nearby_gen_dict"] = self.update_gen_dict(parsed_info["nearby_gen_dict"], item)
+                
         ## Items in inventory
         for item in player.inv:
             if item.name.lower() in str_input.lower():
                 parsed_info["nearby_objects"].append(item)
+
+            if item.gen_name.lower() in str_input.lower():
+                parsed_info["nearby_gen_dict"] = self.update_gen_dict(parsed_info["nearby_gen_dict"], item)
+                
+
         ## The room itself
         if player.loc.name.lower() in str_input.lower() or "room" in str_input.lower():
             parsed_info["nearby_objects"].append(player.loc)
 
         ## Doors adjacent to the room
-        #### It is not good to have the door name since thats not yet visibly available to the player
-        
+        door_gen_bool = False
+        if "door" in str_input.lower():
+            door_gen_bool = True
+
         for door_or_doors in player.loc.doors.values():
             if isinstance(door_or_doors, list):
                 for door in door_or_doors:
                     if door != None and door.name.lower() in str_input.lower():
                         parsed_info["nearby_objects"].append(door)
+                    
+                    if door != None and door_gen_bool:
+                        parsed_info["nearby_gen_dict"] = self.update_gen_dict(parsed_info["nearby_gen_dict"], door)
             else:
                 if door_or_doors != None and door_or_doors.name.lower() in str_input.lower():
                     parsed_info["nearby_objects"].append(door_or_doors)
+                if door_or_doors != None and door_gen_bool:
+                        parsed_info["nearby_gen_dict"] = self.update_gen_dict(parsed_info["nearby_gen_dict"], door_or_doors)
 
         # Loop over directions both for movement and displays
         for key, val in self.movement_dict.items():

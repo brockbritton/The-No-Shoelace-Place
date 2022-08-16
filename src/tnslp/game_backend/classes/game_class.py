@@ -170,7 +170,7 @@ class Game:
             # Begin parsing the input
             input_value = frontend_input.strip()
             parsed_dict = self.parser.parse_input(self.player1, input_value)
-            print("parsed data:", parsed_dict)
+
             # Check the parsed dictionary for existing values
             for value in parsed_dict.values():
                 if len(value) > 0:
@@ -257,10 +257,19 @@ class Game:
         parsed_info = {
             "action" : [], #parsed actions : 
             "nearby_objects" : [], #parsed objects : inv objects, storage containers, doors, room, 
+            "nearby_gen_dict" : {},
             "directions" : [], #parsed directions
-            "special_actions" : []
+            "special_actions" : [],
+            "original_input" : str_input,
         }
         """
+        print(parsed_dict["nearby_gen_dict"])
+
+        if len(parsed_dict["nearby_gen_dict"]) > 0:
+            print("checking for general items")
+            
+
+
 
         # If the parsed dictionary has an action
         if len(parsed_dict["action"]) > 0:
