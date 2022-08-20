@@ -215,6 +215,7 @@ class Game:
         # If there are values to build a multiple choice option,
         # take the underlying values and place the in the waiting for the next frontend input
         # and take the display vales and place them in the actions dict
+        # --- displays : 0 | values : 1 ---
         if len(actions['build_multiple_choice']) != 0:
             self.wait_for_frontend_input['build_multiple_choice'] = actions['build_multiple_choice'] #displays and values 
             actions['build_multiple_choice'] = actions['build_multiple_choice'][0] #displays
@@ -253,50 +254,91 @@ class Game:
         }
 
         # The parsed dictionary is as follows:
-        """ 
-        parsed_info = {
-            "action" : [], #parsed actions : 
-            "nearby_objects" : [], #parsed objects : inv objects, storage containers, doors, room, 
-            "nearby_gen_dict" : {},
-            "directions" : [], #parsed directions
-            "special_actions" : [],
-            "original_input" : str_input,
-        }
-        """
-        print(parsed_dict["nearby_gen_dict"])
+        # Casting to give better variable type highlights
+        actions_list = list(parsed_dict["action"])  #parsed actions
+        nearby_objects = list(parsed_dict["nearby_objects"]) #parsed objects : inv objects, storage containers, doors, room,
+        nearby_gen_dict = dict(parsed_dict["nearby_gen_dict"]) #general object names and objects for each
+        directions = list(parsed_dict["directions"]) #parsed directions
+        special_actions = list(parsed_dict["special_actions"]) #certain actions helpful for dev
+        original_str = str(parsed_dict["original_input"]) #original input string by the user
+        
 
-        if len(parsed_dict["nearby_gen_dict"]) > 0:
-            print("checking for general items")
+        if len(nearby_gen_dict) > 0:
+            if len(nearby_gen_dict) == 1 and len(next(iter(nearby_gen_dict.items()))[1]) == 1:
+                nearby_objects.append(next(iter(nearby_gen_dict.items()))[1][0])
+            else:
+                print("checking for general name items")
+                low_index = len(original_str)
+                if len(nearby_gen_dict) > 1:
+                    #index the general names to know which comes first
+                    #set the first gen name key value pair to the variables
+                    for key in nearby_gen_dict:
+                        check_index = original_str.find(key)
+                        if check_index < low_index:
+                            curr_gen_name = key
+                            curr_gen_objects = nearby_gen_dict[key]
+                            low_index = check_index
+                    
+                else:
+                    first_key_value = next(iter(nearby_gen_dict.items()))
+                    curr_gen_name = first_key_value[0]
+                    curr_gen_objects = first_key_value[1]
+                
+                gen_name_solved = False
+                if len(nearby_objects) > 0:
+                    #check to see if the nearby object contains the gen_name in the name
+                    #loop through nearby objects and if one of them has the gen name of the first dictionary key
+                    #check if the full string minus the name of the object deletes the first key (gen_name)
+                    for item in nearby_objects:
+                        if item.gen_name == curr_gen_name and curr_gen_name in item.name.lower():
+                            check_str = original_str.replace(item.name.lower(), "")
+                            if curr_gen_name not in check_str:
+                                gen_name_solved = True
+                                break
+
+                #request which object the user was referencing
+                if not gen_name_solved:
+                    if len(actions_list) == 1:
+                        actions['print_all'].append(f"Which {curr_gen_name} would you like to {actions_list[0]}?")
+                    else:
+                        actions['print_all'].append(f"Which {curr_gen_name} do you mean?")
+
+                    displays = []
+                    for item in curr_gen_objects:
+                        displays.append(item.name)
+                    displays.append("cancel")
+                    curr_gen_objects.append("c")
+                    actions["build_multiple_choice"] = [displays, curr_gen_objects]
+
+                    return ("gen_name_request", [parsed_dict], actions) #more helpers?
+
             
-
-
-
         # If the parsed dictionary has an action
-        if len(parsed_dict["action"]) > 0:
-            if len(parsed_dict["action"]) == 1:
+        if len(actions_list) > 0:
+            if len(actions_list) == 1:
                 # If there is one action and one object
-                if len(parsed_dict["nearby_objects"]) == 1:
-                    if parsed_dict["action"][0] in parsed_dict["nearby_objects"][0].item_actions:
+                if len(nearby_objects) == 1:
+                    if actions_list[0] in nearby_objects[0].item_actions:
                         
-                        function_params = self.get_item_action_params(parsed_dict["action"][0])
-                        return_data = parsed_dict["nearby_objects"][0].item_actions[parsed_dict["action"][0]](*function_params)
+                        function_params = self.get_item_action_params(actions_list[0])
+                        return_data = nearby_objects[0].item_actions[actions_list[0]](*function_params)
                         
                         if isinstance(return_data, tuple):
                             dest, helper, actions = gl.parse_tuples(return_data, actions)
                         elif isinstance(return_data, dict):
                             actions = gl.combine_dicts(actions, return_data)
                     else:
-                        actions['print_all'].append(f"You cannot {parsed_dict['action'][0]} this item.")
+                        actions['print_all'].append(f"You cannot {actions_list[0]} this item.")
                     
                 # For if there are cases when an action and multiple objects need to be parsed
-                elif len(parsed_dict["nearby_objects"]) > 1:
+                elif len(nearby_objects) > 1:
                     # If one is a storage unit and one is an inv_item
-                    if parsed_dict["action"][0] == "drop" and len(parsed_dict["nearby_objects"]) == 2:
+                    if actions_list[0] == "drop" and len(nearby_objects) == 2:
                         # Check for if one is a storage unit and one is an inv_item
-                        if isinstance(parsed_dict["nearby_objects"][0], item_class.Storage_Unit) and isinstance(parsed_dict["nearby_objects"][1], item_class.Inv_Item):
-                            move_item, storage_unit = parsed_dict["nearby_objects"][1], parsed_dict["nearby_objects"][0]
-                        elif isinstance(parsed_dict["nearby_objects"][1], item_class.Storage_Unit) and isinstance(parsed_dict["nearby_objects"][0], item_class.Inv_Item):
-                            move_item, storage_unit = parsed_dict["nearby_objects"][0], parsed_dict["nearby_objects"][1]
+                        if isinstance(nearby_objects[0], item_class.Storage_Unit) and isinstance(nearby_objects[1], item_class.Inv_Item):
+                            move_item, storage_unit = nearby_objects[1], nearby_objects[0]
+                        elif isinstance(nearby_objects[1], item_class.Storage_Unit) and isinstance(nearby_objects[0], item_class.Inv_Item):
+                            move_item, storage_unit = nearby_objects[0], nearby_objects[1]
                         
                         # Depending on the storage unit, check necessary item attributes and add to it if possible
                         if isinstance(storage_unit, item_class.Storage_Wall):
@@ -317,15 +359,14 @@ class Game:
                                 return_tuple = move_item.move_item(storage_unit, self.player1) 
 
                             dest, helper, actions = gl.parse_tuples(return_tuple, actions) 
-
-
+                
                 # When there are no objects, and only a direction
-                elif len(parsed_dict["directions"]) == 1:
-                    if parsed_dict["action"][0] == "go":
-                        if parsed_dict["directions"][0] == "cardinal":
+                elif len(directions) == 1:
+                    if actions_list[0] == "go":
+                        if directions[0] == "cardinal":
                             actions["print_all"].append("You don't know your cardinal directions in here.")
                         else: 
-                            i = ["backward", "left", "right", "forward"].index(parsed_dict["directions"][0])
+                            i = ["backward", "left", "right", "forward"].index(directions[0])
                             direction_choice = ["b", "l", "r", "f"][i]
                             blrf_dict = self.player1.build_blrf_dict()
 
@@ -335,30 +376,32 @@ class Game:
                             dest, helper = return_tuple[0], return_tuple[1]
                             actions = gl.combine_dicts(actions, return_tuple[2])
 
+                else:
+                    actions['print_all'].append(f"There is nothing by that name to {actions_list[0]}.")
             else:
                 # Print error message if there are multiple actions
                 actions["print_all"].append("Please only use one action at a time.")
                 
         # If the parsed dictionary does not have an action
         # and does have a direction or a nearby object
-        elif len(parsed_dict["directions"]) >= 1 or len(parsed_dict["nearby_objects"]) >= 1:
+        elif len(directions) >= 1 or len(nearby_objects) >= 1:
             # If there is one direction or one nearby object
-            if len(parsed_dict["directions"]) + len(parsed_dict["nearby_objects"]) == 1:
-                if len(parsed_dict["directions"]) == 1:
-                    if parsed_dict["directions"][0] == "cardinal":
+            if len(directions) + len(nearby_objects) == 1:
+                if len(directions) == 1:
+                    if directions[0] == "cardinal":
                         actions["print_all"].append("You don't know your cardinal directions in here.")
                     else: 
-                        actions['print_all'].append(self.player1.loc.print_directions(self.player1, parsed_dict["directions"][0]))
-                elif len(parsed_dict["nearby_objects"]) == 1:
-                    actions = gl.combine_dicts(actions, parsed_dict["nearby_objects"][0].inspect_item())
+                        actions['print_all'].append(self.player1.loc.print_directions(self.player1, directions[0]))
+                elif len(nearby_objects) == 1:
+                    actions = gl.combine_dicts(actions, nearby_objects[0].inspect_item())
             # If there are multiple directions and/or nearby objects
             else:
                 # Please refer to one object at a time
                 actions["print_all"].append("Please only refer to only one item at a time.")
         # If the parsed dictionary does not have an action, or a direction, or a nearby object
         # but does have a special action
-        elif len(parsed_dict["special_actions"]) > 0:
-            for action in parsed_dict["special_actions"]:
+        elif len(special_actions) > 0:
+            for action in special_actions:
                 match action:
                     case "xd" : actions["print_all"].append(self.player1.loc.print_directions(self.player1, None))
                     case "xi" : actions["print_all"].append(self.player1.loc.xray_look_storage_units())
