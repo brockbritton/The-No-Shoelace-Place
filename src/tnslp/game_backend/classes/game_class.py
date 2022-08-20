@@ -161,6 +161,14 @@ class Game:
                     return_tuple = self.player1.abilities[index].upgrade_ability(input_value, self.master_helper[1:], self.player1)
                 case "face_demon":
                     return_tuple = self.player1.face_demon(input_value) ############
+                case "gen_name_request":
+                    if input_value != "c":
+                        print(input_value)
+                        self.master_helper[0]["nearby_objects"].append(input_value)
+                        return_tuple = self.evaluate_parsed_data(self.master_helper[0])
+                    else:
+                        actions["print_all"].append(f"You did not choose a {self.master_helper[1]} to specify.")
+
                     
         # Otherwise, just use the input as it was given
         else:
@@ -278,7 +286,7 @@ class Game:
                             curr_gen_name = key
                             curr_gen_objects = nearby_gen_dict[key]
                             low_index = check_index
-                    
+
                 else:
                     first_key_value = next(iter(nearby_gen_dict.items()))
                     curr_gen_name = first_key_value[0]
@@ -290,7 +298,7 @@ class Game:
                     #loop through nearby objects and if one of them has the gen name of the first dictionary key
                     #check if the full string minus the name of the object deletes the first key (gen_name)
                     for item in nearby_objects:
-                        if item.gen_name == curr_gen_name and curr_gen_name in item.name.lower():
+                        if curr_gen_name in item.name.lower():
                             check_str = original_str.replace(item.name.lower(), "")
                             if curr_gen_name not in check_str:
                                 gen_name_solved = True
@@ -309,8 +317,8 @@ class Game:
                     displays.append("cancel")
                     curr_gen_objects.append("c")
                     actions["build_multiple_choice"] = [displays, curr_gen_objects]
-
-                    return ("gen_name_request", [parsed_dict], actions) #more helpers?
+                    del parsed_dict["nearby_gen_dict"][curr_gen_name]
+                    return ("gen_name_request", [parsed_dict, curr_gen_name], actions) #more helpers?
 
             
         # If the parsed dictionary has an action
