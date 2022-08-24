@@ -33,12 +33,14 @@ class Room:
             'inspect': self.inspect_room,
         }
 
-    def inspect_room(self):
+    def inspect_room(self, player):
         actions = {
             'print_all': [],
         }
 
         actions['print_all'].append(self.description)
+
+        actions['print_all'].append(self.print_directions(player, None))
         
         if len(self.storage_containers) > 0:
             actions['print_all'].append(self.look_storage_units())

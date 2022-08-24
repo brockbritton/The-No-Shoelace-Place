@@ -135,7 +135,7 @@ class Character:
             'build_multiple_choice': [],
             'update_ui_values': []
         }
-        invalid_direction = ["You cannot go that way", "There is a wall in that direction", "It is not possible to go that way"]  
+        invalid_direction_strs = ["You cannot go that way.", "There is a wall in that direction.", "It is not possible to go that way."]  
         
         if self.guided:
             actions['print_all'].append("You are currently being guided by hospital staff. You cannot move freely.")
@@ -166,21 +166,22 @@ class Character:
             actions['build_multiple_choice'] = [display_rooms, next_room]
             return ("move_nesw", [d_choice, next_room], actions)
 
-        if self.loc.has_doors: #also check where doors have already been unlocked
+        if self.loc.has_doors: 
             
             if not isinstance(self.loc.doors[d_choice], list): 
                 if self.loc.doors[d_choice] != None: 
-                    dest, helper, actions_open_close = self.loc.doors[d_choice].open_item()
-                    actions = gl.combine_dicts(actions, actions_open_close)
+                    if not self.loc.doors[d_choice].open:
+                        dest, helper, actions_open_close = self.loc.doors[d_choice].open_item()
+                        actions = gl.combine_dicts(actions, actions_open_close)
                     if self.loc.doors[d_choice].open:
                         enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
                         return (enter_room_tuple[0], enter_room_tuple[1], actions)
-                    return (dest, helper, actions)
+                    return (None, None, actions)
         
                 else:
                     if next_room == 0:
-                        actions['print_all'].append(invalid_direction[random.randint(0, len(invalid_direction)-1)])
+                        actions['print_all'].append(invalid_direction_strs[random.randint(0, len(invalid_direction_strs)-1)])
                     else: 
                         enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
@@ -189,9 +190,9 @@ class Character:
                 possible_rooms = self.loc.check_direction_next_room(d_choice)
                 next_room_index = possible_rooms.index(next_room)
                 if self.loc.doors[d_choice][next_room_index] != None: 
-                    
-                    dest, helper, actions_open_close = self.loc.doors[d_choice][next_room_index].open_item()
-                    actions = gl.combine_dicts(actions, actions_open_close)
+                    if not self.loc.doors[d_choice][next_room_index].open:
+                        dest, helper, actions_open_close = self.loc.doors[d_choice][next_room_index].open_item()
+                        actions = gl.combine_dicts(actions, actions_open_close)
                     if self.loc.doors[d_choice][next_room_index].open:
                         enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
@@ -200,7 +201,7 @@ class Character:
         
                 else:
                     if next_room == 0:
-                        actions['print_all'].append(invalid_direction[random.randint(0, len(invalid_direction)-1)])
+                        actions['print_all'].append(invalid_direction_strs[random.randint(0, len(invalid_direction_strs)-1)])
                     else: 
                         enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])
@@ -208,7 +209,7 @@ class Character:
 
         else:
             if next_room == 0:
-                actions['print_all'].append(invalid_direction[random.randint(0, len(invalid_direction)-1)])
+                actions['print_all'].append(invalid_direction_strs[random.randint(0, len(invalid_direction_strs)-1)])
                 return (None, None, actions)
             else: 
                 enter_room_tuple = next_room.enter_room(self)

@@ -189,6 +189,7 @@ class Lockable_Interact(Openable_Interact):
     def __init__(self, name, gen_name, keys_list) -> None:
         super().__init__(name, gen_name)
         self.locked = True
+        self.broken = False
         self.compatible_keys = keys_list # list keys in most general effectiveness to most specific effectiveness
         self.key_unlock = True
         self.crowbar_unlock = True
@@ -196,6 +197,7 @@ class Lockable_Interact(Openable_Interact):
         self.item_actions.update({
             'lock': self.lock_item,
             'unlock': self.unlock_item,
+            'break': self.break_lock,
         })
 
     
@@ -218,7 +220,9 @@ class Lockable_Interact(Openable_Interact):
             
             if unlocking_item != None:
                 if isinstance(unlocking_item, Crowbar):
-                    actions['print_all'].append(f"You have broken open the {self.name} with the {unlocking_item.name}.")
+                    actions['print_all'].append(f"Do you want to break the lock on this {self.gen_name}? You will be unable to lock this {self.gen_name} again.")
+                    actions["ask_y_or_n"] = True
+                    return ("ask_break_item", self, actions)
                 else:
                     actions['print_all'].append(f"You have unlocked the {self.name} with the {unlocking_item.name}.")
                 self.locked = False
@@ -227,7 +231,7 @@ class Lockable_Interact(Openable_Interact):
         else:
             actions['print_all'].append(f"The {self.name} is already unlocked.")
 
-        return actions
+        return (None, None, actions)
 
     def lock_item(self, player):
         actions = {
@@ -235,22 +239,47 @@ class Lockable_Interact(Openable_Interact):
             'build_multiple_choice': [],
             'ask_y_or_n': False
         }
-        if not self.locked:
-            locking_item = None
-            for item in self.compatible_keys:
-                if item in player.inv:
-                    locking_item = item
-                    break
-            if locking_item != None:
-                actions['print_all'].append(f"You have locked the {self.name} with the {locking_item.name}.")
-                self.locked = True
+        if not self.broken:
+            if not self.locked:
+                locking_item = None
+                for item in self.compatible_keys:
+                    if item in player.inv:
+                        locking_item = item
+                        break
+
+                if locking_item != None:
+                    if self.open:
+                        actions['print_all'].append(f"You have closed and locked the {self.name} with the {locking_item.name}.")
+                        self.open = False
+                    else:
+                        actions['print_all'].append(f"You have locked the {self.name} with the {locking_item.name}.")
+                    self.locked = True
+                else:
+                    actions['print_all'].append(f"You do not have anything that can lock the {self.name}.")
+                
             else:
-                actions['print_all'].append(f"You do not have anything that can lock the {self.name}.")
-            
+                actions['print_all'].append(f"The {self.name} is already locked.")
         else:
-            actions['print_all'].append(f"The {self.name} is already locked.")
+            actions['print_all'].append(f"The lock on the {self.name} is broken. You cannot lock this {self.gen_name} anymore.")
 
         return actions
+
+    def break_lock(self):
+        actions = {
+            'print_all': [],
+            'build_multiple_choice': [],
+            'ask_y_or_n': False
+        }
+        print("hi")
+        if not self.broken:
+            actions["print_all"].append(f"You have broken the lock on the {self.name}, therefore permanently unlocking it.")
+            self.broken = True
+            self.locked = False
+        else:
+            actions["print_all"].append(f"The lock is already broken on this {self.gen_name}. You cannot break it again.")
+        
+        return actions
+
 
     def open_item(self): 
         dest, helper = None, None

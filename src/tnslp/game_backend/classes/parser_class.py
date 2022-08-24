@@ -18,7 +18,7 @@ class Parser:
         display_keys = {'display':["display", "view", "show", "reveal"]}
         
         self.movement_dict = {
-            "forward" : ["forward", "forwards", "straight", "front "],
+            "forward" : ["forward", "forwards", "straight", "front"],
             "backward" : ["backward", "backwards", "back", "behind"],
             "left" : ["left"],
             "right" : ["right"]}

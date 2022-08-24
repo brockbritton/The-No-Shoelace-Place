@@ -3,6 +3,7 @@
 import tnslp.game_backend.classes.character_class as character_class
 import tnslp.game_backend.classes.item_class as item_class
 import tnslp.game_backend.classes.parser_class as parser_class
+import tnslp.game_backend.classes.room_class as room_class
 import tnslp.game_backend.gl_backend_functions as gl
 
 
@@ -35,13 +36,18 @@ class Game:
             case "opp_action_lvl": return self.player1.abilities[3].lvl
             case "catharsis_lvl": return self.player1.abilities[4].lvl
 
-    def get_item_action_params(self, action):
+    def get_item_action_params(self, action, object):
         # must be called each time because the values change
         match action:
             case "pick up": return [self.player1]
             case "drop": return [None, self.player1]
             case "unlock": return [self.player1]
             case "lock": return [self.player1]
+            case "inspect":
+                if isinstance(object, room_class.Room):
+                    return [self.player1]
+                else:
+                    return []
 
         return []
 
@@ -163,11 +169,21 @@ class Game:
                     return_tuple = self.player1.face_demon(input_value) ############
                 case "gen_name_request":
                     if input_value != "c":
-                        print(input_value)
                         self.master_helper[0]["nearby_objects"].append(input_value)
                         return_tuple = self.evaluate_parsed_data(self.master_helper[0])
-                    else:
+                    else:  
                         actions["print_all"].append(f"You did not choose a {self.master_helper[1]} to specify.")
+                        return_tuple = (None, None, actions)
+                        # This ^^^ is duplicating for some reason
+                case "ask_break_item":
+                    if input_value == "y":
+                        break_actions = self.master_helper.break_lock()
+                        return_tuple = (None, None, break_actions)
+                    else:
+                        actions["print_all"].append(f"You chose not to break the {self.master_helper.name}.")
+                        return_tuple = (None, None, actions)
+                        
+                        
 
                     
         # Otherwise, just use the input as it was given
@@ -273,7 +289,9 @@ class Game:
 
         if len(nearby_gen_dict) > 0:
             if len(nearby_gen_dict) == 1 and len(next(iter(nearby_gen_dict.items()))[1]) == 1:
-                nearby_objects.append(next(iter(nearby_gen_dict.items()))[1][0])
+                only_gen_item = next(iter(nearby_gen_dict.items()))[1][0]
+                if only_gen_item not in nearby_objects:
+                    nearby_objects.append(only_gen_item)
             else:
                 print("checking for general name items")
                 low_index = len(original_str)
@@ -328,7 +346,7 @@ class Game:
                 if len(nearby_objects) == 1:
                     if actions_list[0] in nearby_objects[0].item_actions:
                         
-                        function_params = self.get_item_action_params(actions_list[0])
+                        function_params = self.get_item_action_params(actions_list[0], nearby_objects[0])
                         return_data = nearby_objects[0].item_actions[actions_list[0]](*function_params)
                         
                         if isinstance(return_data, tuple):
