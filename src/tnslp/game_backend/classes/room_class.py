@@ -39,11 +39,11 @@ class Room:
         }
 
         actions['print_all'].append(self.description)
-
-        actions['print_all'].append(self.print_directions(player, None))
         
         if len(self.storage_containers) > 0:
             actions['print_all'].append(self.look_storage_units())
+        
+        actions['print_all'].append(self.print_directions(player, None))
 
         return actions
 

@@ -419,7 +419,8 @@ class Game:
                     else: 
                         actions['print_all'].append(self.player1.loc.print_directions(self.player1, directions[0]))
                 elif len(nearby_objects) == 1:
-                    actions = gl.combine_dicts(actions, nearby_objects[0].inspect_item())
+                    function_params = self.get_item_action_params("inspect", nearby_objects[0])
+                    actions = nearby_objects[0].item_actions["inspect"](*function_params)
             # If there are multiple directions and/or nearby objects
             else:
                 # Please refer to one object at a time
