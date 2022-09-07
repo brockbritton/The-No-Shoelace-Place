@@ -285,7 +285,6 @@ class Game:
         directions = list(parsed_dict["directions"]) #parsed directions
         special_actions = list(parsed_dict["special_actions"]) #certain actions helpful for dev
         original_str = str(parsed_dict["original_input"]) #original input string by the user
-        
 
         if len(nearby_gen_dict) > 0:
             if len(nearby_gen_dict) == 1 and len(next(iter(nearby_gen_dict.items()))[1]) == 1:
@@ -392,15 +391,19 @@ class Game:
                         if directions[0] == "cardinal":
                             actions["print_all"].append("You don't know your cardinal directions in here.")
                         else: 
-                            i = ["backward", "left", "right", "forward"].index(directions[0])
-                            direction_choice = ["b", "l", "r", "f"][i]
-                            blrf_dict = self.player1.build_blrf_dict()
+                            if isinstance(directions[0], room_class.Room):
+                                # move to this room 
+                                pass
+                            else:
+                                i = ["backward", "left", "right", "forward"].index(directions[0])
+                                direction_choice = ["b", "l", "r", "f"][i]
+                                blrf_dict = self.player1.build_blrf_dict()
 
-                            next_rooms = [self.player1.loc.north, self.player1.loc.east, self.player1.loc.south, self.player1.loc.west]
-                            i = ['n', 'e', 's', 'w'].index(blrf_dict[direction_choice])
-                            return_tuple = self.player1.move_nesw(blrf_dict[direction_choice], next_rooms[i])
-                            dest, helper = return_tuple[0], return_tuple[1]
-                            actions = gl.combine_dicts(actions, return_tuple[2])
+                                next_rooms = [self.player1.loc.north, self.player1.loc.east, self.player1.loc.south, self.player1.loc.west]
+                                i = ['n', 'e', 's', 'w'].index(blrf_dict[direction_choice])
+                                return_tuple = self.player1.move_nesw(blrf_dict[direction_choice], next_rooms[i])
+                                dest, helper = return_tuple[0], return_tuple[1]
+                                actions = gl.combine_dicts(actions, return_tuple[2])
 
                 else:
                     actions['print_all'].append(f"There is nothing by that name to {actions_list[0]}.")
@@ -417,7 +420,11 @@ class Game:
                     if directions[0] == "cardinal":
                         actions["print_all"].append("You don't know your cardinal directions in here.")
                     else: 
-                        actions['print_all'].append(self.player1.loc.print_directions(self.player1, directions[0]))
+                        if isinstance(directions[0], room_class.Room):
+                            # example: the library is to your left ##############
+                            actions["print_all"].append(f"The {directions[0].name} is to your direction")
+                        else:
+                            actions['print_all'].append(self.player1.loc.print_directions(self.player1, directions[0]))
                 elif len(nearby_objects) == 1:
                     function_params = self.get_item_action_params("inspect", nearby_objects[0])
                     actions = nearby_objects[0].item_actions["inspect"](*function_params)

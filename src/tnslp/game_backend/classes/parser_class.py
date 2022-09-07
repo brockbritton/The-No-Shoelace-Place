@@ -1,5 +1,4 @@
 
-from ast import parse
 import re
 
 
@@ -14,7 +13,7 @@ class Parser:
         unlock_keys = {'unlock':['unlock', 'unseal']}
         lock_keys = {'lock':["lock", "seal"]}
         break_keys = {'break':["break", "smash", "tear down", "rip off", "damage", "destroy"]}
-        move_keys = {'go':["go", "walk", "turn", "travel", "exit", "leave"]}
+        move_keys = {'go':["go", "walk", "turn", "enter", "travel", "exit", "leave"]}
         display_keys = {'display':["display", "view", "show", "reveal"]}
         
         self.movement_dict = {
@@ -123,6 +122,14 @@ class Parser:
         for direction in ("south", "north", "east", "west"):
             if direction in str_input.lower():
                 parsed_info["directions"].append("cardinal")
+        for direction in (player.loc.north, player.loc.east, player.loc.south, player.loc.west):
+            if isinstance(direction, list):
+                for room in direction:
+                    if room.name.lower() in str_input.lower():
+                        parsed_info["directions"].append(room)
+            else:
+                if direction.name.lower() in str_input.lower():
+                    parsed_info["directions"].append(direction)
 
         # Check for special actions
         # xi : items in room
