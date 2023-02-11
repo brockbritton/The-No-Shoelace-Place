@@ -1,9 +1,9 @@
 
 
-var rate_of_letters = 20; /* fast: 5, normal: 20, slow: 50 */
-var rate_of_header_fadein = 500;
-var quote_fadein_rate = 2000;
-var on_header_element = false;
+const rate_of_letters = 20; /* fast: 5, normal: 20, slow: 50 */
+const rate_of_header_fadein = 500;
+const quote_fadein_rate = 2000;
+let on_header_element = false;
 
 
 function ajax_accept_input(data_values, route) {
@@ -40,7 +40,7 @@ function ajax_accept_input(data_values, route) {
 
 function accept_entry_input(event) {
     event.preventDefault()
-    var input_text = form.elements[0].value;
+    let input_text = form.elements[0].value;
     printtk(">   " + input_text)
     let data_values = {
         'input' : input_text,
@@ -93,7 +93,7 @@ function print_all(pars_list, bmc_list, rebuild_text){
 
 function load_prints(list, bmc_list) {
     for (let text in list) {
-        var par = document.createElement("p");
+        let par = document.createElement("p");
         if (list[text] instanceof Array) {
             if (list[text][1] == "quote") {
                 par.classList.add("quote_text");
@@ -120,7 +120,7 @@ function printtk(text) {
         text = "null_data";
     } 
     
-    var par = document.createElement("p");
+    const par = document.createElement("p");
     if (text instanceof Array) {
         if (text[1] == "quote") {
             par.classList.add("quote_text");
@@ -146,7 +146,7 @@ function print_letter_by_letter(text, par_element) {
     game_display_div.scrollTop = game_display_div.scrollHeight;
 }
 
-var quote_opacity_rate = 0.01;
+const quote_opacity_rate = 0.01;
 function fade_in_quote_line(par_element) {
     
     if (par_element.style.opacity != 1) {

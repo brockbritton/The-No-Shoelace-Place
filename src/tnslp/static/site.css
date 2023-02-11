@@ -380,7 +380,7 @@ html {
     font-size: 1.25em;
     margin-top: 0em;
     margin-bottom: 0em;
-    width: fit-content;
+    width: 100%;
     display: inline-block;
 }
 
@@ -395,13 +395,53 @@ html {
     display: inline-block;
 }
 
+.ps_inv_elem_spacing {
+    padding: 0em;
+    margin-top: 0em;
+    margin-bottom: .5em;
+    background-color: none !important;
+    height: 1.25em;
+    width: 95%;
+}
+
+#health_value {
+
+    height: 1.25em;
+    font-family: 'Courier New', monospace !important;
+    font-size: 1.25em;
+    margin-top: 0em;
+    margin-bottom: 0em;
+    width: auto;
+    display: inline-block;
+}
+
+#out-of-100 {
+    height: 1.25em;
+    width: 2.5em;
+    margin-left: auto; 
+    margin-right: 0;    
+    font-family: 'Courier New', monospace !important;
+    font-size: 1.25em;
+    margin-top: 0em;
+    margin-bottom: 0em;
+    display: inline-block;
+
+}
+
+#health-out-of-100 {
+    height: min-content;
+    width: 5em;
+    float: right;
+    overflow: none;
+}
+
 .inv_strings {
     text-align: left;
     font-family: 'Courier New', monospace !important;
     font-size: 1.25em;
     margin-top: 0em;
     margin-bottom: 0em;
-    width: fit-content;
+    width: 100%;
     display: inline-block;
 }
 
@@ -410,7 +450,7 @@ html {
     font-size: 1.25em;
     margin-top: 0em;
     margin-bottom: 0em;
-    width: fit-content;
+    width: 100%;
     display: inline-block;
 }
 
@@ -420,16 +460,6 @@ html {
     align-items: center;
     margin-top: 0em;
     margin-bottom: .5em;
-}
-
-.ps_inv_elem_spacing {
-    padding: 0em;
-    margin-top: 0em;
-    margin-bottom: .5em;
-    background-color: none !important;
-    height: 1.25em;
-    width: 95%;
-    
 }
 
 
@@ -450,7 +480,6 @@ html {
     margin-left: auto;
     margin-right: auto;
     margin-top: -3.125em;
-    width: 50%;
 }
 
 .instruction_part {

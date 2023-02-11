@@ -174,7 +174,6 @@ class Game:
                     else:  
                         actions["print_all"].append(f"You did not choose a {self.master_helper[1]} to specify.")
                         return_tuple = (None, None, actions)
-                        # This ^^^ is duplicating for some reason
                 case "ask_break_item":
                     if input_value == "y":
                         break_actions = self.master_helper.break_lock()
@@ -182,9 +181,6 @@ class Game:
                     else:
                         actions["print_all"].append(f"You chose not to break the {self.master_helper.name}.")
                         return_tuple = (None, None, actions)
-                        
-                        
-
                     
         # Otherwise, just use the input as it was given
         else:
@@ -255,9 +251,14 @@ class Game:
             actions['rebuild_text_entry'] = True
         # Remove this useless key that doesn't need to be sent to the frontend 
         actions.pop('ask_y_or_n')
+  
+        if len(actions['print_all']) > 0:
+            # Due to some prints being duplicated for no discernable reason, 
+            # this searches the print statements to make sure there are no duplicates   
+            # ************** 
 
-        # Save all text prints from this turn so re-loading is possible
-        self.save_prints.extend(actions['print_all'])
+            # Save all text prints from this turn so re-loading is possible
+            self.save_prints.extend(actions['print_all'])
 
         print()
         print("master destination", self.master_dest)

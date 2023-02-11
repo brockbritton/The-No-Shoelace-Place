@@ -54,7 +54,6 @@ def accept_input_data():
     data_dict = request.form.to_dict()
     
     print("frontend input ", data_dict['input'])
-    #actions_dict = session['game'].game_state_funcs[session['game'].game_state](data_dict['input'])
     actions_dict = session['game'].organize_raw_input(data_dict['input'])
     return actions_dict
     

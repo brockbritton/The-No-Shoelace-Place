@@ -123,13 +123,15 @@ class Parser:
             if direction in str_input.lower():
                 parsed_info["directions"].append("cardinal")
         for direction in (player.loc.north, player.loc.east, player.loc.south, player.loc.west):
-            if isinstance(direction, list):
-                for room in direction:
-                    if room.name.lower() in str_input.lower():
-                        parsed_info["directions"].append(room)
-            else:
-                if direction.name.lower() in str_input.lower():
-                    parsed_info["directions"].append(direction)
+            # Zero's indicate a wall - will not have a name attribute
+            if not isinstance(direction, int):
+                if isinstance(direction, list):
+                    for room in direction:
+                        if room.name.lower() in str_input.lower():
+                            parsed_info["directions"].append(room)
+                else:
+                    if direction.name.lower() in str_input.lower():
+                        parsed_info["directions"].append(direction)
 
         # Check for special actions
         # xi : items in room
