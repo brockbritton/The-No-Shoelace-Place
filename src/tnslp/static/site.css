@@ -104,7 +104,6 @@ html {
 /* Game Page */
 /* ######### */
 
-
 #image_header {
     position: relative;
     margin-top: -3.125em;
@@ -112,7 +111,6 @@ html {
     width: auto;
     background-color: none;
     z-index: 0;
-    
 }
 
 #image_header #cursor_space {
@@ -168,6 +166,7 @@ html {
     color: white;
     font-family: 'Courier New', monospace !important;
     font-size: 1em;
+    /* filter: blur(5px); */
 }
 
 /* ####################### */
@@ -243,8 +242,6 @@ html {
 
 #entry_widgets {
     height: 10%;
-    /* height: auto ?*/ 
-    
 }
 
 #text_entry_div {
@@ -348,8 +345,6 @@ html {
     margin-top: auto;
     margin-bottom: 1.5em;
 }
-
-
 
 .panel_titles {
     background-color: none !important;
@@ -461,6 +456,33 @@ html {
     margin-bottom: .5em;
 }
 
+/* ######## */
+/* Game Page Map */
+/* ######## */
+#game-map {
+    position: absolute;
+    left: 15vw;
+    top: 20vh;
+    height: 600px; /* 80wh */
+    width: 70vw; /* 80vw */
+    background-color: black;
+    border-radius: 15px;
+    border: 5px solid white;
+    display: block;
+    z-index: 3;
+}
+
+#map-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    background-color: black;
+    height: 40px;
+    width: 40px;
+    border: 2px solid white;
+
+}
 
 /* ####################### */
 /* How to Play Page Styles */

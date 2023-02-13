@@ -116,6 +116,7 @@ function load_prints(list, bmc_list) {
 }
 
 function printtk(text) {
+    //this function pays tribute to how i wrote the game first in tkinter
     if (text == null) {
         text = "null_data";
     } 
@@ -245,6 +246,15 @@ function switch_to_outline_header() {
     on_header_element = false;
 }
 
-function saveGame() {
-    alert("feature does not yet exist")
+function toggleGameMap() {
+    const map_window = document.getElementById("game-map")
+    const game_window = document.getElementById("game_gui")
+    if (map_window.style.display == "block") {
+        map_window.style.display = "none";
+        game_window.style.filter = "none";
+    } else {
+        map_window.style.display = "block";
+        game_window.style.filter = "blur(5px)";
+    }
+
 }

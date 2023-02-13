@@ -14,14 +14,16 @@
     <title>Text Adventure</title>
 </head>
 <body>
+    
     <div id="image_header">
         <img id="background_image" src="{{ url_for('static', filename='img/line-header.png')}}" alt="">
         <img id="foreground_image" src="{{ url_for('static', filename='img/filled-header.png')}}" alt="">
         <div id="cursor_space" onmouseenter="fade_to_fill_header()" onmouseleave="switch_to_outline_header()"></div>
     </div>
     <div id="game-map">
-
-        
+        <button id="map-close-button" onclick="toggleGameMap()">
+            X
+        </button>
     </div>
     <div id="game_gui">
         <div id="text_and_entry_widgets">
@@ -185,12 +187,10 @@
                 <div id="game_buttons" class="panel_divs">
                     <p class="panel_titles"></p> <!-- no title for this section -->
                         <div id="bottom_right">
-                            <button class="game_menu_buttons"
-                                onclick="saveGame()">
-                                Save Game
+                            <button class="game_menu_buttons" onclick="toggleGameMap()">
+                                Game Map
                             </button>
-                            <button class="game_menu_buttons"
-                                onclick="location.href='/game/instructions'">
+                            <button class="game_menu_buttons" onclick="location.href='/game/instructions'">
                                 Game Help
                             </button>
                         </div> 
