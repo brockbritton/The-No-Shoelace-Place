@@ -456,15 +456,15 @@ html {
     margin-bottom: .5em;
 }
 
-/* ######## */
+/* ############# */
 /* Game Page Map */
-/* ######## */
+/* ############# */
 #game-map {
     position: absolute;
-    left: 15vw;
+    left: 20vw;
     top: 20vh;
     height: 600px; /* 80wh */
-    width: 70vw; /* 80vw */
+    width: 60vw; /* 80vw */
     background-color: black;
     border-radius: 15px;
     border: 5px solid white;
@@ -476,13 +476,92 @@ html {
     position: absolute;
     top: 10px;
     right: 10px;
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-weight: bold;
+    font-size: 25px;
     color: white;
     background-color: black;
     height: 40px;
     width: 40px;
     border: 2px solid white;
+}
+
+#map-close-button:hover {
+    background-color: #C0C0C0;
+    /* background-color: #FFD700; GOLD */
+     
+}
+
+.map-room {
+    position: absolute;
+    background-color: black;
+    border: 1px solid white
+}
+
+.patient-room {
 
 }
+
+.undiscovered-room {
+    filter: blur(3px);
+}
+
+#service-hallway-room {
+    top: 200px;
+    left: 324px;
+    height: 275px;
+    width: 75px;
+}
+
+#security-room {
+    top: 100px;
+    left: 315px;
+    height: 100px;
+    width: 100px;
+}
+
+#outside-time-room {
+    top: 475px;
+    left: 200px;
+    height: 100px;
+    width: 225px;
+}
+
+#common-room {
+    top: 326px;
+    left: 400px;
+    height: 125px;
+    width: 300px;  
+}
+
+#tv-room {
+    top: 250px;
+    left: 400px;
+    height: 75px;
+    width: 75px; 
+}
+
+#blue-hallway-room {
+    top: 100px;
+    left: 701px;
+    height: 300px;
+    width: 75px; 
+}
+
+#red-hallway-room {
+    top: 100px;
+    left: 416px;
+    height: 75px;
+    width: 284px;
+}
+
+#ward-stairs-room {
+    top: 405px;
+    left: 701px;
+    height: 100px;
+    width: 80px;
+}
+
 
 /* ####################### */
 /* How to Play Page Styles */
