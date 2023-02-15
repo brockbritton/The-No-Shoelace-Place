@@ -492,6 +492,32 @@ html {
      
 }
 
+.doorway {
+    background-color: black;
+    height: 30px;
+    width: 21px;
+    z-index: inherit + 3;
+}
+
+#example-doorway {
+    position: absolute;
+    top: 185px;
+    left: 352px
+}
+
+.door-locked {
+    height: inherit;
+    width: inherit;
+    display: block;
+}
+
+.door-unlocked {
+    height: inherit;
+    width: inherit;
+    display: none;
+
+}
+
 .map-room {
     position: absolute;
     display: flex;
