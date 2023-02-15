@@ -434,6 +434,7 @@ class Door(Openable_Interact):
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
         self.can_lock_unlock = False
+        self.found = False
             
 class Lockable_Door(Lockable_Interact, Door):
     def __init__(self, name, gen_name, keys_list) -> None:

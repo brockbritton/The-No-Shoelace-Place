@@ -254,8 +254,10 @@ class Game:
   
         if len(actions['print_all']) > 0:
             # Due to some prints being duplicated for no discernable reason, 
-            # this searches the print statements to make sure there are no duplicates   
-            # ************** 
+            # this searches the print statements to make sure there are no duplicates
+            for i in range(0, len(actions['print_all']) - 1):
+                if actions['print_all'][i] == actions['print_all'][i+1]:
+                    actions['print_all'].remove(actions['print_all'][i])
 
             # Save all text prints from this turn so re-loading is possible
             self.save_prints.extend(actions['print_all'])
