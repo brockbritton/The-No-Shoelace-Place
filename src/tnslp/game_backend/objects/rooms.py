@@ -30,9 +30,9 @@ ward_to_basement_stairs = room_class.Stairwell("Stairs Down", "Stairs Down", "",
 ### Ward Rooms ###
 # display names must be 11 characters or less
 
-game_entrance = room_class.Ward_Room(
-    "Game Entrance", #room name #add article "the"
-    "Game Ent.", #display name
+game_exit = room_class.Ward_Room(
+    "Game Exit", #room name #add article "the"
+    "Game Exit", #display name
     "No Room Description", #description
     "", #room label or none
     None, #extra storage units or none
@@ -59,6 +59,15 @@ service_hallway = room_class.Ward_Room(
     (None, None),
     [None, item.service_hallway_e, item.outside_time_n, [None, item.service_hallway_w]])
 
+security_room = room_class.Ward_Room(
+    "Security Unit", #add article "the"
+    "Security", 
+    "No Room Description", 
+    "",
+    None, 
+    (None, None),
+    None)
+
 outside_time = room_class.Ward_Room(
     "Outside Courtyard", #add article "the"
     "Outside",
@@ -67,7 +76,6 @@ outside_time = room_class.Ward_Room(
     [item.park_bench, item.toys_bag], 
     (None, None),
     [item.outside_time_n, None, None, None]) #adds happiness
-
 
 utility_closet = room_class.Ward_Room(
     "Utility Closet", #add article "the"
@@ -177,36 +185,36 @@ red_hallway = room_class.Ward_Room(
     (None, None),
     None)
 
-pat_room_202 = room_class.Ward_Room(
-    "Room 202", 
-    "Room 202", 
+pat_room_102 = room_class.Ward_Room(
+    "Patient Room 102", 
+    "Room 102", 
     "A common patient room with two beds.", 
     "",
     None, 
     (None, None),
     None) #randomize player room
 
-pat_room_204 = room_class.Ward_Room(
-    "Room 204", 
-    "Room 204", 
+pat_room_104 = room_class.Ward_Room(
+    "Patient Room 104", 
+    "Room 104", 
     "A common patient room with two beds.", 
     "",
     None, 
     (None, None),
     None)
 
-pat_room_201 = room_class.Ward_Room(
-    "Room 201", 
-    "Room 201", 
+pat_room_101 = room_class.Ward_Room(
+    "Patient Room 101", 
+    "Room 101", 
     "A common patient room with two beds.", 
     "",
     None, 
     (None, None),
     None)
 
-pat_room_203 = room_class.Ward_Room(
-    "Room 203", 
-    "Room 203", 
+pat_room_103 = room_class.Ward_Room(
+    "Patient Room 103", 
+    "Room 103", 
     "A common patient room with two beds.", 
     "",
     None, 
@@ -450,35 +458,37 @@ plexiglass_cell = room_class.Final_Room(
     ) 
 
 
-## Landing Coordinates ##
-basement_landing.set_coordinates(basement_to_ward_stairs, 0, 0, basement_lobby)
-ward_landing.set_coordinates(ward_to_basement_stairs, 0, 0, common_room)
+## Landing Coordinates ## 
+basement_landing.set_coordinates(0, 0, basement_to_ward_stairs, basement_lobby)
+ward_landing.set_coordinates(0, 0, ward_to_basement_stairs, common_room)
 
 ## Ward Coordinates ##
 
-admissions.set_coordinates(game_entrance, service_hallway, 0, 0)
-service_hallway.set_coordinates(0, common_room, outside_time, [utility_closet, admissions])
+admissions.set_coordinates(0, service_hallway, 0, game_exit)
+service_hallway.set_coordinates(security_room, common_room, outside_time, [utility_closet, admissions])
 utility_closet.set_coordinates(0, service_hallway, 0, 0)
 outside_time.set_coordinates(service_hallway, 0, 0, 0)
+security_room.set_coordinates(0, red_hallway, service_hallway, 0)
 
-common_room.set_coordinates([tv_room, staff_breakroom, med_station], [blue_hallway, ward_landing], [library, bathroom_cr], service_hallway) ###
+common_room.set_coordinates([tv_room, staff_breakroom, med_station], [blue_hallway, ward_landing], [library, bathroom_cr], service_hallway)
 tv_room.set_coordinates(0, 0, common_room, 0)
 staff_breakroom.set_coordinates(0, med_station, common_room, 0)
 med_station.set_coordinates(0, 0, common_room, staff_breakroom)
 library.set_coordinates(common_room, 0, 0, 0)
 bathroom_cr.set_coordinates(common_room, 0, 0, 0)
 
-blue_hallway.set_coordinates(red_hallway, [kitchen, sensory_room], 0, [common_room, linen_closet])
+blue_hallway.set_coordinates(0, [linen_closet, sensory_room, kitchen], 0, [common_room, red_hallway])
 kitchen.set_coordinates(0, 0, 0, blue_hallway)
 sensory_room.set_coordinates(0, 0, 0, blue_hallway)
-linen_closet.set_coordinates(0, blue_hallway, 0, 0)
+linen_closet.set_coordinates(0, 0, 0, blue_hallway)
 
-red_hallway.set_coordinates(0, [pat_room_204, pat_room_202], blue_hallway, [pat_room_201, pat_room_203, bathroom_p])
-bathroom_p.set_coordinates(0, red_hallway, 0, 0)
-pat_room_201.set_coordinates(0, red_hallway, 0, 0)
-pat_room_203.set_coordinates(0, red_hallway, 0, 0)
-pat_room_202.set_coordinates(0, 0, 0, red_hallway)
-pat_room_204.set_coordinates(0, 0, 0, red_hallway)
+red_hallway.set_coordinates([pat_room_103, pat_room_101], blue_hallway, [bathroom_p, pat_room_102, pat_room_104], security_room)
+bathroom_p.set_coordinates(red_hallway, 0, 0, 0)
+pat_room_102.set_coordinates(red_hallway, 0, 0, 0)
+pat_room_104.set_coordinates(red_hallway, 0, 0, 0)
+pat_room_101.set_coordinates(0, 0, red_hallway, 0)
+pat_room_103.set_coordinates(0, 0, red_hallway, 0)
+
 
 ## Basement Coordinates ##
 

@@ -494,16 +494,35 @@ html {
 
 .map-room {
     position: absolute;
+    display: flex;
     background-color: black;
     border: 1px solid white
 }
 
-.patient-room {
-
+.undiscovered-map {
+    filter: blur(3px);
 }
 
-.undiscovered-room {
-    filter: blur(3px);
+.patient-room {
+    height: 50px;
+    width: 75px;
+}
+
+.vertical-text {
+    writing-mode: vertical-lr !important; 
+    text-orientation: upright !important;
+    margin: 100% auto !important;
+    height: 50% !important;
+    text-align: center !important;
+}
+
+.map-room > p {
+    width: min-content;
+    height: max-content;
+    margin: auto;
+    vertical-align: middle;
+    text-align: center;
+    cursor: default;
 }
 
 #service-hallway-room {
@@ -527,6 +546,36 @@ html {
     width: 225px;
 }
 
+#admissions-room {
+    top: 275px;
+    left: 228px;
+    height: 75px;
+    width: 95px;
+}
+
+#game-exit-room {
+    top: 275px;
+    left: 178px;
+    height: 75px;
+    width: 50px;
+    border: none !important;
+}
+
+#exit-text {
+    writing-mode: vertical-lr; 
+    text-orientation: upright;
+    margin: auto;
+    height: 100%;
+    text-align: center;
+}
+
+#utility-closet-room {
+    top: 375px;
+    left: 273px;
+    height: 50px;
+    width: 50px;
+}
+
 #common-room {
     top: 326px;
     left: 400px;
@@ -535,10 +584,45 @@ html {
 }
 
 #tv-room {
+    top: 275px;
+    left: 405px;
+    height: 50px;
+    width: 65px; 
+}
+
+#staff-breakroom {
     top: 250px;
-    left: 400px;
+    left: 484px; 
     height: 75px;
-    width: 75px; 
+    width: 75px;
+}
+
+#med-station-room {
+    top: 275px;
+    left: 560px; 
+    height: 50px;
+    width: 75px;
+}
+
+#common-room-bathroom {
+    top: 452px;
+    left: 450px;
+    height: 50px;
+    width: 50px;
+}
+
+#library-room {
+    top: 452px;
+    left: 525px;
+    height: 75px;
+    width: 75px;
+}
+
+#ward-stairs-room {
+    top: 405px;
+    left: 701px;
+    height: 100px;
+    width: 80px;
 }
 
 #blue-hallway-room {
@@ -548,6 +632,28 @@ html {
     width: 75px; 
 }
 
+#kitchen-room {
+    top: 300px;
+    left: 777px;
+    height: 75px;
+    width: 75px;
+}
+
+#sensory-room {
+    top: 215px;
+    left: 777px;
+    height: 75px;
+    width: 75px;  
+}
+
+#linen-closet-room {
+    top: 150px;
+    left: 777px;
+    height: 50px;
+    width: 50px; 
+}
+
+
 #red-hallway-room {
     top: 100px;
     left: 416px;
@@ -555,12 +661,35 @@ html {
     width: 284px;
 }
 
-#ward-stairs-room {
-    top: 405px;
-    left: 701px;
-    height: 100px;
-    width: 80px;
+#patient-bathroom {
+    top: 176px;
+    left: 600px;  
+    height: 50px;
+    width: 50px;
 }
+
+#patient-room-101 {
+    top: 49px;
+    left: 545px;
+}
+
+#patient-room-103 {
+    top: 49px;
+    left: 464px;
+}
+
+#patient-room-102 {
+    top: 176px;
+    left: 505px
+}
+
+#patient-room-104 {
+    top: 176px;
+    left: 425px
+}
+
+
+
 
 
 /* ####################### */

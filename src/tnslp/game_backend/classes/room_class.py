@@ -28,7 +28,7 @@ class Room:
         
         self.storage_dict = {}
         self._room_registry.append(self)
-        self.visited = False
+        self.visited = True ##for unknown or not
         self.item_actions = {
             'inspect': self.inspect_room,
         }
