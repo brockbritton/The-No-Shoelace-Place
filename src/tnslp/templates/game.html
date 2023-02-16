@@ -92,11 +92,62 @@
             <p> BR</p>
         </div>
 
-        <!-- doorway example-->
-        <div class="doorway" id="example-doorway">
+        <!-- locked doors -->
+        <div class="doorway map-door-container" id="security-south">
             <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
             <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> S3: locked </p>
         </div>
+        <div class="doorway map-door-container" id="security-east">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> S6: locked </p>
+        </div>
+        <div class="doorway map-door-container" id="courtyard-north">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> S9: locked </p>
+        </div>
+        <div class="doorway map-door-container" id="service-cr">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> S4: locked </p>
+        </div>
+        <div class="doorway map-door-container" id="staff-break-south">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> W4: locked </p>
+        </div>
+        <div class="doorway map-door-container" id="meds-south">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> W6: locked </p>
+        </div>
+        <div class="doorway map-door-container" id="admissions-exit">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> M7: locked </p>
+        </div>
+        
+
+
+        <!-- unlocked doorways -->
+        <div class="doorway" id="p101-south"></div>
+        <div class="doorway" id="p103-south"></div>
+        <div class="doorway" id="p102-north"></div>
+        <div class="doorway" id="p104-north"></div>
+        <div class="doorway" id="pBR-north"></div>
+        <div class="doorway-ew" id="red-blue-hallway"></div>
+        <div class="doorway-ew" id="linen-west"></div>
+        <div class="doorway-ew" id="sensory-west"></div>
+        <div class="doorway-ew" id="kitchen-west"></div>
+        <div class="doorway-ew" id="cr-blue-hallway"></div>
+        <div class="doorway" id="tv-south"></div>
+        <div class="doorway-ew" id="staff-meds"></div>
+        <div class="doorway" id="crBR-north"></div>
+        <div class="doorway" id="library-north"></div>
+        <div class="doorway-ew" id="utility-east"></div>
+        <div class="doorway-ew" id="admissions-east"></div>
     </div>
     <div id="game_gui">
         <div id="text_and_entry_widgets">

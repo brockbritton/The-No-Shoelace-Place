@@ -461,10 +461,10 @@ html {
 /* ############# */
 #game-map {
     position: absolute;
-    left: 20vw;
+    left: 25vw;
     top: 20vh;
-    height: 600px; /* 80wh */
-    width: 60vw; /* 80vw */
+    height: 70vh; /* 80wh */
+    width: 50vw; /* 80vw */
     background-color: black;
     border-radius: 15px;
     border: 5px solid white;
@@ -492,32 +492,7 @@ html {
      
 }
 
-.doorway {
-    background-color: black;
-    height: 30px;
-    width: 21px;
-    z-index: inherit + 3;
-}
-
-#example-doorway {
-    position: absolute;
-    top: 185px;
-    left: 352px
-}
-
-.door-locked {
-    height: inherit;
-    width: inherit;
-    display: block;
-}
-
-.door-unlocked {
-    height: inherit;
-    width: inherit;
-    display: none;
-
-}
-
+/* Game Map Classes*/
 .map-room {
     position: absolute;
     display: flex;
@@ -551,37 +526,89 @@ html {
     cursor: default;
 }
 
+.doorway {
+    background-color: black;
+    position: absolute;
+    height: 30px;
+    width: 21px;
+    z-index: inherit + 1;
+}
+
+.doorway-ew {
+    background-color: black;
+    position: absolute;
+    height: 21px;
+    width: 21px;
+    z-index: inherit + 1;
+}
+
+.door-locked {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: inherit;
+    width: inherit;
+    display: block;
+}
+
+.door-unlocked {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: inherit;
+    width: inherit;
+    display: none;
+}
+
+.map-door-label {
+    background-color: black;
+    position: relative;
+    width: 110px;
+    text-align: center;
+    margin-top: 7px;
+    margin-left: -45px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    cursor: default;
+}
+
+.doorway:hover .map-door-label {
+    opacity: 1;
+}
+
+/* Physical Map Rooms */
+
 #service-hallway-room {
     top: 200px;
-    left: 324px;
+    left: 199px;
     height: 275px;
     width: 75px;
 }
 
 #security-room {
     top: 100px;
-    left: 315px;
+    left: 190px;
     height: 100px;
     width: 100px;
 }
 
 #outside-time-room {
     top: 475px;
-    left: 200px;
+    left: 75px;
     height: 100px;
     width: 225px;
 }
 
 #admissions-room {
     top: 275px;
-    left: 228px;
+    left: 103px;
     height: 75px;
     width: 95px;
 }
 
 #game-exit-room {
     top: 275px;
-    left: 178px;
+    left: 53px;
     height: 75px;
     width: 50px;
     border: none !important;
@@ -597,84 +624,84 @@ html {
 
 #utility-closet-room {
     top: 375px;
-    left: 273px;
+    left: 138px;
     height: 50px;
-    width: 50px;
+    width: 60px;
 }
 
 #common-room {
     top: 326px;
-    left: 400px;
+    left: 275px;
     height: 125px;
     width: 300px;  
 }
 
 #tv-room {
     top: 275px;
-    left: 405px;
+    left: 280px;
     height: 50px;
     width: 65px; 
 }
 
 #staff-breakroom {
     top: 250px;
-    left: 484px; 
+    left: 359px; 
     height: 75px;
     width: 75px;
 }
 
 #med-station-room {
     top: 275px;
-    left: 560px; 
+    left: 435px; 
     height: 50px;
     width: 75px;
 }
 
 #common-room-bathroom {
     top: 452px;
-    left: 450px;
+    left: 325px;
     height: 50px;
     width: 50px;
 }
 
 #library-room {
     top: 452px;
-    left: 525px;
+    left: 400px;
     height: 75px;
     width: 75px;
 }
 
 #ward-stairs-room {
     top: 405px;
-    left: 701px;
+    left: 576px;
     height: 100px;
     width: 80px;
 }
 
 #blue-hallway-room {
     top: 100px;
-    left: 701px;
+    left: 576px;
     height: 300px;
     width: 75px; 
 }
 
 #kitchen-room {
     top: 300px;
-    left: 777px;
+    left: 652px;
     height: 75px;
     width: 75px;
 }
 
 #sensory-room {
     top: 215px;
-    left: 777px;
+    left: 652px;
     height: 75px;
     width: 75px;  
 }
 
 #linen-closet-room {
     top: 150px;
-    left: 777px;
+    left: 652px;
     height: 50px;
     width: 50px; 
 }
@@ -682,38 +709,156 @@ html {
 
 #red-hallway-room {
     top: 100px;
-    left: 416px;
+    left: 291px;
     height: 75px;
     width: 284px;
 }
 
 #patient-bathroom {
     top: 176px;
-    left: 600px;  
+    left: 475px;  
     height: 50px;
     width: 50px;
 }
 
 #patient-room-101 {
     top: 49px;
-    left: 545px;
+    left: 420px;
 }
 
 #patient-room-103 {
     top: 49px;
-    left: 464px;
+    left: 339px;
 }
 
 #patient-room-102 {
     top: 176px;
-    left: 505px
+    left: 380px
 }
 
 #patient-room-104 {
     top: 176px;
-    left: 425px
+    left: 300px
 }
 
+/* Physical Map Locks */
+#security-south {
+    top: 185px;
+    left: 227px
+}
+
+#security-east {
+    top: 128px;
+    left: 280px
+}
+
+#courtyard-north {
+    top: 459px;
+    left: 227px
+}
+
+#service-cr {
+    top: 380px;
+    left: 265px;
+}
+
+#staff-break-south {
+    top: 310px;
+    left: 390px;
+}
+
+#meds-south {
+    top: 310px;
+    left: 460px;
+}
+
+#admissions-exit {
+    top: 295px;
+    left: 89px;
+}
+
+/* Physical Map Doorways */
+#p101-south {
+    top: 85px;
+    left: 450px
+}
+
+#p103-south {
+    top: 85px;
+    left: 370px
+}
+
+#p102-north {
+    top: 160px;
+    left: 407px
+}
+
+#p104-north {
+    top: 160px;
+    left: 330px
+}
+
+#pBR-north {
+    top: 160px;
+    left: 490px
+}
+
+#red-blue-hallway {
+    top: 128px;
+    left: 565px
+}
+
+#linen-west {
+    top: 165px;
+    left: 638px 
+}
+
+#sensory-west {
+    top: 245px;
+    left: 638px
+}
+
+#kitchen-west {
+    top: 325px;
+    left: 638px
+}
+
+#cr-blue-hallway {
+    top: 350px;
+    left: 565px
+}
+
+#tv-south {
+    top: 310px;
+    left: 303px 
+}
+
+#staff-meds {
+    top: 290px;
+    left: 425px; 
+}
+
+#crBR-north {
+    top: 435px;
+    left: 340px
+}
+
+#library-north {
+    top: 435px;
+    left: 430px 
+}
+
+#utility-east {
+    width: 10px;
+    top: 390px;
+    left: 195px
+}
+
+#admissions-east {
+    width: 10px;
+    top: 300px;
+    left: 195px
+}
 
 
 
