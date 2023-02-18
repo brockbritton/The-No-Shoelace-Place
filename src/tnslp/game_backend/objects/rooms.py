@@ -11,7 +11,7 @@ ward_landing = room_class.Ward_Room(
     "",
     None, 
     (None, None),
-    [None, None, None, item.ward_to_basement_door])
+    [None, None, None, item.common_room_and_ward_landing_door])
 
 basement_landing = room_class.Basement_Room(
     "Basement Landing", #room name #add article "the"
@@ -37,7 +37,7 @@ game_exit = room_class.Ward_Room(
     "", #room label or none
     None, #extra storage units or none
     (None, None), #items for ground, walls - must be lists of items
-    None #doors or none
+    [None, item.admissions_exit_door, None, None] #doors or none
     )
 
 
@@ -48,7 +48,7 @@ admissions = room_class.Ward_Room(
     "",
     None, 
     (None, None),
-    [item.admissions_entrance, item.service_hallway_w, None, None])
+    [None, None, None, item.admissions_exit_door])
 
 service_hallway = room_class.Ward_Room(
     "Service Hallway", #add article "the"
@@ -57,7 +57,7 @@ service_hallway = room_class.Ward_Room(
     "",
     None, 
     (None, None),
-    [None, item.service_hallway_e, item.outside_time_n, [None, item.service_hallway_w]])
+    [item.security_and_service_hallway_door, item.service_hallway_and_common_room_door, item.courtyard_and_service_hallway_door, [None, None]])
 
 security_room = room_class.Ward_Room(
     "Security Unit", #add article "the"
@@ -66,16 +66,16 @@ security_room = room_class.Ward_Room(
     "",
     None, 
     (None, None),
-    None)
+    [None, item.security_and_red_hallway_door, item.security_and_service_hallway_door, None])
 
 outside_time = room_class.Ward_Room(
     "Outside Courtyard", #add article "the"
     "Outside",
-    "A brick courtyard, with walls twelve feet tall, and no way to climb them. A park bench sits off to one side with a large open space taking up the majority.", 
+    "A brick courtyard, with walls twelve feet high, and no way to climb them. A park bench sits off to one side with a large open space taking up the majority.", 
     "",
     [item.park_bench, item.toys_bag], 
     (None, None),
-    [item.outside_time_n, None, None, None]) #adds happiness
+    [item.courtyard_and_service_hallway_door, None, None, None]) 
 
 utility_closet = room_class.Ward_Room(
     "Utility Closet", #add article "the"
@@ -93,7 +93,7 @@ common_room = room_class.Ward_Room(
     "",
     [item.cr_art_table, item.cr_game_cabinets, item.cr_ping_pong_table], 
     (None, [item.doors_poster]),
-    [[None, None, None], [None, item.ward_to_basement_door], [None, None], item.service_hallway_e])
+    [[None, item.common_room_and_staff_breakroom, item.common_room_and_medications], [None, item.common_room_and_ward_landing_door], [None, None], item.service_hallway_and_common_room_door])
 
 tv_room = room_class.Ward_Room(
     "TV Room", #add article "the"
@@ -120,7 +120,7 @@ staff_breakroom = room_class.Ward_Room(
     "",
     None, 
     (None, None),
-    None)
+    [None, None, item.common_room_and_staff_breakroom, None])
 
 med_station = room_class.Ward_Room(
     "Medication Room", #add article "the"
@@ -129,7 +129,7 @@ med_station = room_class.Ward_Room(
     "",
     [item.mw_recycle_bin, item.mw_trash_bin],
     (None, None), 
-    None)
+    [None, None, item.common_room_and_medications, None])
 
 bathroom_cr = room_class.Ward_Room(
     "Common Room Bathroom", #add article "the"
@@ -156,7 +156,7 @@ kitchen = room_class.Ward_Room(
     "",
     [item.serv_counter, item.serv_tableware_bin], 
     (None, None),
-    None) #adds happiness
+    None)
 
 sensory_room = room_class.Ward_Room(
     "Sensory Room", #add article "the"
@@ -183,7 +183,7 @@ red_hallway = room_class.Ward_Room(
     "",
     None, 
     (None, None),
-    None)
+    [None, None, None, item.security_and_red_hallway_door])
 
 pat_room_102 = room_class.Ward_Room(
     "Patient Room 102", 

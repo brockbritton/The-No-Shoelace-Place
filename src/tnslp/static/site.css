@@ -76,8 +76,7 @@ html {
 }
 
 .large_bordered_button:hover {
-    color: #A9A9A9;
-    border: 0.125em solid #A9A9A9; 
+    background-color: #C0C0C0;
 }
 
 .regular_bordered_button {
@@ -96,8 +95,7 @@ html {
 }
 
 .regular_bordered_button:hover {
-    color: #A9A9A9;
-    border: 0.125em solid #A9A9A9;
+    background-color: #C0C0C0;
 }
 
 /* ######### */
@@ -188,7 +186,7 @@ html {
 }
 
 .game_multiple_choice_buttons:hover {
-    cursor: pointer;
+    background-color: #C0C0C0;
 }
 
 .game_menu_buttons {
@@ -203,6 +201,10 @@ html {
     display: inline;
     font-size: 1.25em;
     margin: 0.3125em 0.625em 0.3125em 0em;
+}
+
+.game_menu_buttons:hover {
+    background-color: #C0C0C0;
 }
 
 /* Text display and Entry widgets */
@@ -572,7 +574,7 @@ html {
     cursor: default;
 }
 
-.doorway:hover .map-door-label {
+.doorway:hover > .map-door-label {
     opacity: 1;
 }
 

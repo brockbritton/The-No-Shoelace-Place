@@ -19,9 +19,11 @@ import tnslp.game_backend.classes.item_class as item_class
 id_bracelet = item_class.ID_Bracelet("id bracelet", "bracelet") 
 
 ### All Keys ###
-basement_key = item_class.Key("basement key", "key")
-cabinet_key = item_class.Key("ward cabinet keys", "key")
-ward_doors_key = item_class.Key("ward security key", "key")
+master_key = item_class.Key("master key", "key")
+security_key = item_class.Key("security key", "key")
+ward_doors_key = item_class.Key("ward doors key", "key")
+patient_key = item_class.Key("patient key", "key")
+rec_key = item_class.Key("rec key", "key")
 
 ### All Posters ###
 friends_poster = item_class.Hanging_Quote_Note("friends poster", 
@@ -101,11 +103,13 @@ deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
 chess_set = item_class.Chess_Set("chess box", "box")
     # Storage Units
 cr_art_table = item_class.Storage_Spot("arts and crafts table", "table")
-cr_game_cabinets = item_class.Storage_LockBox("game cabinet", "cabinet", False, [cabinet_key, ward_doors_key])
+cr_game_cabinets = item_class.Storage_Box("game cabinet", "cabinet")
 cr_game_cabinets.set_items([chess_set, deck_of_cards])
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
     # Doors
-ward_to_basement_door = item_class.Lockable_Door("Basement Door", "door", [basement_key])
+common_room_and_ward_landing_door = item_class.Lockable_Door("Door W1-B", "door", None)
+common_room_and_staff_breakroom = item_class.Lockable_Door("Door W4", "door", None)
+common_room_and_medications = item_class.Lockable_Door("Door W6", "door", None)
 
 # Library #
     # Storage Units
@@ -136,8 +140,13 @@ lr_bedding_shelf = item_class.Storage_Spot("bedding shelf", "shelf")
 # Service Hallway #
     # Storage Units
     # Doors
-service_hallway_w = item_class.Lockable_Door("Door J331", "door", [ward_doors_key])
-service_hallway_e = item_class.Lockable_Door("Door J332", "door", [ward_doors_key])
+service_hallway_and_common_room_door = item_class.Lockable_Door("Door S4", "door", None)
+
+# Security Unit #
+    # Storage Units
+    # Doors
+security_and_red_hallway_door = item_class.Lockable_Door("Door S6", "door", None)
+security_and_service_hallway_door = item_class.Lockable_Door("Door S3", "door", None)
 
 # Utility Closet #
     # Storage Units
@@ -149,11 +158,11 @@ uc_hygiene_shelf = item_class.Storage_Spot("hygiene supplies shelf", "shelf")
 park_bench = item_class.Storage_Spot("park bench", "table")
 toys_bag = item_class.Storage_Bin("toys bin", "bin")
     # Doors
-outside_time_n = item_class.Lockable_Door("Door J3333", "door", [ward_doors_key])
+courtyard_and_service_hallway_door = item_class.Lockable_Door("Door S9", "door", None)
 
 # Admissions Office #
     # Storage Units
-admissions_entrance = item_class.Lockable_Door("Exit Door", "door", None) 
+admissions_exit_door = item_class.Lockable_Door("Door M7", "door", None) 
 
 
 ##########################

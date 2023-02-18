@@ -136,10 +136,12 @@ class Parser:
         # Check for special actions
         # xi : items in room
         # xd : directions
-        for special in ("xi", "xd"):
+        for special in ("xi", "xd", "cheatcode:Asher"):
             if special in str_input.lower():
                 parsed_info["special_actions"].append(special)
         
+        
+
         # Return values
         return parsed_info
 

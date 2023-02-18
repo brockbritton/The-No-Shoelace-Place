@@ -17,7 +17,7 @@ class Character:
         self.last_loc = None
         self.personal_room = room.common_room
 
-        self.inv = [item.id_bracelet, item.basement_key, item.crowbar]
+        self.inv = [item.id_bracelet, item.crowbar]
         #self.inv = []
         self.inv_cap = 6 #current inventory capacity - maybe just keep it set
         self.inv_cap_start = 6 #starting inventory capacity
