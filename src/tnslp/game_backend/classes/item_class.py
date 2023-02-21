@@ -434,11 +434,13 @@ class Door(Openable_Interact):
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
         self.can_lock_unlock = False
-        self.found = False
             
 class Lockable_Door(Lockable_Interact, Door):
+    _doors_registry = []
     def __init__(self, name, gen_name, keys_list) -> None:
         super().__init__(name, gen_name, keys_list)
+        self._doors_registry.append(self)
+        self.visited = False
         self.keyable = True
 
 class Electronic_Door(Lockable_Interact, Door):
@@ -556,8 +558,8 @@ class Power_Box(Interact):
         self.special_commands = ["pull", "push"]
 
     def hit_switch(self):
-        for r in room_class.Room._room_registry:
-            r.switch_lights()
+        for room in room_class.Room._room_registry:
+            room.switch_lights()
 
     def inspect_item(self):
         actions = {

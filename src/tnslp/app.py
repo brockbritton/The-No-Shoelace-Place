@@ -52,16 +52,18 @@ def play_game():
 @app.route("/game/accept-input-data", methods=['POST'])
 def accept_input_data():
     data_dict = request.form.to_dict()
-    
     print("frontend input ", data_dict['input'])
-    actions_dict = session['game'].organize_raw_input(data_dict['input'])
-    return actions_dict
+    return session['game'].organize_raw_input(data_dict['input'])
     
+@app.route("/game/request-map-data", methods=['GET'])
+def request_map_data():
+    map_data = session['game'].return_map_data()
+    print(map_data)
+    return map_data
 
 @app.route("/game/loading-game", methods=['POST'])
 def loading_game():
-    
-    if len(session['game'].save_prints) == 0: ##### this will change when 
+    if len(session['game'].save_prints) == 0: 
         return_dict = session['game'].start_game()
     else:
         return_dict = session['game'].load_game() 
@@ -71,7 +73,6 @@ def loading_game():
 @app.route("/game/instructions")
 def cheat_sheet():
     return render_template("instructions.html")
-
 
 @app.route("/api/data")
 def get_data():

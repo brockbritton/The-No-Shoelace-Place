@@ -708,7 +708,6 @@ html {
     width: 50px; 
 }
 
-
 #red-hallway-room {
     top: 100px;
     left: 291px;
@@ -743,38 +742,38 @@ html {
     left: 300px
 }
 
-/* Physical Map Locks */
-#security-south {
+/* Physical Map Door Locks */
+#door-s3 {
     top: 185px;
     left: 227px
 }
 
-#security-east {
+#door-s6 {
     top: 128px;
     left: 280px
 }
 
-#courtyard-north {
+#door-s9 {
     top: 459px;
     left: 227px
 }
 
-#service-cr {
+#door-s4 {
     top: 380px;
     left: 265px;
 }
 
-#staff-break-south {
+#door-w4 {
     top: 310px;
     left: 390px;
 }
 
-#meds-south {
+#door-w6 {
     top: 310px;
     left: 460px;
 }
 
-#admissions-exit {
+#door-m7 {
     top: 295px;
     left: 89px;
 }

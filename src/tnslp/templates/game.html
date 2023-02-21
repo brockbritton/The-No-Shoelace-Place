@@ -93,45 +93,44 @@
         </div>
 
         <!-- locked doors -->
-        <div class="doorway map-door-container" id="security-south">
-            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-            <p class="map-door-label"> S3: locked </p>
-        </div>
-        <div class="doorway map-door-container" id="security-east">
-            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-            <p class="map-door-label"> S6: locked </p>
-        </div>
-        <div class="doorway map-door-container" id="courtyard-north">
-            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-            <p class="map-door-label"> S9: locked </p>
-        </div>
-        <div class="doorway map-door-container" id="service-cr">
-            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-            <p class="map-door-label"> S4: locked </p>
-        </div>
-        <div class="doorway map-door-container" id="staff-break-south">
-            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-            <p class="map-door-label"> W4: locked </p>
-        </div>
-        <div class="doorway map-door-container" id="meds-south">
-            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-            <p class="map-door-label"> W6: locked </p>
-        </div>
-        <div class="doorway map-door-container" id="admissions-exit">
+        <div class="doorway map-door-container" id="door-m7">
             <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
             <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
             <p class="map-door-label"> M7: locked </p>
         </div>
+        <div class="doorway map-door-container" id="door-s3">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> S3: locked </p>
+        </div>
+        <div class="doorway map-door-container" id="door-s9">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> S9: locked </p>
+        </div>
+        <div class="doorway map-door-container" id="door-s4">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> S4: locked </p>
+        </div>
+        <div class="doorway map-door-container" id="door-w4">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> W4: locked </p>
+        </div>
+        <div class="doorway map-door-container" id="door-w6">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> W6: locked </p>
+        </div>
+        <div class="doorway map-door-container" id="door-s6">
+            <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+            <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+            <p class="map-door-label"> S6: locked </p>
+        </div>
         
-
-
-        <!-- unlocked doorways -->
+        
+        <!-- no lock doorways -->
         <div class="doorway" id="p101-south"></div>
         <div class="doorway" id="p103-south"></div>
         <div class="doorway" id="p102-north"></div>
@@ -167,7 +166,7 @@
                             value="{{ request.form['command_input'] }}">
                         </input>
             
-                        <button id="text_entry_enter_button" class="game_multiple_choice_buttons" onclick="accept_entry_input"> Enter </button>
+                        <button type="button" id="text_entry_enter_button" class="game_multiple_choice_buttons" onclick="accept_entry_input()"> Enter </button>
                     </form>
                 </div>
 
@@ -310,14 +309,14 @@
                 </div>
                 <div id="game_buttons" class="panel_divs">
                     <p class="panel_titles"></p> <!-- no title for this section -->
-                        <div id="bottom_right">
-                            <button class="game_menu_buttons" onclick="toggleGameMap()">
-                                Game Map
-                            </button>
-                            <button class="game_menu_buttons" onclick="location.href='/game/instructions'">
-                                Game Help
-                            </button>
-                        </div> 
+                    <div id="bottom_right">
+                        <button class="game_menu_buttons" onclick="toggleGameMap()">
+                            Game Map
+                        </button>
+                        <button class="game_menu_buttons" onclick="location.href='/game/instructions'">
+                            Game Help
+                        </button>
+                    </div> 
                 </div>
             </div>  
         </div>

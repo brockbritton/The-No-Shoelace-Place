@@ -12,7 +12,7 @@ function ajax_accept_input(data_values, route) {
         url: route,
         data: data_values,
         type: 'POST',
-        success: function(response){
+        success: function(response) {
             if ('print_all' in response) {
                 print_all.apply(null, [response['print_all'], response['build_multiple_choice'], response['rebuild_text_entry']])
                 
@@ -28,18 +28,32 @@ function ajax_accept_input(data_values, route) {
                 update_ui_values(response['update_ui_values']);
             } 
         },
-        error: function(request){
+        error: function(request, response, errors){
             if (route == "/game/loading-game") {
                 ajax_accept_input(data_values, "/game/loading-game")
             } else {
-                printtk("Error " + request.status + ": see terminal for more information." );
+                printtk(`Error ${request.status}: see terminal for more information.` );
             }
         }
     }); 
 }
 
+function get_map_data() {
+    $.ajax({
+        url: '/game/request-map-data',
+        type: 'GET',
+        success: function(response) {
+            console.log(response)
+            //update_map_objects
+        },
+        error: function(request, response, errors) {
+            console.log(errors)
+        }
+    });
+}
+
 function accept_entry_input(event) {
-    event.preventDefault()
+    event.preventDefault();
     let input_text = form.elements[0].value;
     printtk(">   " + input_text)
     let data_values = {
@@ -47,6 +61,10 @@ function accept_entry_input(event) {
     }
     ajax_accept_input(data_values, '/game/accept-input-data');
     form.elements[0].value = "";
+}
+
+function update_map_objects(bool_list) {
+
 }
 
 function default_return_press(event) {
@@ -253,6 +271,7 @@ function toggleGameMap() {
         map_window.style.display = "none";
         game_window.style.filter = "none";
     } else {
+        get_map_data()
         map_window.style.display = "block";
         game_window.style.filter = "blur(5px)";
     }

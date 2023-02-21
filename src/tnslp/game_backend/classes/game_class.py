@@ -445,6 +445,34 @@ class Game:
 
         return (dest, helper, actions)
 
-
-
+    def return_map_data(self):
+        map_dict = {
+            "ward_rooms" : [],
+            "basement_rooms" : [],
+            "doors" : [],
+            "current_room" : []
+        }
         
+
+        for w_room in room_class.Ward_Room._ward_rooms_registry:
+            if w_room.visited:
+                map_dict["ward_rooms"].append(True)
+            else:
+                map_dict["ward_rooms"].append(False)
+        """
+        for b_room in room_class.Basement_Room._basement_rooms_registry:
+            if b_room.visited:
+                map_dict["basement_rooms"].append(True)
+            else:
+                map_dict["basement_rooms"].append(False)
+        """
+        for door in item_class.Lockable_Door._doors_registry:
+            if door.visited:
+                map_dict["doors"].append(True)
+            else:
+                map_dict["doors"].append(False)
+
+        # self.player1.loc: 
+        # looking for which room is current and what direction the player is facing
+
+        return map_dict

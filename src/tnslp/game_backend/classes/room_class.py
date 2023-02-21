@@ -9,8 +9,7 @@ import tnslp.game_backend.gl_backend_functions as gl
 
 
 class Room:
-    _room_registry = []
-
+    _all_rooms_registry = []
     def __init__(self, name, display_name, description, room_label, doors, floor_wall_items) -> None:
         self.name = name
         self.display_name = display_name
@@ -20,15 +19,15 @@ class Room:
         self.has_doors = False
         if doors != None:
             self.create_door_dict(doors)
-        
+        self._all_rooms_registry.append(self)
         self.storage_containers = [item_class.Storage_Spot("ground", "ground"), item_class.Storage_Wall("wall", "walls")]
         for i in range(0, len(floor_wall_items)):
             if floor_wall_items[i] != None:
                 self.storage_containers[i].set_items(floor_wall_items[i])
         
         self.storage_dict = {}
-        self._room_registry.append(self)
-        self.visited = True ##for unknown or not
+        self._all_rooms_registry.append(self)
+        self.visited = False ##for unknown or not
         self.item_actions = {
             'inspect': self.inspect_room,
         }
@@ -149,6 +148,16 @@ class Room:
             actions['print_all'].append(f"New Room Discovered! +{player.xp_dict['new_room']}xp")
             actions['update_ui_values'].append(player.earn_xp(10))
             self.visited = True
+
+        
+        for direction in self.doors.values():
+            if isinstance(direction, list):
+                for door in direction:
+                    if isinstance(door, item_class.Lockable_Door) and not door.visited:
+                        door.visited = True
+            else:
+                if isinstance(direction, item_class.Lockable_Door) and not direction.visited:
+                    direction.visited = True
 
         actions['print_all'].append(f"You are now in {self.name}.")
         actions['update_ui_values'].append("room_value")
@@ -445,10 +454,12 @@ class Room:
         return full_sentence
 
 class Ward_Room(Room):
+    _ward_rooms_registry = []
     # room name, display name, description, room label, storage units, doors
     def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
         super().__init__(name, display_name, description, room_label, doors, floor_wall_items)
         self.lights_on = True
+        self._ward_rooms_registry.append(self)
         if storage_units != None:
             self.add_storage_units(storage_units)
         
@@ -458,9 +469,11 @@ class Ward_Room(Room):
 
 
 class Basement_Room(Room):
+    _basement_rooms_registry = []
     def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
         super().__init__(name, display_name, description, room_label, doors, floor_wall_items)
         self.lights_on = False
+        self._basement_rooms_registry.append(self)
         if storage_units != None:
             self.add_storage_units(storage_units)
 

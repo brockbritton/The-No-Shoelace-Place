@@ -247,6 +247,5 @@ class Character:
         actions['print_all'].append(f"---build not complete---")
         #self.loc.demon 
 
-
         return (None, None, actions)
 

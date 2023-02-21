@@ -3,30 +3,6 @@ import tnslp.game_backend.classes.room_class as room_class
 import tnslp.game_backend.objects.items as item
 import tnslp.game_backend.objects.npcs as npc
 
-# Stairwells to connect the ward and basement
-ward_landing = room_class.Ward_Room(
-    "Ward Landing", #add article "the"
-    "Stairs 1",
-    "A dimly lit stairwell, leading to a floor below.", 
-    "",
-    None, 
-    (None, None),
-    [None, None, None, item.common_room_and_ward_landing_door])
-
-basement_landing = room_class.Basement_Room(
-    "Basement Landing", #room name #add article "the"
-    "Stairs B", #display name
-    "No Room Description", #description
-    "", #room label or none
-    None, #storage units or none
-    (None, None),
-    None #doors or none
-    ) 
-
-basement_to_ward_stairs = room_class.Stairwell("Stairs Up", "Stairs Up", "", ward_landing)
-ward_to_basement_stairs = room_class.Stairwell("Stairs Down", "Stairs Down", "", basement_landing)
-
-
 ### Ward Rooms ###
 # display names must be 11 characters or less
 
@@ -39,7 +15,6 @@ game_exit = room_class.Ward_Room(
     (None, None), #items for ground, walls - must be lists of items
     [None, item.admissions_exit_door, None, None] #doors or none
     )
-
 
 admissions = room_class.Ward_Room(
     "Admissions", 
@@ -59,6 +34,15 @@ service_hallway = room_class.Ward_Room(
     (None, None),
     [item.security_and_service_hallway_door, item.service_hallway_and_common_room_door, item.courtyard_and_service_hallway_door, [None, None]])
 
+utility_closet = room_class.Ward_Room(
+    "Utility Closet", #add article "the"
+    "Utilities",
+    "No Room Description", 
+    "",
+    [item.uc_cleaning_shelf, item.uc_hygiene_shelf], 
+    (None, None),
+    None)
+
 security_room = room_class.Ward_Room(
     "Security Unit", #add article "the"
     "Security", 
@@ -76,15 +60,6 @@ outside_time = room_class.Ward_Room(
     [item.park_bench, item.toys_bag], 
     (None, None),
     [item.courtyard_and_service_hallway_door, None, None, None]) 
-
-utility_closet = room_class.Ward_Room(
-    "Utility Closet", #add article "the"
-    "Utilities",
-    "No Room Description", 
-    "",
-    [item.uc_cleaning_shelf, item.uc_hygiene_shelf], 
-    (None, None),
-    None)
 
 common_room = room_class.Ward_Room(
     "Common Room", #add article "the"
@@ -104,14 +79,6 @@ tv_room = room_class.Ward_Room(
     (None, None),
     None)
 
-library = room_class.Ward_Room(
-    "Library", #add article "the"
-    "Library", 
-    "No Room Description", 
-    "",
-    [item.lib_classic_bookshelf, item.lib_nf_bookshelf, item.lib_fant_bookshelf, item.lib_help_bookshelf], 
-    (None, None),
-    None)
 
 staff_breakroom = room_class.Ward_Room(
     "Staff Breakroom", #add article "the"
@@ -138,6 +105,15 @@ bathroom_cr = room_class.Ward_Room(
     "",
     None, 
     (None, [item.faucets_poster]),
+    None)
+
+library = room_class.Ward_Room(
+    "Library", #add article "the"
+    "Library", 
+    "No Room Description", 
+    "",
+    [item.lib_classic_bookshelf, item.lib_nf_bookshelf, item.lib_fant_bookshelf, item.lib_help_bookshelf], 
+    (None, None),
     None)
 
 blue_hallway = room_class.Ward_Room(
@@ -185,24 +161,6 @@ red_hallway = room_class.Ward_Room(
     (None, None),
     [None, None, None, item.security_and_red_hallway_door])
 
-pat_room_102 = room_class.Ward_Room(
-    "Patient Room 102", 
-    "Room 102", 
-    "A common patient room with two beds.", 
-    "",
-    None, 
-    (None, None),
-    None) #randomize player room
-
-pat_room_104 = room_class.Ward_Room(
-    "Patient Room 104", 
-    "Room 104", 
-    "A common patient room with two beds.", 
-    "",
-    None, 
-    (None, None),
-    None)
-
 pat_room_101 = room_class.Ward_Room(
     "Patient Room 101", 
     "Room 101", 
@@ -229,6 +187,25 @@ bathroom_p = room_class.Ward_Room(
     None, 
     (None, None),
     None)
+
+pat_room_102 = room_class.Ward_Room(
+    "Patient Room 102", 
+    "Room 102", 
+    "A common patient room with two beds.", 
+    "",
+    None, 
+    (None, None),
+    None) #randomize player room
+
+pat_room_104 = room_class.Ward_Room(
+    "Patient Room 104", 
+    "Room 104", 
+    "A common patient room with two beds.", 
+    "",
+    None, 
+    (None, None),
+    None)
+
 
 ######################    
 ### Basement Rooms ###
@@ -456,6 +433,29 @@ plexiglass_cell = room_class.Final_Room(
     "", #room label
     None #doors
     ) 
+
+# Stairwells to connect the ward and basement
+ward_landing = room_class.Ward_Room(
+    "Ward Landing", #add article "the"
+    "Stairs 1",
+    "A dimly lit stairwell, leading to a floor below.", 
+    "",
+    None, 
+    (None, None),
+    [None, None, None, item.common_room_and_ward_landing_door])
+
+basement_landing = room_class.Basement_Room(
+    "Basement Landing", #room name #add article "the"
+    "Stairs B", #display name
+    "No Room Description", #description
+    "", #room label or none
+    None, #storage units or none
+    (None, None),
+    None #doors or none
+    ) 
+
+basement_to_ward_stairs = room_class.Stairwell("Stairs Up", "Stairs Up", "", ward_landing)
+ward_to_basement_stairs = room_class.Stairwell("Stairs Down", "Stairs Down", "", basement_landing)
 
 
 ## Landing Coordinates ## 
