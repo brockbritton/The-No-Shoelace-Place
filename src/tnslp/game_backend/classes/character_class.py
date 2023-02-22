@@ -145,7 +145,9 @@ class Character:
             actions['print_all'].append("Please choose a room below:")
 
             display_rooms = [] #check for doors too
-            for i in range(0, len(next_room)):
+            print(self.loc, self.loc.has_doors)
+            for i in range(0, len(next_room)): 
+                print(next_room[i], next_room[i].has_doors)
                 if self.loc.has_doors and self.loc.doors[d_choice][i] != None:
                     if self.loc.doors[d_choice][i].locked:
                         display_rooms.append(f"{self.loc.doors[d_choice][i].name} (locked)")

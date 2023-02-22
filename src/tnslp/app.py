@@ -13,7 +13,6 @@ Session(app)
 
 @app.before_first_request
 def before_first_request():
-    #app.logger.info("before_first_request")
     session.clear()
 
     session['current_js_actions'] = {
@@ -57,9 +56,7 @@ def accept_input_data():
     
 @app.route("/game/request-map-data", methods=['GET'])
 def request_map_data():
-    map_data = session['game'].return_map_data()
-    print(map_data)
-    return map_data
+    return session['game'].return_map_data()
 
 @app.route("/game/loading-game", methods=['POST'])
 def loading_game():

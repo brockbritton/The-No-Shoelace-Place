@@ -159,7 +159,7 @@ red_hallway = room_class.Ward_Room(
     "",
     None, 
     (None, None),
-    [None, None, None, item.security_and_red_hallway_door])
+    [[None, None], None, [None, None, None], item.security_and_red_hallway_door])
 
 pat_room_101 = room_class.Ward_Room(
     "Patient Room 101", 
@@ -167,7 +167,7 @@ pat_room_101 = room_class.Ward_Room(
     "A common patient room with two beds.", 
     "",
     None, 
-    (None, None),
+    (None, None), 
     None)
 
 pat_room_103 = room_class.Ward_Room(
@@ -222,7 +222,7 @@ basement_lobby = room_class.Basement_Room(
 
 old_nurses_station = room_class.Basement_Room(
     "Old Nursing Station", #add article "the"
-    "B. Nursing", 
+    "B. Nursing",  
     "No Room Description",
     "",
     None,

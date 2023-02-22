@@ -470,7 +470,7 @@ html {
     background-color: black;
     border-radius: 15px;
     border: 5px solid white;
-    display: block;
+    display: none;
     z-index: 3;
 }
 
@@ -499,11 +499,12 @@ html {
     position: absolute;
     display: flex;
     background-color: black;
-    border: 1px solid white
+    border: 1px solid white;
+    filter: blur(8px)
 }
 
-.undiscovered-map {
-    filter: blur(3px);
+.discovered-map {
+    filter: none !important;
 }
 
 .patient-room {
@@ -528,12 +529,15 @@ html {
     cursor: default;
 }
 
+
+
 .doorway {
     background-color: black;
     position: absolute;
     height: 30px;
     width: 21px;
     z-index: inherit + 1;
+    filter: blur(4px);
 }
 
 .doorway-ew {
@@ -542,6 +546,11 @@ html {
     height: 21px;
     width: 21px;
     z-index: inherit + 1;
+    filter: blur(4px);
+}
+
+.map-door-container {
+    filter: blur(5px);
 }
 
 .door-locked {

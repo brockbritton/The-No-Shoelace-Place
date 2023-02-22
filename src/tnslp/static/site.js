@@ -43,11 +43,23 @@ function get_map_data() {
         url: '/game/request-map-data',
         type: 'GET',
         success: function(response) {
-            console.log(response)
-            //update_map_objects
+            //for (const [key, value] of response.entries())
+            const ward_doors_container = document.getElementById("ward-doors-map")
+            const ward_rooms_container = document.getElementById("ward-rooms-map")
+            
+            const key = "ward-rooms"
+            const html_key = `${key}-map`
+            for (i in response[key]) {
+                if (response[key][i]) {
+                    document.getElementById(html_key).children[i].classList.add("discovered-map")
+                } else {
+                    document.getElementById(html_key).children[i].classList.remove("discovered-map")
+                }
+            }
+
         },
         error: function(request, response, errors) {
-            console.log(errors)
+            console.log(`Map Data Request: ${errors}`)
         }
     });
 }

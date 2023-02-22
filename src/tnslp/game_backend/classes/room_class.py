@@ -27,7 +27,7 @@ class Room:
         
         self.storage_dict = {}
         self._all_rooms_registry.append(self)
-        self.visited = False ##for unknown or not
+        self.visited = False
         self.item_actions = {
             'inspect': self.inspect_room,
         }
@@ -253,7 +253,6 @@ class Room:
                 for x in (range(0, len(adjacent_room))):
                     if direction_cardinality in self.doors: #?
                         if self.doors[direction_cardinality] != None and self.doors[direction_cardinality][x] != None:
-                            
                             if not self.doors[direction_cardinality][x].locked:
                                 if adjacent_room[x].visited:
                                     room_states.append(("door visited", (self.doors[direction_cardinality][x], adjacent_room[x])))
@@ -265,7 +264,6 @@ class Room:
                                 else:
                                     room_states.append(("door unknown", self.doors[direction_cardinality][x]))
                                 
-
                         else:
                             if adjacent_room[x].visited:
                                 room_states.append(("visited room", adjacent_room[x]))

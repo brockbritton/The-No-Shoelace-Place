@@ -4,6 +4,7 @@ import tnslp.game_backend.classes.character_class as character_class
 import tnslp.game_backend.classes.item_class as item_class
 import tnslp.game_backend.classes.parser_class as parser_class
 import tnslp.game_backend.classes.room_class as room_class
+import tnslp.game_backend.objects.rooms as rooms
 import tnslp.game_backend.gl_backend_functions as gl
 
 
@@ -16,8 +17,8 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
+        self.ward_rooms = room_class.Ward_Room._ward_rooms_registry
 
-    
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
 
@@ -447,30 +448,39 @@ class Game:
 
     def return_map_data(self):
         map_dict = {
-            "ward_rooms" : [],
-            "basement_rooms" : [],
-            "doors" : [],
-            "current_room" : []
+            "ward-rooms" : [],
+            "basement-rooms" : [],
+            "ward-doors" : [],
+            "basement-doors" : [],
+            "current-room" : []
         }
-        
-
-        for w_room in room_class.Ward_Room._ward_rooms_registry:
-            if w_room.visited:
-                map_dict["ward_rooms"].append(True)
+        #print(room_class.Ward_Room._ward_rooms_registry)
+        #print(rooms.common_room.visited)
+        for room in self.ward_rooms:
+            if room.visited:
+                map_dict["ward-rooms"].append(True)
             else:
-                map_dict["ward_rooms"].append(False)
-        """
+                map_dict["ward-rooms"].append(False)
+        
+        print(map_dict["ward-rooms"])
+
         for b_room in room_class.Basement_Room._basement_rooms_registry:
             if b_room.visited:
-                map_dict["basement_rooms"].append(True)
+                map_dict["basement-rooms"].append(True)
             else:
-                map_dict["basement_rooms"].append(False)
-        """
-        for door in item_class.Lockable_Door._doors_registry:
+                map_dict["basement-rooms"].append(False)
+        
+        for door in item_class.Ward_Lockable_Door._doors_registry:
             if door.visited:
-                map_dict["doors"].append(True)
+                map_dict["ward-doors"].append(True)
             else:
-                map_dict["doors"].append(False)
+                map_dict["ward-doors"].append(False)
+        
+        for door in item_class.Basement_Lockable_Door._doors_registry:
+            if door.visited:
+                map_dict["basement-doors"].append(True)
+            else:
+                map_dict["basement-doors"].append(False)
 
         # self.player1.loc: 
         # looking for which room is current and what direction the player is facing

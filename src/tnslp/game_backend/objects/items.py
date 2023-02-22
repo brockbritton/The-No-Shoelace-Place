@@ -107,9 +107,9 @@ cr_game_cabinets = item_class.Storage_Box("game cabinet", "cabinet")
 cr_game_cabinets.set_items([chess_set, deck_of_cards])
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
     # Doors
-common_room_and_ward_landing_door = item_class.Lockable_Door("Door W1-B", "door", None)
-common_room_and_staff_breakroom = item_class.Lockable_Door("Door W4", "door", None)
-common_room_and_medications = item_class.Lockable_Door("Door W6", "door", None)
+common_room_and_ward_landing_door = item_class.Ward_Lockable_Door("Door W1-B", "door", None)
+common_room_and_staff_breakroom = item_class.Ward_Lockable_Door("Door W4", "door", None)
+common_room_and_medications = item_class.Ward_Lockable_Door("Door W6", "door", None)
 
 # Library #
     # Storage Units
@@ -140,13 +140,13 @@ lr_bedding_shelf = item_class.Storage_Spot("bedding shelf", "shelf")
 # Service Hallway #
     # Storage Units
     # Doors
-service_hallway_and_common_room_door = item_class.Lockable_Door("Door S4", "door", None)
+service_hallway_and_common_room_door = item_class.Ward_Lockable_Door("Door S4", "door", None)
 
 # Security Unit #
     # Storage Units
     # Doors
-security_and_red_hallway_door = item_class.Lockable_Door("Door S6", "door", None)
-security_and_service_hallway_door = item_class.Lockable_Door("Door S3", "door", None)
+security_and_red_hallway_door = item_class.Ward_Lockable_Door("Door S6", "door", None)
+security_and_service_hallway_door = item_class.Ward_Lockable_Door("Door S3", "door", None)
 
 # Utility Closet #
     # Storage Units
@@ -158,11 +158,11 @@ uc_hygiene_shelf = item_class.Storage_Spot("hygiene supplies shelf", "shelf")
 park_bench = item_class.Storage_Spot("park bench", "table")
 toys_bag = item_class.Storage_Bin("toys bin", "bin")
     # Doors
-courtyard_and_service_hallway_door = item_class.Lockable_Door("Door S9", "door", None)
+courtyard_and_service_hallway_door = item_class.Ward_Lockable_Door("Door S9", "door", None)
 
 # Admissions Office #
     # Storage Units
-admissions_exit_door = item_class.Lockable_Door("Door M7", "door", None) 
+admissions_exit_door = item_class.Ward_Lockable_Door("Door M7", "door", None) 
 
 
 ##########################
@@ -180,8 +180,8 @@ flashlight = item_class.Flashlight("flashlight", "flashlight")
 power_box = item_class.Power_Box("fuse box", "fuse box")
 
 # Basement Doors
-power_room_door = item_class.Lockable_Door("Power Room Door", "door", [power_room_key])
-high_security_door = item_class.Lockable_Door("Door J331", "door", [keycard, "2525"])
+power_room_door = item_class.Basement_Lockable_Door("Power Room Door", "door", [power_room_key])
+high_security_door = item_class.Basement_Lockable_Door("Door J331", "door", [keycard, "2525"])
 
 # Storage Containers
 # Cabinets

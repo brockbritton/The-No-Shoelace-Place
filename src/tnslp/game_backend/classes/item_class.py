@@ -436,12 +436,22 @@ class Door(Openable_Interact):
         self.can_lock_unlock = False
             
 class Lockable_Door(Lockable_Interact, Door):
+    def __init__(self, name, gen_name, keys_list) -> None:
+        super().__init__(name, gen_name, keys_list)
+        self.visited = False
+        self.keyable = True
+
+class Ward_Lockable_Door(Lockable_Door):
     _doors_registry = []
     def __init__(self, name, gen_name, keys_list) -> None:
         super().__init__(name, gen_name, keys_list)
         self._doors_registry.append(self)
-        self.visited = False
-        self.keyable = True
+
+class Basement_Lockable_Door(Lockable_Door):
+    _doors_registry = []
+    def __init__(self, name, gen_name, keys_list) -> None:
+        super().__init__(name, gen_name, keys_list)
+        self._doors_registry.append(self)
 
 class Electronic_Door(Lockable_Interact, Door):
     def __init__(self, name, gen_name, keys_list) -> None:
