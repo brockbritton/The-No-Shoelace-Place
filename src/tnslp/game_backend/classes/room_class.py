@@ -10,7 +10,7 @@ import tnslp.game_backend.gl_backend_functions as gl
 
 class Room:
     _all_rooms_registry = []
-    def __init__(self, name, display_name, description, room_label, doors, floor_wall_items) -> None:
+    def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
         self.name = name
         self.display_name = display_name
         self.description = description
@@ -21,6 +21,8 @@ class Room:
             self.create_door_dict(doors)
         self._all_rooms_registry.append(self)
         self.storage_containers = [item_class.Storage_Spot("ground", "ground"), item_class.Storage_Wall("wall", "walls")]
+        print(f"floor/wall: {floor_wall_items}")
+        print(f"doors: {doors}")
         for i in range(0, len(floor_wall_items)):
             if floor_wall_items[i] != None:
                 self.storage_containers[i].set_items(floor_wall_items[i])
@@ -455,7 +457,7 @@ class Ward_Room(Room):
     _ward_rooms_registry = []
     # room name, display name, description, room label, storage units, doors
     def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
-        super().__init__(name, display_name, description, room_label, doors, floor_wall_items)
+        super().__init__(name, display_name, description, room_label, floor_wall_items, doors)
         self.lights_on = True
         self._ward_rooms_registry.append(self)
         if storage_units != None:
@@ -466,10 +468,15 @@ class Ward_Room(Room):
         return f'{self.name}(ward room)'
 
 
+class Starting_Ward_Room(Ward_Room):
+    def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
+        super().__init__(name, display_name, description, room_label, storage_units, floor_wall_items, doors)
+        self.visited = True
+
 class Basement_Room(Room):
     _basement_rooms_registry = []
     def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
-        super().__init__(name, display_name, description, room_label, doors, floor_wall_items)
+        super().__init__(name, display_name, description, room_label, floor_wall_items, doors)
         self.lights_on = False
         self._basement_rooms_registry.append(self)
         if storage_units != None:
@@ -479,27 +486,11 @@ class Basement_Room(Room):
     def __repr__(self) -> str:
         return f'{self.name}(basement room)'
 
-class Maze_Room(Room):
-    def __init__(self, name, description, floor_wall_items, doors) -> None:
-        super().__init__(name, "Boiler room", description, None, doors, floor_wall_items)
-        self.lights_on = False
-
-    def __repr__(self) -> str:
-        return f'{self.name}(maze room)'
-
-    def print_directions(self, player, none_or_one):
-        if item.flashlight in player.inv:
-            if item.flashlight.full_power:
-                return super().print_directions(player, none_or_one)
-            else:
-                return "The flashlight's light is barely strong enough to see even a few steps."
-        else:
-            return "It is completely dark here. There is no light to see by."
-
 
 class Stairwell(Room):
+    #self, name, display_name, description, room_label, floor_wall_items, doors
     def __init__(self, name, display_name, room_label, to_room) -> None:
-        super().__init__(name, display_name, None, room_label, None, (None, None))
+        super().__init__(name, display_name, None, room_label, (None, None), None)
         self.to_room = to_room
         self.visited = True
 
@@ -508,8 +499,9 @@ class Stairwell(Room):
     
 
 class Final_Room(Room):
+    #self, name, display_name, description, room_label, floor_wall_items, doors
     def __init__(self, name, display_name, description, room_label, doors) -> None:
-        super().__init__(name, display_name, description, room_label, doors, (None, None))
+        super().__init__(name, display_name, description, room_label, [None, None], doors)
         self.lights_on = False
         self.demon = npc_class.Depression_Demon()
     
@@ -551,9 +543,3 @@ class Final_Room(Room):
                 displays.append(ability.name)
             actions['build_multiple_choice'] = [displays, player_avail_abilities]
             return ("face_demon", None, actions)
-
-
-
-        
-        
-

@@ -223,7 +223,7 @@ basement_lobby = room_class.Basement_Room(
 old_nurses_station = room_class.Basement_Room(
     "Old Nursing Station", #add article "the"
     "B. Nursing",  
-    "No Room Description",
+    "No Room Description", 
     "",
     None,
     (None, None),
@@ -346,93 +346,23 @@ shock_therapy_room = room_class.Basement_Room(
     (None, None),
     None)
 
-####################################    
-### Basement / Maze:Boiler Rooms ###
-####################################
-
-maze_int1 = room_class.Maze_Room(
-    "A Dark Intersection", 
-    "",
-    (None, None),
-    None)
-
-maze_south_end1 = room_class.Maze_Room(
-    "A Dead End", 
-    "",
-    (None, None),
-    None)
-
-maze_north_end1 = room_class.Maze_Room(
-    "A Dead End", 
-    "",
-    (None, None),
-    None)
-
-maze_int2 = room_class.Maze_Room(
-    "A Dark Intersection", 
-    "",
-    (None, None),
-    None)
-
-maze_int3 = room_class.Maze_Room(
-    "A Dark Intersection", 
-    "",
-    (None, None),
-    None)
-
-maze_west_end1 = room_class.Maze_Room(
-    "A Dead End", 
-    "",
-    (None, None),
-    None)
-
-maze_int4 = room_class.Maze_Room(
-    "A Dark Intersection", 
-    "",
-    (None, None),
-    None)
-
-maze_east_end1 = room_class.Maze_Room(
-    "A Dead End", 
-    "",
-    (None, None),
-    None)
-
-maze_int5 = room_class.Maze_Room(
-    "A Dark Intersection", 
-    "",
-    (None, None),
-    None)
-
-maze_north_end2 = room_class.Maze_Room(
-    "A Dead End", 
-    "",
-    (None, None),
-    None)
-
-maze_int6 = room_class.Maze_Room(
-    "A Dark Intersection", 
-    "",
-    (None, None),
-    [None, None, None, item.power_room_door])
-
-maze_east_end2 = room_class.Maze_Room(
-    "A Dead End", 
-    "",
-    (None, None),
-    None)
+### Basement / Maze:Boiler Rooms ? ###
 
 ########################################   
 ### Basement / Plexiglass Final Room ###
 ########################################
-
+"""
 plexiglass_cell = room_class.Final_Room(
     "Plexiglass Cell", #name
     "Demon Cell", #display name 
     "No Room Description", #description
     "", #room label
-    None #doors
-    ) 
+    (None, None))
+""" 
+
+###################################
+### Stair Landings / Stairwells ###
+###################################
 
 # Stairwells to connect the ward and basement
 ward_landing = room_class.Ward_Room(
@@ -497,24 +427,9 @@ old_nurses_station.set_coordinates(old_med_window, basement_lobby, 0, old_medica
 old_med_window.set_coordinates(0, basement_lobby, old_nurses_station, 0)
 old_medical_storage.set_coordinates(0, old_nurses_station, 0, 0)
 
-residential_hallway.set_coordinates(old_residential_bedroom, sedation_room, basement_lobby, maze_int1)
+residential_hallway.set_coordinates(old_residential_bedroom, sedation_room, basement_lobby, 0)
 sedation_room.set_coordinates(0, 0, 0, residential_hallway)
 old_residential_bedroom.set_coordinates(0, 0, residential_hallway, 0)
-
-maze_int1.set_coordinates(maze_north_end1, residential_hallway, maze_south_end1, maze_int2)
-maze_south_end1.set_coordinates(maze_int1, 0, 0, 0)
-maze_north_end1.set_coordinates(0, 0, maze_int1, 0)
-maze_int2.set_coordinates(maze_int3, maze_int1, maze_int3, 0)
-maze_int3.set_coordinates(maze_int2, 0, 0, maze_west_end1)
-maze_west_end1.set_coordinates(0, maze_int3, 0, 0)
-maze_int4.set_coordinates(0, maze_east_end1, maze_int3, maze_int5)
-maze_east_end1.set_coordinates(0, 0, 0, maze_int4)
-maze_int5.set_coordinates(maze_north_end2, maze_int4, maze_int6, 0)
-maze_north_end2.set_coordinates(0, 0, maze_int5, 0)
-maze_int6.set_coordinates(maze_int5, maze_east_end2, 0, power_room)
-maze_east_end2.set_coordinates(0, 0, 0, maze_int6)
-
-power_room.set_coordinates(0, maze_int6, 0, 0)
 
 waiting_room.set_coordinates(basement_lobby, 0, old_therapy_room, clinical_hallway)
 clinical_hallway.set_coordinates(0, waiting_room, [straightjacket_storage, tanning_bed_cell], high_security_area)
@@ -522,6 +437,6 @@ old_therapy_room.set_coordinates(waiting_room, 0, 0, 0)
 straightjacket_storage.set_coordinates(clinical_hallway, 0, 0, 0)
 tanning_bed_cell.set_coordinates(clinical_hallway, 0, 0, 0)
 
-high_security_area.set_coordinates(shock_therapy_room, clinical_hallway, 0, plexiglass_cell)
+high_security_area.set_coordinates(shock_therapy_room, clinical_hallway, 0, 0)
 shock_therapy_room.set_coordinates(0, 0, high_security_area, 0)
-plexiglass_cell.set_coordinates(0, high_security_area, 0, 0)
+#plexiglass_cell.set_coordinates(0, high_security_area, 0, 0)
