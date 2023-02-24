@@ -16,7 +16,7 @@ game_exit = room_class.Ward_Room(
     [None, item.admissions_exit_door, None, None] #doors or none
     )
 
-admissions = room_class.Ward_Room(
+admissions = room_class.Ward_Room(  
     "Admissions", 
     "Admissions", 
     "A sparsely decorated room, a few chairs in the corner, and desks at which staff sit focused on their work", 

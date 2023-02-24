@@ -255,11 +255,12 @@ html {
 #button_entry_div {
     display: none;
     font-size: 1.5em;
-    margin: 0.625em;
-    height: auto;
+    margin: 0.625em 0;
+    height: 65px;
     width: 100%;
     overflow-x: scroll;
-
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 
 #command_label {
