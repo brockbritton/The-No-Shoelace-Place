@@ -471,14 +471,15 @@ class Starting_Ward_Room(Ward_Room):
     def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
         super().__init__(name, display_name, description, room_label, storage_units, floor_wall_items, doors)
         self.visited = True
-        for direction in self.doors.values():
-            if isinstance(direction, list):
-                for door in direction:
-                    if isinstance(door, item_class.Lockable_Door) and not door.visited:
-                        door.visited = True
-            else:
-                if isinstance(direction, item_class.Lockable_Door) and not direction.visited:
-                    direction.visited = True
+        if self.has_doors:
+            for direction in self.doors.values():
+                if isinstance(direction, list):
+                    for door in direction:
+                        if isinstance(door, item_class.Lockable_Door) and not door.visited:
+                            door.visited = True
+                else:
+                    if isinstance(direction, item_class.Lockable_Door) and not direction.visited:
+                        direction.visited = True
 
 
 class Basement_Room(Room):
