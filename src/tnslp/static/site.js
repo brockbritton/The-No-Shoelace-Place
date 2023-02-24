@@ -47,15 +47,18 @@ function get_map_data() {
             const ward_doors_container = document.getElementById("ward-doors-map")
             const ward_rooms_container = document.getElementById("ward-rooms-map")
             
-            const key = "ward-rooms"
-            const html_key = `${key}-map`
-            for (i in response[key]) {
-                if (response[key][i]) {
-                    document.getElementById(html_key).children[i].classList.add("discovered-map")
-                } else {
-                    document.getElementById(html_key).children[i].classList.remove("discovered-map")
+            const keys = ["ward-rooms", "ward-doors"]
+            for (i in keys) {
+                for (r in response[keys[i]]) {
+                    let html_key = `${keys[i]}-map`
+                    if (response[keys[i]][r]) {
+                        document.getElementById(html_key).children[r].classList.add("discovered-map")
+                    } else {
+                        document.getElementById(html_key).children[r].classList.remove("discovered-map")
+                    }
                 }
             }
+            
 
         },
         error: function(request, response, errors) {

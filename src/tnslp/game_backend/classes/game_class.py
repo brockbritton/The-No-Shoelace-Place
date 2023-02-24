@@ -17,7 +17,12 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
+        
+        #Map collections
         self.ward_rooms = room_class.Ward_Room._ward_rooms_registry
+        self.ward_doors = item_class.Ward_Lockable_Door._doors_registry
+        self.basement_rooms = room_class.Basement_Room._basement_rooms_registry
+        self.basement_doors = item_class.Basement_Lockable_Door._doors_registry
 
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
@@ -122,7 +127,6 @@ class Game:
 
         return actions
 
-    
     def organize_raw_input(self, frontend_input):
         actions = {
             'print_all': [],
@@ -454,29 +458,26 @@ class Game:
             "basement-doors" : [],
             "current-room" : []
         }
-        #print(room_class.Ward_Room._ward_rooms_registry)
-        #print(rooms.common_room.visited)
+
         for room in self.ward_rooms:
             if room.visited:
                 map_dict["ward-rooms"].append(True)
             else:
                 map_dict["ward-rooms"].append(False)
         
-        print(map_dict["ward-rooms"])
+        for door in self.ward_doors:
+            if door.visited:
+                map_dict["ward-doors"].append(True)
+            else:
+                map_dict["ward-doors"].append(False)
 
-        for b_room in room_class.Basement_Room._basement_rooms_registry:
+        for b_room in self.basement_rooms:
             if b_room.visited:
                 map_dict["basement-rooms"].append(True)
             else:
                 map_dict["basement-rooms"].append(False)
         
-        for door in item_class.Ward_Lockable_Door._doors_registry:
-            if door.visited:
-                map_dict["ward-doors"].append(True)
-            else:
-                map_dict["ward-doors"].append(False)
-        
-        for door in item_class.Basement_Lockable_Door._doors_registry:
+        for door in self.basement_doors:
             if door.visited:
                 map_dict["basement-doors"].append(True)
             else:

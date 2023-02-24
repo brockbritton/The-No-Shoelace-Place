@@ -61,7 +61,7 @@ outside_time = room_class.Ward_Room(
     (None, None),
     [item.courtyard_and_service_hallway_door, None, None, None]) 
 
-common_room = room_class.Ward_Room(
+common_room = room_class.Starting_Ward_Room(
     "Common Room", #add article "the"
     "Common Room", 
     "A common area filled with tables and chairs, with cabinets lining a few walls.", 

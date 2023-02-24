@@ -4,7 +4,6 @@ import random
 import num2words as n2w
 import tnslp.game_backend.classes.item_class as item_class
 import tnslp.game_backend.classes.npc_class as npc_class
-import tnslp.game_backend.objects.items as item
 import tnslp.game_backend.gl_backend_functions as gl
 
 
@@ -17,12 +16,12 @@ class Room:
         self.label = room_label
         self.doors = {}
         self.has_doors = False
-        if doors != None:
+        if doors != None: 
             self.create_door_dict(doors)
         self._all_rooms_registry.append(self)
         self.storage_containers = [item_class.Storage_Spot("ground", "ground"), item_class.Storage_Wall("wall", "walls")]
-        print(f"floor/wall: {floor_wall_items}")
-        print(f"doors: {doors}")
+        #print(f"floor/wall: {floor_wall_items}")
+        #print(f"doors: {doors}")
         for i in range(0, len(floor_wall_items)):
             if floor_wall_items[i] != None:
                 self.storage_containers[i].set_items(floor_wall_items[i])
@@ -472,6 +471,15 @@ class Starting_Ward_Room(Ward_Room):
     def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
         super().__init__(name, display_name, description, room_label, storage_units, floor_wall_items, doors)
         self.visited = True
+        for direction in self.doors.values():
+            if isinstance(direction, list):
+                for door in direction:
+                    if isinstance(door, item_class.Lockable_Door) and not door.visited:
+                        door.visited = True
+            else:
+                if isinstance(direction, item_class.Lockable_Door) and not direction.visited:
+                    direction.visited = True
+
 
 class Basement_Room(Room):
     _basement_rooms_registry = []
@@ -543,3 +551,7 @@ class Final_Room(Room):
                 displays.append(ability.name)
             actions['build_multiple_choice'] = [displays, player_avail_abilities]
             return ("face_demon", None, actions)
+
+class Maze_Room(Room):
+    def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
+        super().__init__(name, display_name, description, room_label, floor_wall_items, doors)

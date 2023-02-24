@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_COOKIE_SECURE"] = False
+app.config["SESSION_COOKIE_SECURE"] = True
 Session(app)
 
 @app.before_first_request
@@ -26,6 +26,8 @@ def before_first_request():
     except KeyError:
         session['game'] = game_class.Game()
         print("game created")
+
+    session.modified = True
 
 @app.route("/")
 def home():
