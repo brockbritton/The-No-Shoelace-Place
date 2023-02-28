@@ -57,7 +57,6 @@ function get_map_data() {
                         }
                     }
                 }
-                
             }
         },
         error: function(request, response, errors) {

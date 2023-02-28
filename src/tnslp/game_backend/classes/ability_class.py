@@ -7,7 +7,7 @@ class Ability:
         self.name = display_name
         self.damage = base_damage
         self.affects = conditions_list
-        self.lvl = 3
+        self.lvl = 0
 
     def __repr__(self) -> str:
         return f'{self.name}(ability)'
