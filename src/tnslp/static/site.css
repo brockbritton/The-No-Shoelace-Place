@@ -559,7 +559,7 @@ html {
     left: 0;
     height: inherit;
     width: inherit;
-    display: none;
+    display: block;
 }
 
 .door-unlocked {
@@ -583,7 +583,7 @@ html {
     cursor: default;
 }
 
-.doorway:hover > .map-door-label {
+.doorway.discovered-map:hover > .map-door-label {
     opacity: 1;
 }
 

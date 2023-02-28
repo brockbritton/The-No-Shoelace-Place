@@ -43,23 +43,22 @@ function get_map_data() {
         url: '/game/request-map-data',
         type: 'GET',
         success: function(response) {
-            //for (const [key, value] of response.entries())
-            const ward_doors_container = document.getElementById("ward-doors-map")
-            const ward_rooms_container = document.getElementById("ward-rooms-map")
-            
-            const keys = ["ward-rooms", "ward-doors"]
-            for (i in keys) {
-                for (r in response[keys[i]]) {
-                    let html_key = `${keys[i]}-map`
-                    if (response[keys[i]][r]) {
-                        document.getElementById(html_key).children[r].classList.add("discovered-map")
-                    } else {
-                        document.getElementById(html_key).children[r].classList.remove("discovered-map")
+            //const map_levels = ["ward", "basement"]
+            const map_levels = ["ward"]
+            for (let i in map_levels) {
+                const map_objects = ["rooms", "doors"]
+                for (let j in map_objects) {
+                    let html_key = `${map_levels[i]}-${map_objects[j]}-map`
+                    for (let r in response[`${map_levels[i]}-${map_objects[j]}`]) {
+                        if (response[`${map_levels[i]}-${map_objects[j]}`][r]) {
+                            document.getElementById(html_key).children[r].classList.add("discovered-map")
+                        } else {
+                            document.getElementById(html_key).children[r].classList.remove("discovered-map")
+                        }
                     }
                 }
+                
             }
-            
-
         },
         error: function(request, response, errors) {
             console.log(`Map Data Request: ${errors}`)
