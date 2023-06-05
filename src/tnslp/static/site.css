@@ -30,6 +30,7 @@ html {
 button {
     background-color: black;
     color: white;
+    
 }
 
 button:hover {
@@ -114,6 +115,31 @@ button:disabled:hover {
     background-color: grey;
 }
 
+.gameplay-buttons {
+    font-family: 'Courier New', monospace !important; 
+    border: 0.125em solid white;
+    padding: 0.3125em 0.625em;
+    border-radius: 0.3125em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.25em;
+    margin: 0.3125em 0.625em 0.3125em 0em;
+    vertical-align: middle;
+}
+
+.game-menu-buttons {
+    border: 0.125em solid white;
+    padding: 0.3125em 0.625em;
+    float: right;
+    border-radius: 0.3125em;
+    text-align: center;
+    text-decoration: none;
+    display: inline;
+    font-size: 1.25em;
+    margin: 0.3125em 0.625em 0.3125em 0em;
+}
+
 /* ######### */
 /* Game Page */
 /* ######### */
@@ -180,35 +206,6 @@ button:disabled:hover {
     /* filter: blur(5px); */
 }
 
-/* ####################### */
-/* Game Page Button Styles */
-/* ####################### */
-
-.game-multiple-choice-buttons {
-    font-family: 'Courier New', monospace !important; 
-    border: 0.125em solid white;
-    padding: 0.3125em 0.625em;
-    border-radius: 0.3125em;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1.25em;
-    margin: 0.3125em 0.625em 0.3125em 0em;
-}
-
-
-.game-menu-buttons {
-    border: 0.125em solid white;
-    padding: 0.3125em 0.625em;
-    float: right;
-    border-radius: 0.3125em;
-    text-align: center;
-    text-decoration: none;
-    display: inline;
-    font-size: 1.25em;
-    margin: 0.3125em 0.625em 0.3125em 0em;
-}
-
 /* ############################## */
 /* Text display and Entry widgets */
 /* ############################## */
@@ -256,6 +253,7 @@ button:disabled:hover {
     color: white;
     border-radius: 5px;
     vertical-align: middle;
+    
 }
 
 #player-text-input:focus {
@@ -270,8 +268,7 @@ button:disabled:hover {
 /* Where multiple choice buttons will be created */
 #button-entry-div {
     display: none;
-    font-size: 1.5em;
-    height: 65px;
+    height: auto;
     width: 100%;
     overflow-x: scroll;
     overflow-y: hidden;

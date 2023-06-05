@@ -168,12 +168,13 @@
                     <label id="text-input-label" for="player-text-input"> <strong> > </strong> </label>
                     <input id="player-text-input" 
                         type="text" 
+                        autocomplete="off"
                         placeholder="direct patient">
                     </input>
-                    <button type="button" id="text-entry-enter-button" 
-                        class="game-multiple-choice-buttons" 
+                    <button id="text-entry-enter-button" 
+                        class="gameplay-buttons" 
                         onclick="accept_entry_input()"> 
-                        play <!-- text on form button -->
+                        play <!-- text on button -->
                     </button>
                 </div>
                 <div id="button-entry-div">
@@ -331,9 +332,9 @@
         ajaxAcceptInput(null, '/game/loading-game');
 
         window.addEventListener("keydown", function(e) {
-            console.log(e.key)
+            //console.log(e.key)
             if (e.key == "Enter") {
-                alert("enter")
+                document.getElementById("text-entry-enter-button").click()
                 
             }
         });

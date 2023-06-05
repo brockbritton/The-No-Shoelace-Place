@@ -12,7 +12,7 @@ class Calendar:
         self.next_day(player)
 
     def __repr__(self) -> str:
-        return f'(calendar)'
+        return '(calendar)'
 
     def next_day(self, player):
         # Player stats values are updated on initialized Day object
@@ -35,10 +35,10 @@ class Calendar:
         if self.days_list[-1].turns_left == 0: 
             actions['print_all'].append(f"Day {self.days_list[-1].day_number} is ending. You have no more turns left. You have returned to your room and have fallen asleep.")
             self.next_day(player)
-            actions['update_ui_values'].append("day_value")
+            actions['update_ui_values'].append("day-value")
             actions['print_all'].append(f"Day {self.days_list[-1].day_number} is beginning. You have {self.days_list[-1].turns_left} turns left. You are currently in {player.loc.name}.")
 
-        actions['update_ui_values'].append("turns_value")
+        actions['update_ui_values'].append("turns-value")
         return actions
 
 
@@ -61,5 +61,5 @@ class _Day:
         self.activity2 = None
 
     def __repr__(self) -> str:
-        return f'(day)'
+        return '(day)'
 

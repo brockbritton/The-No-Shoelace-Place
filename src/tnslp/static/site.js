@@ -17,6 +17,30 @@ const image_header = document.getElementById("image_header");
 const foreground_header_image = document.getElementById("foreground_image");
 */
 
+function accept_entry_input() {
+    const input_element = document.getElementById("player-text-input");
+    const input_text = input_element.value
+    printtk(">   " + input_text)
+    let data_values = {
+        'input' : input_text,
+    }
+    ajaxAcceptInput(data_values, '/game/accept-input-data');
+    input_element.value = "";
+}
+
+function accept_button_input(display, button_index) {
+    printtk(">   " + display)
+    let data_values = {
+        'input' : button_index,
+    }
+    ajaxAcceptInput(data_values, '/game/accept-input-data');
+    const button_entry_div = document.getElementById("button-entry-div");
+    button_entry_div.style.display = "none";
+    while (button_entry_div.firstChild) {
+        button_entry_div.removeChild(button_entry_div.firstChild);
+    } 
+}
+
 function ajaxAcceptInput(data_values, route) {
     $.ajax({
         url: route,
@@ -46,47 +70,6 @@ function ajaxAcceptInput(data_values, route) {
             }
         }
     }); 
-}
-
-function get_map_data() {
-    $.ajax({
-        url: '/game/request-map-data',
-        type: 'GET',
-        success: function(response) {
-            //const map_levels = ["ward", "basement"]
-            const map_levels = ["ward"]
-            for (let i in map_levels) {
-                const map_objects = ["rooms", "doors"]
-                for (let j in map_objects) {
-                    let html_key = `${map_levels[i]}-${map_objects[j]}-map`
-                    for (let r in response[`${map_levels[i]}-${map_objects[j]}`]) {
-                        if (response[`${map_levels[i]}-${map_objects[j]}`][r]) {
-                            document.getElementById(html_key).children[r].classList.add("discovered-map")
-                        } else {
-                            document.getElementById(html_key).children[r].classList.remove("discovered-map")
-                        }
-                    }
-                }
-            }
-        },
-        error: function(request, response, errors) {
-            console.log(`Map Data Request: ${errors}`)
-        }
-    });
-}
-
-function accept_entry_input(event) {
-    let input_text = document.getElementById("player-text-input").value;
-    printtk(">   " + input_text)
-    let data_values = {
-        'input' : input_text,
-    }
-    ajaxAcceptInput(data_values, '/game/accept-input-data');
-    input_text.value = "";
-}
-
-function update_map_objects(bool_list) {
-
 }
 
 function print_all(pars_list, bmc_list, rebuild_text){
@@ -181,10 +164,11 @@ function fade_in_quote_line(par_element) {
 
 function build_multiple_choice(display_strings) {
     toggle_entry_divs("button");
+    const button_entry_div = document.getElementById("button-entry-div");
     for (let i=0; i < display_strings.length; i++) {
-        let btn = document.createElement("btn");
-        btn.classList.add("game_multiple_choice_buttons");
-        btn.innerHTML = display_strings[i];
+        let btn = document.createElement("button");
+        btn.classList.add("gameplay-buttons");
+        btn.innerHTML = display_strings[i].toLowerCase();
         btn.value = i;
         btn.onclick = accept_button_input.bind(null, display_strings[i], i);
         button_entry_div.appendChild(btn);
@@ -201,20 +185,6 @@ function toggle_entry_divs(element_type) {
         button_entry_div.style.display = "none";
         text_entry_div.style.display = "block";
     }
-}
-
-
-function accept_button_input(display, button_index) {
-    printtk(">   " + display)
-    let data_values = {
-        'input' : button_index,
-    }
-    ajaxAcceptInput(data_values, '/game/accept-input-data');
-    
-    button_entry_div.style.display = "none";
-    while (button_entry_div.firstChild) {
-        button_entry_div.removeChild(button_entry_div.firstChild);
-    } 
 }
 
 function update_inv_visual(inv_strings) {
@@ -250,6 +220,9 @@ function update_ui_values(list_pairs) {
     }
 }
 
+
+// Frontend Map Functions \\
+
 function toggleGameMap() {
     const map_window = document.getElementById("game-map")
     const game_window = document.getElementById("game_gui")
@@ -261,5 +234,36 @@ function toggleGameMap() {
         map_window.style.display = "block";
         game_window.style.filter = "blur(5px)";
     }
+
+}
+
+function get_map_data() {
+    $.ajax({
+        url: '/game/request-map-data',
+        type: 'GET',
+        success: function(response) {
+            //const map_levels = ["ward", "basement"]
+            const map_levels = ["ward"]
+            for (let i in map_levels) {
+                const map_objects = ["rooms", "doors"]
+                for (let j in map_objects) {
+                    let html_key = `${map_levels[i]}-${map_objects[j]}-map`
+                    for (let r in response[`${map_levels[i]}-${map_objects[j]}`]) {
+                        if (response[`${map_levels[i]}-${map_objects[j]}`][r]) {
+                            document.getElementById(html_key).children[r].classList.add("discovered-map")
+                        } else {
+                            document.getElementById(html_key).children[r].classList.remove("discovered-map")
+                        }
+                    }
+                }
+            }
+        },
+        error: function(request, response, errors) {
+            console.log(`Map Data Request: ${errors}`)
+        }
+    });
+}
+
+function update_map_objects(bool_list) {
 
 }
