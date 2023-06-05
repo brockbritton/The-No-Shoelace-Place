@@ -161,14 +161,14 @@ class Room:
                     direction.visited = True
 
         actions['print_all'].append(f"You are now in {self.name}.")
-        actions['update_ui_values'].append("room_value")
+        actions['update_ui_values'].append("room-value")
 
         if not self.lights_on:
             #some check about having full battery flashlight
             stumble = random.randint(1,12)
             if stumble == 1:
                 actions['print_all'].append("In the dark, you stumbled and fell, scraping your hands on the rough ground.")
-                actions['update_ui_values'].append("health_value")
+                actions['update_ui_values'].append("health-value")
                 player.health -= 5
                 if player.health <= 0:
                     player.health = 0

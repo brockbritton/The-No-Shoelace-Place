@@ -27,17 +27,37 @@ html {
     font-size: 1em;
 }
 
+button {
+    background-color: black;
+    color: white;
+}
+
+button:hover {
+    font-weight: 700;
+    background-color: grey;
+
+}
+
+button:active {
+    background-color: #C0C0C0;
+}
+
+button:disabled:hover {
+    cursor: not-allowed;
+    color: black;
+}
+
 
 /* ############### */
 /* Title/Home Page */
 /* ############### */
-#center_welcome {
+#center-welcome {
     justify-content: center;
     justify-items: center;
     width: 100%;
 }
 
-#center_welcome #welcome_logo {
+#center-welcome #welcome-logo {
     height: auto;
     display: block;
     margin-left: auto;
@@ -46,7 +66,7 @@ html {
     width: 50%;
 }
 
-#center_welcome #welcome_buttons {
+#center-welcome #welcome-buttons {
     background-color: none !important;
     width: 100%;
     display: block;
@@ -60,10 +80,8 @@ html {
 /* ######### */
 /*  Buttons  */
 /* ######### */
-.large_bordered_button {
-    background-color: black; 
+.large-bordered-button {
     border: 0.125em solid white;
-    color: white;
     padding: 0.9375em 1.875em;
     border-radius: 0.75em;
     text-align: center;
@@ -75,14 +93,12 @@ html {
 	opacity: 1 !important;
 }
 
-.large_bordered_button:hover {
-    background-color: #C0C0C0;
+.large-bordered-button:hover {
+    background-color: grey;
 }
 
-.regular_bordered_button {
-    background-color: black; 
+.regular-bordered-button {
     border: 0.125em solid white;
-    color: white;
     padding: 0.9375em 1.875em;
     border-radius: 0.75em;
     text-align: center;
@@ -94,15 +110,15 @@ html {
 	opacity: 1 !important;
 }
 
-.regular_bordered_button:hover {
-    background-color: #C0C0C0;
+.regular-bordered-button:hover {
+    background-color: grey;
 }
 
 /* ######### */
 /* Game Page */
 /* ######### */
 
-#image_header {
+#image-header-container {
     position: relative;
     margin-top: -3.125em;
     height: 15.625em;
@@ -111,7 +127,7 @@ html {
     z-index: 0;
 }
 
-#image_header #cursor_space {
+#cursor-space {
     position: absolute;
     margin-top: 6.25em;
     height: 8.75em;
@@ -120,10 +136,10 @@ html {
     width: 70%;
     background-color: none;
     overflow: hidden;
-    z-index: 2;
+    z-index: 3;
 }
 
-#image_header #background_image {
+.game-header-image {
     position: absolute;
     height: auto;
     left: 50%;
@@ -134,32 +150,29 @@ html {
     margin-top: -0.625em;
 }
 
-#image_header #foreground_image {
-    position: absolute;
-    height: auto;
-    left: 50%;
-    transform: translate(-50%);
-    width: 70%;
-    background-color: none;
-    overflow: hidden;
-    margin-top: -0.625em;
+#fill-header {
     opacity: 0;
     z-index: 2;
+    transition: opacity .5s;
+}
+
+#cursor-space:hover ~ #fill-header {
+    opacity: 1;
 }
 
 
-#game_gui {
+#game-gui {
     position: relative;
-    width: 88%;
     display: flex;
-    /* height: 34.375em; */
-    height: auto;
+    width: 90%;
+    margin: auto;
+    height: 34.375em;  /* need? */
     background-color: none !important;
-    padding: 0em 6.25em 0em 6.25em;
+    padding: 0;
     z-index: 2;
 }
 
-#game_gui > * {
+#game-gui > * {
     background-color: none;
     color: white;
     font-family: 'Courier New', monospace !important;
@@ -171,28 +184,21 @@ html {
 /* Game Page Button Styles */
 /* ####################### */
 
-.game_multiple_choice_buttons {
-    background-color: black; 
+.game-multiple-choice-buttons {
     font-family: 'Courier New', monospace !important; 
     border: 0.125em solid white;
-    color: white;
     padding: 0.3125em 0.625em;
     border-radius: 0.3125em;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 1em;
+    font-size: 1.25em;
     margin: 0.3125em 0.625em 0.3125em 0em;
 }
 
-.game_multiple_choice_buttons:hover {
-    background-color: #C0C0C0;
-}
 
-.game_menu_buttons {
-    background-color: black; 
+.game-menu-buttons {
     border: 0.125em solid white;
-    color: white;
     padding: 0.3125em 0.625em;
     float: right;
     border-radius: 0.3125em;
@@ -203,22 +209,20 @@ html {
     margin: 0.3125em 0.625em 0.3125em 0em;
 }
 
-.game_menu_buttons:hover {
-    background-color: #C0C0C0;
-}
-
+/* ############################## */
 /* Text display and Entry widgets */
-#text_and_entry_widgets {
+/* ############################## */
+
+#display-entry-container {
+    flex: 5;
     width: 43.75em;
     height: 43.75em;
-    border: 0.625em solid, white;
-    flex: 5;
     overflow: hidden;
-    background-color: none !important;
 }
 
-#game_text_display {
+#game-text-display {
     border: 0.1875em solid white;
+    border-radius: 10px;
     width: 100%;
     height: 70%;
     overflow: scroll;
@@ -229,33 +233,44 @@ html {
     background-color: none !important;
 }
 
-.command_input_text {
-    font-size: 1em;
-    font-family: 'Courier New', monospace !important; 
-    background-color: none !important;
-}
-
-.quote_text {
-    font-size: 1em;
-    font-family: 'Courier New', monospace !important; 
-    background-color: none !important;
-    text-align: center;
-}
-
-#entry_widgets {
+#text-button-entry-widgets {
     height: 10%;
+    background-color: black;
+    font-size: 1.25em;
+    padding: 5px;
 }
 
-#text_entry_div {
-    display: block;
+#text-input-label {
+    background-color: black;
+    color: white;
+    margin: 0 10px 0 20px;
     font-size: 1.5em;
-    margin: 0.625em;
+    vertical-align: middle;
 }
 
-#button_entry_div {
+#player-text-input {
+    font-size: 1.4em;
+    padding: 0.3125em;
+    font-family: 'Courier New', monospace !important; 
+    background-color: black !important;
+    color: white;
+    border-radius: 5px;
+    vertical-align: middle;
+}
+
+#player-text-input:focus {
+    outline: 1px white solid;
+}
+
+#text-entry-enter-button {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+/* Where multiple choice buttons will be created */
+#button-entry-div {
     display: none;
     font-size: 1.5em;
-    margin: 0.625em 0;
     height: 65px;
     width: 100%;
     overflow-x: scroll;
@@ -263,37 +278,38 @@ html {
     white-space: nowrap;
 }
 
-#command_label {
-    padding: 0.3125em;
+.standard-display-text {
     font-size: 1em;
     font-family: 'Courier New', monospace !important; 
+    background-color: none !important;
 }
 
-#command_input {
-    font-family: 'Courier New', monospace !important; 
+
+.quote-text {
     font-size: 1em;
-    background-color: black;
-    color: white;
+    font-family: 'Courier New', monospace !important; 
+    background-color: none !important;
+    text-align: center;
 }
 
-#command_input:focus {
-    outline: none;
+.riddle-text {
+
 }
 
 /* Right Panel - Player Stats, Inventory, Abilities, Menu Buttons */
-#right_panel {
+#right-panel {
     flex: 4;
     margin: 0em 0em 0em 3.125em;
     height: 34.375em;
 }
 
-.panel_rows {
+.panel-rows {
     height: 50%;
     display: flex;
     margin-bottom: 1.5em;
 }
 
-.panel_divs {
+.panel-cols {
     background-color: none !important;
     color: white;
     font-family: Georgia, serif;
@@ -303,53 +319,53 @@ html {
     justify-content: center;
 }
 
-#ps_left {
+#ps-left {
     background-color: none !important;
     float: left;
-    width: 35%;
+    width: 25%;
 }
 
-#ps_right {
+#ps-right {
     background-color: none !important;
     float: right;
-    width: 60%;
+    width: 70%;
     text-align: right;
     margin-right: 5%;
 }
 
-#inv_left {
+#inv-left {
     float: left;
     width: min-content;
 }
 
-#inv_right {
+#inv-right {
     float: right;
     width: 90%;
 }
 
-#ability_left {
+#ability-left {
     float: left;
     width: max-content;
 }
 
-#ability_right {
+#ability-right {
     float: right;
     width: min-content;
     margin-right: 1.25em;
 }
 
-#game_buttons {
+#game-buttons {
     display: flex;
     flex-direction: column;
     
 }
 
-#bottom_right {
+#bottom-right {
     margin-top: auto;
     margin-bottom: 1.5em;
 }
 
-.panel_titles {
+.panel-titles {
     background-color: none !important;
     color: white;
     font-family: Georgia, serif;
@@ -360,7 +376,7 @@ html {
     margin-bottom: .75em;
 }
 
-.label_buttons {
+.label-buttons {
     background-color: black; 
     color: white;
     border: none;
@@ -372,7 +388,7 @@ html {
     margin: 0em;
 }
 
-.right_panel_text {
+.right-panel-text {
     text-align: left;
     background-color: none !important;
     font-size: 1.25em;
@@ -382,7 +398,7 @@ html {
     display: inline-block;
 }
 
-.ps_values {
+.ps-values {
     text-align: right;
     background-color: none !important;
     font-family: 'Courier New', monospace !important;
@@ -393,7 +409,7 @@ html {
     display: inline-block;
 }
 
-.ps_inv_elem_spacing {
+.ps-inv-elem-spacing {
     padding: 0em;
     margin-top: 0em;
     margin-bottom: .5em;
@@ -402,7 +418,7 @@ html {
     width: 95%;
 }
 
-#health_value {
+#health-value {
 
     height: 1.25em;
     font-family: 'Courier New', monospace !important;
@@ -432,7 +448,7 @@ html {
     overflow: none;
 }
 
-.inv_strings {
+.inv-strings {
     text-align: left;
     font-family: 'Courier New', monospace !important;
     font-size: 1.25em;
@@ -442,7 +458,7 @@ html {
     display: inline-block;
 }
 
-.ability_strings {
+.ability-strings {
     text-align: left;
     font-size: 1.25em;
     margin-top: 0em;
@@ -451,558 +467,10 @@ html {
     display: inline-block;
 }
 
-.ability_str_lvl_div {
+.ability-str-lvl-div {
     display: flex;
     justify-content: left;
     align-items: center;
     margin-top: 0em;
     margin-bottom: .5em;
-}
-
-/* ############# */
-/* Game Page Map */
-/* ############# */
-#game-map {
-    position: absolute;
-    left: 25vw;
-    top: 20vh;
-    height: 70vh; /* 80wh */
-    width: 50vw; /* 80vw */
-    background-color: black;
-    border-radius: 15px;
-    border: 5px solid white;
-    display: none;
-    z-index: 3;
-}
-
-#map-close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-family: "Lucida Console", "Courier New", monospace;
-    font-weight: bold;
-    font-size: 25px;
-    color: white;
-    background-color: black;
-    height: 40px;
-    width: 40px;
-    border: 2px solid white;
-}
-
-#map-close-button:hover {
-    background-color: #C0C0C0;
-    /* background-color: #FFD700; GOLD */
-     
-}
-
-/* Game Map Classes*/
-.map-room {
-    position: absolute;
-    display: flex;
-    background-color: black;
-    border: 1px solid white;
-    filter: blur(8px)
-}
-
-.discovered-map {
-    filter: none !important;
-}
-
-.patient-room {
-    height: 50px;
-    width: 75px;
-}
-
-.vertical-text {
-    writing-mode: vertical-lr !important; 
-    text-orientation: upright !important;
-    margin: 100% auto !important;
-    height: 50% !important;
-    text-align: center !important;
-}
-
-.map-room > p {
-    width: min-content;
-    height: max-content;
-    margin: auto;
-    vertical-align: middle;
-    text-align: center;
-    cursor: default;
-}
-
-.doorway {
-    background-color: black;
-    position: absolute;
-    height: 30px;
-    width: 21px;
-    z-index: inherit + 1;
-    filter: blur(4px);
-    border-radius: 8px;
-}
-
-.doorway-ew {
-    background-color: black;
-    position: absolute;
-    height: 21px;
-    width: 21px;
-    z-index: inherit + 1;
-    filter: blur(4px);
-}
-
-.map-door-container {
-    filter: blur(5px);
-}
-
-.door-locked {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: inherit;
-    width: inherit;
-    display: block;
-}
-
-.door-unlocked {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: inherit;
-    width: inherit;
-    display: block;
-}
-
-.map-door-label {
-    background-color: black;
-    position: relative;
-    width: 110px;
-    text-align: center;
-    margin-top: 7px;
-    margin-left: -45px;
-    opacity: 0;
-    transition: opacity 0.5s;
-    cursor: default;
-}
-
-.doorway.discovered-map:hover > .map-door-label {
-    opacity: 1;
-}
-
-/* Physical Map Rooms */
-
-#service-hallway-room {
-    top: 200px;
-    left: 199px;
-    height: 275px;
-    width: 75px;
-}
-
-#security-room {
-    top: 100px;
-    left: 190px;
-    height: 100px;
-    width: 100px;
-}
-
-#outside-time-room {
-    top: 475px;
-    left: 75px;
-    height: 100px;
-    width: 225px;
-}
-
-#admissions-room {
-    top: 275px;
-    left: 103px;
-    height: 75px;
-    width: 95px;
-}
-
-#game-exit-room {
-    top: 275px;
-    left: 53px;
-    height: 75px;
-    width: 50px;
-    border: none !important;
-}
-
-#exit-text {
-    writing-mode: vertical-lr; 
-    text-orientation: upright;
-    margin: auto;
-    height: 100%;
-    text-align: center;
-}
-
-#utility-closet-room {
-    top: 375px;
-    left: 138px;
-    height: 50px;
-    width: 60px;
-}
-
-#common-room {
-    top: 326px;
-    left: 275px;
-    height: 125px;
-    width: 300px;  
-}
-
-#tv-room {
-    top: 275px;
-    left: 280px;
-    height: 50px;
-    width: 65px; 
-}
-
-#staff-breakroom {
-    top: 250px;
-    left: 359px; 
-    height: 75px;
-    width: 75px;
-}
-
-#med-station-room {
-    top: 275px;
-    left: 435px; 
-    height: 50px;
-    width: 75px;
-}
-
-#common-room-bathroom {
-    top: 452px;
-    left: 325px;
-    height: 50px;
-    width: 50px;
-}
-
-#library-room {
-    top: 452px;
-    left: 400px;
-    height: 75px;
-    width: 75px;
-}
-
-#ward-stairs-room {
-    top: 405px;
-    left: 576px;
-    height: 100px;
-    width: 80px;
-}
-
-#blue-hallway-room {
-    top: 100px;
-    left: 576px;
-    height: 300px;
-    width: 75px; 
-}
-
-#kitchen-room {
-    top: 300px;
-    left: 652px;
-    height: 75px;
-    width: 75px;
-}
-
-#sensory-room {
-    top: 215px;
-    left: 652px;
-    height: 75px;
-    width: 75px;  
-}
-
-#linen-closet-room {
-    top: 150px;
-    left: 652px;
-    height: 50px;
-    width: 50px; 
-}
-
-#red-hallway-room {
-    top: 100px;
-    left: 291px;
-    height: 75px;
-    width: 284px;
-}
-
-#patient-bathroom {
-    top: 176px;
-    left: 475px;  
-    height: 50px;
-    width: 50px;
-}
-
-#patient-room-101 {
-    top: 49px;
-    left: 420px;
-}
-
-#patient-room-103 {
-    top: 49px;
-    left: 339px;
-}
-
-#patient-room-102 {
-    top: 176px;
-    left: 380px
-}
-
-#patient-room-104 {
-    top: 176px;
-    left: 300px
-}
-
-/* Physical Map Door Locks */
-#door-w1-b {
-    display: none;
-}
-
-#door-s3 {
-    top: 185px;
-    left: 227px
-}
-
-#door-s6 {
-    top: 128px;
-    left: 280px
-}
-
-#door-s9 {
-    top: 459px;
-    left: 227px
-}
-
-#door-s4 {
-    top: 380px;
-    left: 265px;
-}
-
-#door-w4 {
-    top: 310px;
-    left: 390px;
-}
-
-#door-w6 {
-    top: 310px;
-    left: 460px;
-}
-
-#door-m7 {
-    top: 295px;
-    left: 89px;
-}
-
-/* Physical Map Doorways */
-#p101-south {
-    top: 85px;
-    left: 450px
-}
-
-#p103-south {
-    top: 85px;
-    left: 370px
-}
-
-#p102-north {
-    top: 160px;
-    left: 407px
-}
-
-#p104-north {
-    top: 160px;
-    left: 330px
-}
-
-#pBR-north {
-    top: 160px;
-    left: 490px
-}
-
-#red-blue-hallway {
-    top: 128px;
-    left: 565px
-}
-
-#linen-west {
-    top: 165px;
-    left: 638px 
-}
-
-#sensory-west {
-    top: 245px;
-    left: 638px
-}
-
-#kitchen-west {
-    top: 325px;
-    left: 638px
-}
-
-#cr-blue-hallway {
-    top: 350px;
-    left: 565px
-}
-
-#tv-south {
-    top: 310px;
-    left: 303px 
-}
-
-#staff-meds {
-    top: 290px;
-    left: 425px; 
-}
-
-#crBR-north {
-    top: 435px;
-    left: 340px
-}
-
-#library-north {
-    top: 435px;
-    left: 430px 
-}
-
-#utility-east {
-    width: 10px;
-    top: 390px;
-    left: 195px
-}
-
-#admissions-east {
-    width: 10px;
-    top: 300px;
-    left: 195px
-}
-
-
-
-
-/* ####################### */
-/* How to Play Page Styles */
-/* ####################### */
-
-#how_to_play_header {
-    height: 500px;
-    width: auto;
-}
-
-#how_to_play_img {
-    height: 800px;
-    width: auto;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: -150px;
-}
-
-.instruction_part {
-    background-color: none !important;
-    width: 100%;
-    height: 500px;
-    margin: .5em;
-}
-
-.instruction_text_left {
-    float: left;
-    width: 60%;
-    
-}
-
-.instruction_text_left > p {
-    text-align: left;
-    font-size: 1.75em;
-    margin-left: 2.5em;
-    margin-right: 1em;
-}
-
-.instruction_text_right {
-    float: right;
-    width: 60%;
-    
-}
-
-.instruction_text_right > p {
-    text-align: right;
-    font-size: 1.75em;
-    margin-left: 1em;
-    margin-right: 2.5em;
-}
-
-.instruction_image_left {
-    float: left;
-    width: 40%;
-    display: flex;
-    
-}
-
-.instruction_image_left > img {
-    width: auto;
-    height: auto;
-    justify-content: center;
-    border: white solid 1px;
-    margin: auto;
-}
-
-.instruction_image_right {
-    float: right;
-    width: 40%;
-    display: flex;
-    
-}
-
-.instruction_image_right > img {
-    width: auto;
-    height: auto;
-    justify-content: center;
-    border: white solid 1px;
-    margin: auto;
-}
-
-.instruction_header_left {
-    font-size: 2.5em;
-    margin: 1em;
-}
-
-.instruction_header_right {
-    font-size: 2.5em;
-    margin: 1em;
-    text-align: right;
-}
-
-/* ################### */
-/* Credits Page Styles */
-/* ################### */
-
-#credits-header {
-    font-size: 3em;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-#left-description {
-    float: left;
-    width: 50%;
-    height: auto;
-
-}
-
-#left-description p {
-    text-align: right;
-    margin-right: 2em;
-    font-size: 1.5em;
-}
-
-
-#right-name {
-    float: right;
-    width: 50%;
-    height: auto;
-}
-
-#right-name p {
-    text-align: left;
-    margin-left: 2em;
-    font-size: 1.5em;
-
 }

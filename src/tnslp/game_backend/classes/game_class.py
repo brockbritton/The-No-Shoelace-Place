@@ -29,18 +29,19 @@ class Game:
 
     def get_curr_ui_value(self, id):
         # must be called each time because the values change
+        ## these can be added to in action  {option}_value
         match id:
-            case "xp_value": return self.player1.xp
-            case "day_value": return self.player1.calendar.days_list[-1].day_number
-            case "turns_value": return self.player1.calendar.days_list[-1].turns_left
-            case "room_value": return self.player1.loc.display_name
-            case "health_value": return self.player1.health
-            case "diagnosis_value": return self.player1.diagnosis
-            case "meditation_lvl": return self.player1.abilities[0].lvl
-            case "assertiveness_lvl": return self.player1.abilities[1].lvl
-            case "pos_attitude_lvl": return self.player1.abilities[2].lvl
-            case "opp_action_lvl": return self.player1.abilities[3].lvl
-            case "catharsis_lvl": return self.player1.abilities[4].lvl
+            case "xp-value": return self.player1.xp
+            case "day-value": return self.player1.calendar.days_list[-1].day_number
+            case "turns-value": return self.player1.calendar.days_list[-1].turns_left
+            case "room-value": return self.player1.loc.display_name
+            case "health-value": return self.player1.health
+            case "diagnosis-value": return self.player1.diagnosis
+            case "meditation-lvl": return self.player1.abilities[0].lvl
+            case "assertiveness-lvl": return self.player1.abilities[1].lvl
+            case "pos-attitude-lvl": return self.player1.abilities[2].lvl
+            case "opp-action-lvl": return self.player1.abilities[3].lvl
+            case "catharsis-lvl": return self.player1.abilities[4].lvl
 
     def get_item_action_params(self, action, object):
         # must be called each time because the values change
@@ -64,17 +65,17 @@ class Game:
             'build_multiple_choice': [],
             'rebuild_text_entry': False,
             'update_ui_values': [
-                "xp_value", 
-                "day_value", 
-                "turns_value", 
-                "room_value", 
-                "health_value", 
-                "diagnosis_value", 
-                "meditation_lvl", 
-                "assertiveness_lvl", 
-                "pos_attitude_lvl", 
-                "opp_action_lvl", 
-                "catharsis_lvl"
+                "xp-value", 
+                "day-value", 
+                "turns-value", 
+                "room-value", 
+                "health-value", 
+                "diagnosis-value", 
+                "meditation-lvl", 
+                "assertiveness-lvl", 
+                "pos-attitude-lvl", 
+                "opp-action-lvl", 
+                "catharsis-lvl"
                 ],
         }
 
@@ -84,6 +85,7 @@ class Game:
         
         return_tuple = self.player1.loc.enter_room(self.player1)
         self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
+        print(actions)
         actions['update_inv_visual'] = self.player1.build_inv_str_list()
         
         if len(self.save_prints) == 0:
@@ -94,6 +96,7 @@ class Game:
             for id in actions['update_ui_values']:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
+            print(actions['update_ui_values'])
         
 
         return actions
@@ -103,17 +106,17 @@ class Game:
             'load_prints': self.save_prints,
             'update_inv_visual': self.player1.build_inv_str_list(),
             'update_ui_values': [
-                "xp_value", 
-                "day_value", 
-                "turns_value", 
-                "room_value", 
-                "health_value", 
-                "diagnosis_value", 
-                "meditation_lvl", 
-                "assertiveness_lvl", 
-                "pos_attitude_lvl", 
-                "opp_action_lvl", 
-                "catharsis_lvl"],
+                "xp-value", 
+                "day-value", 
+                "turns-value", 
+                "room-value", 
+                "health-value", 
+                "diagnosis-value", 
+                "meditation-lvl", 
+                "assertiveness-lvl", 
+                "pos-attitude-lvl", 
+                "opp-action-lvl",
+                "catharsis-lvl"],
         }
 
         if len(actions['update_ui_values']) > 0:

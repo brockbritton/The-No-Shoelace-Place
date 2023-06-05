@@ -6,19 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='site.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='game-map.css')}}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png')}}">
     <link rel="icon" href="data:;base64,=">
     <script type="text/javascript" src="{{url_for('static', filename='site.js')}}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- needed? just use async -->
     <title>The No-Shoelace Place</title>
 </head>
 <body>
-    
-    <div id="image_header">
-        <img id="background_image" src="{{ url_for('static', filename='img/line-header.png')}}" alt="">
-        <img id="foreground_image" src="{{ url_for('static', filename='img/filled-header.png')}}" alt="">
-        <div id="cursor_space" onmouseenter="fade_to_fill_header()" onmouseleave="switch_to_outline_header()"></div>
+    <div id="image-header-container">
+        <div id="cursor-space"></div>
+        <img id="line-header" class="game-header-image" src="{{ url_for('static', filename='img/line-header.png')}}" alt="">
+        <img id="fill-header" class="game-header-image" src="{{ url_for('static', filename='img/filled-header.png')}}" alt="">
     </div>
     <div id="game-map">
         <button id="map-close-button" onclick="toggleGameMap()">X</button>
@@ -159,172 +158,167 @@
             </div>
         </div>
     </div>
-    <div id="game_gui">
-        <div id="text_and_entry_widgets">
-            <div id="game_text_display">
-                <!-- The game text paragraphs will be placed here -->
-                
+    <div id="game-gui">
+        <div id="display-entry-container">
+            <div id="game-text-display">
+                <!-- The game text paragraphs will be placed here --> 
             </div>
-            <div id="entry_widgets">
-                <div id="text_entry_div">
-                    <form id="command_input_form" autocomplete="off">
-                        <label id="command_label" for="command_input"> <strong> > </strong> </label>
-
-                        <input id="command_input" 
-                            type="text" 
-                            name="command_input"
-                            placeholder="What should I do?"
-                            value="{{ request.form['command_input'] }}">
-                        </input>
-            
-                        <button type="button" id="text_entry_enter_button" class="game_multiple_choice_buttons" onclick="accept_entry_input()"> Enter </button>
-                    </form>
+            <div id="text-button-entry-widgets">
+                <div id="text-entry-div">
+                    <label id="text-input-label" for="player-text-input"> <strong> > </strong> </label>
+                    <input id="player-text-input" 
+                        type="text" 
+                        placeholder="direct patient">
+                    </input>
+                    <button type="button" id="text-entry-enter-button" 
+                        class="game-multiple-choice-buttons" 
+                        onclick="accept_entry_input()"> 
+                        play <!-- text on form button -->
+                    </button>
                 </div>
-
-                <div id="button_entry_div">
+                <div id="button-entry-div">
                     <!-- Multiple Choice button entry elements will be placed here -->
-            
                 </div>
             </div>
         </div>
-        <div id="right_panel">
-            <div id="top_panel" class="panel_rows">
-                <div id="player_stats" class="panel_divs">
-                    <p class="panel_titles"> Patient Info</p>
-                    <div id="ps_left">
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">XP:</p>
+        <div id="right-panel">
+            <div id="top-panel" class="panel-rows">
+                <div id="player-stats" class="panel-cols">
+                    <p class="panel-titles"> Patient Info</p>
+                    <div id="ps-left">
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">XP:</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">Day:</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">Day:</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">Turns:</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">Turns:</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">Room:</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">Room:</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">Health:</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">Health:</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">Status:</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">Status:</p>
                         </div>
                     </div>
-                    <div id="ps_right">
-                        <div class="ps_inv_elem_spacing">
-                            <p class="ps_values" id="xp_value">0</p>
+                    <div id="ps-right">
+                        <div class="ps-inv-elem-spacing">
+                            <p class="ps-values" id="xp-value">0</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="ps_values" id="day_value">0</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="ps-values" id="day-value">0</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="ps_values" id="turns_value">15</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="ps-values" id="turns-value">15</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="ps_values" id="room_value">Unknown</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="ps-values" id="room-value">Unknown</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
+                        <div class="ps-inv-elem-spacing">
                             <div id="health-out-of-100">
-                                <p id="health_value">65</p>
+                                <p id="health-value">65</p>
                                 <p id="out-of-100">/100</p>
                             </div>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="ps_values" id="diagnosis_value">Unknown</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="ps-values" id="diagnosis-value">Unknown</p>
                         </div>
                     </div>
                 </div>
-                <div id="inventory" class="panel_divs">
-                    <p class="panel_titles"> Inventory</p>
-                    <div id="inv_left">
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">1.</p>
+                <div id="inventory" class="panel-cols">
+                    <p class="panel-titles"> Inventory</p>
+                    <div id="inv-left">
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">1.</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">2.</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">2.</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">3.</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">3.</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">4.</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">4.</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">5.</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">5.</p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="right_panel_text">6.</p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="right-panel-text">6.</p>
                         </div>
                     </div>
-                    <div id="inv_right">
-                        <div class="ps_inv_elem_spacing">
-                            <p class="inv_strings" id="inv_slot_1"></p>
+                    <div id="inv-right">
+                        <div class="ps-inv-elem-spacing">
+                            <p class="inv-strings" id="inv-slot-1"></p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="inv_strings" id="inv_slot_2"></p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="inv-strings" id="inv-slot-2"></p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="inv_strings" id="inv_slot_3"></p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="inv-strings" id="inv-slot-3"></p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="inv_strings" id="inv_slot_4"></p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="inv-strings" id="inv-slot-4"></p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="inv_strings" id="inv_slot_5"></p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="inv-strings" id="inv-slot-5"></p>
                         </div>
-                        <div class="ps_inv_elem_spacing">
-                            <p class="inv_strings" id="inv_slot_6"></p>
+                        <div class="ps-inv-elem-spacing">
+                            <p class="inv-strings" id="inv-slot-6"></p>
                         </div>
                     </div>
                 </div>
             </div>  
 
-            <div id="bottom_panel" class="panel_rows">
-                <div id="abilities" class="panel_divs">
-                    <p class="panel_titles"> Skills </p>
-                    <div id="ability_left">
-                        <div class="ability_str_lvl_div">
-                            <p class="ability_strings" id="meditation_string">Meditation</p>
+            <div id="bottom-panel" class="panel-rows">
+                <div id="abilities" class="panel-cols">
+                    <p class="panel-titles"> Skills </p>
+                    <div id="ability-left">
+                        <div class="ability-str-lvl-div">
+                            <p class="ability-strings" id="meditation-string">Meditation</p>
                         </div>
-                        <div class="ability_str_lvl_div">
-                            <p class="ability_strings" id="assertiveness_string">Assertiveness</p>
+                        <div class="ability-str-lvl-div">
+                            <p class="ability-strings" id="assertiveness-string">Assertiveness</p>
                         </div>
-                        <div class="ability_str_lvl_div">
-                            <p class="ability_strings" id="pos_attitude_string">Positive Attitude</p>
+                        <div class="ability-str-lvl-div">
+                            <p class="ability-strings" id="pos-attitude-string">Positive Attitude</p>
                         </div>
-                        <div class="ability_str_lvl_div">
-                            <p class="ability_strings" id="opp_action_string">Opposite Action</p>
+                        <div class="ability-str-lvl-div">
+                            <p class="ability-strings" id="opp-action-string">Opposite Action</p>
                         </div>
-                        <div class="ability_str_lvl_div">
-                            <p class="ability_strings" id="meditation_string">Catharsis</p>
+                        <div class="ability-str-lvl-div">
+                            <p class="ability-strings" id="meditation-string">Catharsis</p>
                         </div>
                     </div>
-                    <div id="ability_right">
-                        <div class="ability_str_lvl_div">
-                            <p class="inv_strings" id="meditation_lvl">0</p>
+                    <div id="ability-right">
+                        <div class="ability-str-lvl-div">
+                            <p class="inv-strings" id="meditation-lvl">0</p>
                         </div>
-                        <div class="ability_str_lvl_div">
-                            <p class="inv_strings" id="assertiveness_lvl">0</p>
+                        <div class="ability-str-lvl-div">
+                            <p class="inv-strings" id="assertiveness-lvl">0</p>
                         </div>
-                        <div class="ability_str_lvl_div">
-                            <p class="inv_strings" id="pos_attitude_lvl">0</p>
+                        <div class="ability-str-lvl-div">
+                            <p class="inv-strings" id="pos-attitude-lvl">0</p>
                         </div>
-                        <div class="ability_str_lvl_div">
-                            <p class="inv_strings" id="opp_action_lvl">0</p>
+                        <div class="ability-str-lvl-div">
+                            <p class="inv-strings" id="opp-action-lvl">0</p>
                         </div>
-                        <div class="ability_str_lvl_div">
-                            <p class="inv_strings" id="catharsis_lvl">0</p>
+                        <div class="ability-str-lvl-div">
+                            <p class="inv-strings" id="catharsis-lvl">0</p>
                         </div>
                     </div>
                 </div>
-                <div id="game_buttons" class="panel_divs">
-                    <p class="panel_titles"></p> <!-- no title for this section -->
-                    <div id="bottom_right">
-                        <button class="game_menu_buttons" onclick="toggleGameMap()">
+                <div id="game-buttons" class="panel-cols">
+                    <p class="panel-titles"></p> <!-- no title for this section -->
+                    <div id="bottom-right">
+                        <button class="game-menu-buttons" onclick="toggleGameMap()">
                             Game Map
                         </button>
-                        <button class="game_menu_buttons" onclick="location.href='/game/instructions'">
+                        <button class="game-menu-buttons" onclick="location.href='/game/instructions'">
                             Game Help
                         </button>
                     </div> 
@@ -334,25 +328,14 @@
 
     </div>
     <script>
-        // must have these variables declared here at the bottom of the page
-        const form = document.getElementById('command_input_form');
-        const game_display_div = document.getElementById("game_text_display");
+        ajaxAcceptInput(null, '/game/loading-game');
 
-        const text_entry_div = document.getElementById("text_entry_div");
-        const text_entry = document.getElementById('command_input');
-        const button_entry_div = document.getElementById("button_entry_div");
-
-        const image_header = document.getElementById("image_header");
-        const foreground_header_image = document.getElementById("foreground_image");
-
-        document.getElementById("foreground_image").style.opacity - 0;  
-        ajax_accept_input(null, '/game/loading-game');
-        window.addEventListener('beforeunload', function (e) {
-            // Cancel the event
-            // e.preventDefault();
-            // Chrome requires returnValue to be set
-            // e.returnValue = '';
-            return false;
+        window.addEventListener("keydown", function(e) {
+            console.log(e.key)
+            if (e.key == "Enter") {
+                alert("hi")
+                
+            }
         });
 
 

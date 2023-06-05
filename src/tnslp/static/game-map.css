@@ -1,0 +1,550 @@
+
+
+
+/* ############# */
+/* Game Page Map */
+/* ############# */
+#game-map {
+    position: absolute;
+    left: 25vw;
+    top: 20vh;
+    height: 70vh; /* 80wh */
+    width: 50vw; /* 80vw */
+    background-color: black;
+    border-radius: 15px;
+    border: 5px solid white;
+    display: none;
+    z-index: 3;
+}
+
+#map-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-weight: bold;
+    font-size: 25px;
+    color: white;
+    background-color: black;
+    height: 40px;
+    width: 40px;
+    border: 2px solid white;
+}
+
+#map-close-button:hover {
+    background-color: #C0C0C0;
+    /* background-color: #FFD700; GOLD */
+     
+}
+
+/* Game Map Classes*/
+.map-room {
+    position: absolute;
+    display: flex;
+    background-color: black;
+    border: 1px solid white;
+    filter: blur(8px)
+}
+
+.discovered-map {
+    filter: none !important;
+}
+
+.patient-room {
+    height: 50px;
+    width: 75px;
+}
+
+.vertical-text {
+    writing-mode: vertical-lr !important; 
+    text-orientation: upright !important;
+    margin: 100% auto !important;
+    height: 50% !important;
+    text-align: center !important;
+}
+
+.map-room > p {
+    width: min-content;
+    height: max-content;
+    margin: auto;
+    vertical-align: middle;
+    text-align: center;
+    cursor: default;
+}
+
+.doorway {
+    background-color: black;
+    position: absolute;
+    height: 30px;
+    width: 21px;
+    z-index: inherit + 1;
+    filter: blur(4px);
+    border-radius: 8px;
+}
+
+.doorway-ew {
+    background-color: black;
+    position: absolute;
+    height: 21px;
+    width: 21px;
+    z-index: inherit + 1;
+    filter: blur(4px);
+}
+
+.map-door-container {
+    filter: blur(5px);
+}
+
+.door-locked {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: inherit;
+    width: inherit;
+    display: block;
+}
+
+.door-unlocked {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: inherit;
+    width: inherit;
+    display: block;
+}
+
+.map-door-label {
+    background-color: black;
+    position: relative;
+    width: 110px;
+    text-align: center;
+    margin-top: 7px;
+    margin-left: -45px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    cursor: default;
+}
+
+.doorway.discovered-map:hover > .map-door-label {
+    opacity: 1;
+}
+
+/* Physical Map Rooms */
+
+#service-hallway-room {
+    top: 200px;
+    left: 199px;
+    height: 275px;
+    width: 75px;
+}
+
+#security-room {
+    top: 100px;
+    left: 190px;
+    height: 100px;
+    width: 100px;
+}
+
+#outside-time-room {
+    top: 475px;
+    left: 75px;
+    height: 100px;
+    width: 225px;
+}
+
+#admissions-room {
+    top: 275px;
+    left: 103px;
+    height: 75px;
+    width: 95px;
+}
+
+#game-exit-room {
+    top: 275px;
+    left: 53px;
+    height: 75px;
+    width: 50px;
+    border: none !important;
+}
+
+#exit-text {
+    writing-mode: vertical-lr; 
+    text-orientation: upright;
+    margin: auto;
+    height: 100%;
+    text-align: center;
+}
+
+#utility-closet-room {
+    top: 375px;
+    left: 138px;
+    height: 50px;
+    width: 60px;
+}
+
+#common-room {
+    top: 326px;
+    left: 275px;
+    height: 125px;
+    width: 300px;  
+}
+
+#tv-room {
+    top: 275px;
+    left: 280px;
+    height: 50px;
+    width: 65px; 
+}
+
+#staff-breakroom {
+    top: 250px;
+    left: 359px; 
+    height: 75px;
+    width: 75px;
+}
+
+#med-station-room {
+    top: 275px;
+    left: 435px; 
+    height: 50px;
+    width: 75px;
+}
+
+#common-room-bathroom {
+    top: 452px;
+    left: 325px;
+    height: 50px;
+    width: 50px;
+}
+
+#library-room {
+    top: 452px;
+    left: 400px;
+    height: 75px;
+    width: 75px;
+}
+
+#ward-stairs-room {
+    top: 405px;
+    left: 576px;
+    height: 100px;
+    width: 80px;
+}
+
+#blue-hallway-room {
+    top: 100px;
+    left: 576px;
+    height: 300px;
+    width: 75px; 
+}
+
+#kitchen-room {
+    top: 300px;
+    left: 652px;
+    height: 75px;
+    width: 75px;
+}
+
+#sensory-room {
+    top: 215px;
+    left: 652px;
+    height: 75px;
+    width: 75px;  
+}
+
+#linen-closet-room {
+    top: 150px;
+    left: 652px;
+    height: 50px;
+    width: 50px; 
+}
+
+#red-hallway-room {
+    top: 100px;
+    left: 291px;
+    height: 75px;
+    width: 284px;
+}
+
+#patient-bathroom {
+    top: 176px;
+    left: 475px;  
+    height: 50px;
+    width: 50px;
+}
+
+#patient-room-101 {
+    top: 49px;
+    left: 420px;
+}
+
+#patient-room-103 {
+    top: 49px;
+    left: 339px;
+}
+
+#patient-room-102 {
+    top: 176px;
+    left: 380px
+}
+
+#patient-room-104 {
+    top: 176px;
+    left: 300px
+}
+
+/* Physical Map Door Locks */
+#door-w1-b {
+    display: none;
+}
+
+#door-s3 {
+    top: 185px;
+    left: 227px
+}
+
+#door-s6 {
+    top: 128px;
+    left: 280px
+}
+
+#door-s9 {
+    top: 459px;
+    left: 227px
+}
+
+#door-s4 {
+    top: 380px;
+    left: 265px;
+}
+
+#door-w4 {
+    top: 310px;
+    left: 390px;
+}
+
+#door-w6 {
+    top: 310px;
+    left: 460px;
+}
+
+#door-m7 {
+    top: 295px;
+    left: 89px;
+}
+
+/* Physical Map Doorways */
+#p101-south {
+    top: 85px;
+    left: 450px
+}
+
+#p103-south {
+    top: 85px;
+    left: 370px
+}
+
+#p102-north {
+    top: 160px;
+    left: 407px
+}
+
+#p104-north {
+    top: 160px;
+    left: 330px
+}
+
+#pBR-north {
+    top: 160px;
+    left: 490px
+}
+
+#red-blue-hallway {
+    top: 128px;
+    left: 565px
+}
+
+#linen-west {
+    top: 165px;
+    left: 638px 
+}
+
+#sensory-west {
+    top: 245px;
+    left: 638px
+}
+
+#kitchen-west {
+    top: 325px;
+    left: 638px
+}
+
+#cr-blue-hallway {
+    top: 350px;
+    left: 565px
+}
+
+#tv-south {
+    top: 310px;
+    left: 303px 
+}
+
+#staff-meds {
+    top: 290px;
+    left: 425px; 
+}
+
+#crBR-north {
+    top: 435px;
+    left: 340px
+}
+
+#library-north {
+    top: 435px;
+    left: 430px 
+}
+
+#utility-east {
+    width: 10px;
+    top: 390px;
+    left: 195px
+}
+
+#admissions-east {
+    width: 10px;
+    top: 300px;
+    left: 195px
+}
+
+
+
+
+/* ####################### */
+/* How to Play Page Styles */
+/* ####################### */
+
+#how-to-play-header {
+    height: 500px;
+    width: auto;
+}
+
+#how-to-play-img {
+    height: 800px;
+    width: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -150px;
+}
+
+.instruction-part {
+    background-color: none !important;
+    width: 100%;
+    height: 500px;
+    margin: .5em;
+}
+
+.instruction-text-left {
+    float: left;
+    width: 60%;
+    
+}
+
+.instruction-text-left > p {
+    text-align: left;
+    font-size: 1.75em;
+    margin-left: 2.5em;
+    margin-right: 1em;
+}
+
+.instruction-text-right {
+    float: right;
+    width: 60%;
+    
+}
+
+.instruction-text-right > p {
+    text-align: right;
+    font-size: 1.75em;
+    margin-left: 1em;
+    margin-right: 2.5em;
+}
+
+.instruction-image-left {
+    float: left;
+    width: 40%;
+    display: flex;
+    
+}
+
+.instruction-image-left > img {
+    width: auto;
+    height: auto;
+    justify-content: center;
+    border: white solid 1px;
+    margin: auto;
+}
+
+.instruction-image-right {
+    float: right;
+    width: 40%;
+    display: flex;
+    
+}
+
+.instruction-image-right > img {
+    width: auto;
+    height: auto;
+    justify-content: center;
+    border: white solid 1px;
+    margin: auto;
+}
+
+.instruction-header-left {
+    font-size: 2.5em;
+    margin: 1em;
+}
+
+.instruction-header-right {
+    font-size: 2.5em;
+    margin: 1em;
+    text-align: right;
+}
+
+/* ################### */
+/* Credits Page Styles */
+/* ################### */
+
+#credits-header {
+    font-size: 3em;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#left-description {
+    float: left;
+    width: 50%;
+    height: auto;
+
+}
+
+#left-description p {
+    text-align: right;
+    margin-right: 2em;
+    font-size: 1.5em;
+}
+
+
+#right-name {
+    float: right;
+    width: 50%;
+    height: auto;
+}
+
+#right-name p {
+    text-align: left;
+    margin-left: 2em;
+    font-size: 1.5em;
+
+}
