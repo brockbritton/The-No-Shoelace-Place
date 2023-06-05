@@ -18,7 +18,6 @@ const foreground_header_image = document.getElementById("foreground_image");
 */
 
 function ajaxAcceptInput(data_values, route) {
-    //toggle_return_listener("off");
     $.ajax({
         url: route,
         data: data_values,
@@ -41,7 +40,7 @@ function ajaxAcceptInput(data_values, route) {
         },
         error: function(request, response, errors){
             if (route == "/game/loading-game") {
-                ajax_accept_input(data_values, "/game/loading-game")
+                ajaxAcceptInput(data_values, "/game/loading-game")
             } else {
                 printtk(`Error ${request.status}: see terminal for more information.` );
             }
@@ -77,14 +76,13 @@ function get_map_data() {
 }
 
 function accept_entry_input(event) {
-    event.preventDefault();
-    let input_text = form.elements[0].value;
+    let input_text = document.getElementById("player-text-input").value;
     printtk(">   " + input_text)
     let data_values = {
         'input' : input_text,
     }
-    ajax_accept_input(data_values, '/game/accept-input-data');
-    form.elements[0].value = "";
+    ajaxAcceptInput(data_values, '/game/accept-input-data');
+    input_text.value = "";
 }
 
 function update_map_objects(bool_list) {
@@ -120,7 +118,7 @@ function load_prints(list, bmc_list) {
                 par.innerHTML = list[text][0];
             } 
         } else {
-            par.classList.add("command_input_text");
+            par.classList.add("standard-display-text");
             par.innerHTML = list[text];
         }
         game_text_display.appendChild(par);
@@ -211,7 +209,7 @@ function accept_button_input(display, button_index) {
     let data_values = {
         'input' : button_index,
     }
-    ajax_accept_input(data_values, '/game/accept-input-data');
+    ajaxAcceptInput(data_values, '/game/accept-input-data');
     
     button_entry_div.style.display = "none";
     while (button_entry_div.firstChild) {
