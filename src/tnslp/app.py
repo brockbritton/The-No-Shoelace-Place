@@ -11,9 +11,9 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_COOKIE_SECURE"] = True
 Session(app)
 
-@app.before_first_request
+@app.before_first_request 
 def before_first_request():
-    session.clear()
+    session.clear() 
 
     session['current_js_actions'] = {
         'build_multiple_choice': None,
@@ -21,11 +21,11 @@ def before_first_request():
 
     try:
         if session['game'] is not None:
-            print("game already exists")
+            print("--- game already exists ---")
 
     except KeyError:
         session['game'] = game_class.Game()
-        print("game created")
+        print("--- game created ---")
 
     session.modified = True
 
@@ -50,11 +50,11 @@ def play_game():
     return render_template("game.html")
 
 
-@app.route("/game/accept-input-data", methods=['POST'])
-def accept_input_data():
-    data_dict = request.form.to_dict()
-    print("frontend input ", data_dict['input'])
-    return session['game'].organize_raw_input(data_dict['input'])
+@app.route("/game/accept-data", methods=['POST'])
+def accept_data():
+    input_data = request.json['input']
+    print("frontend input ", input_data)
+    return session['game'].organize_raw_input(input_data)
     
 @app.route("/game/request-map-data", methods=['GET'])
 def request_map_data():

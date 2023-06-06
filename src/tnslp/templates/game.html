@@ -329,17 +329,16 @@
 
     </div>
     <script>
-        ajaxAcceptInput(null, '/game/loading-game');
+        
+        // Start the Game - text to the window \\
+        fetchPostEndpoint(null, '/game/loading-game');
 
-        window.addEventListener("keydown", function(e) {
+        document.addEventListener("keydown", function(e) {
             //console.log(e.key)
             if (e.key == "Enter") {
-                document.getElementById("text-entry-enter-button").click()
-                
+                document.getElementById("text-entry-enter-button").click()  
             }
         });
-
-
     </script>
 </body>
 </html>

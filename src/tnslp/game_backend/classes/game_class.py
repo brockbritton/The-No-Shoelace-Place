@@ -146,7 +146,7 @@ class Game:
         # waiting vars = self.wait_for_frontend_input['build_multiple_choice']
         # If there is a list of variables in waiting vars and the input is numeric, 
         # convert to integer so that the correct variable from waiting vars is accessed
-        if frontend_input.isnumeric() and self.wait_for_frontend_input['build_multiple_choice'] != None:
+        if type(frontend_input) == int and self.wait_for_frontend_input['build_multiple_choice'] != None:
             input_value = self.wait_for_frontend_input['build_multiple_choice'][1][int(frontend_input)]
             self.save_prints.append("> " + self.wait_for_frontend_input['build_multiple_choice'][0][int(frontend_input)]) 
             self.wait_for_frontend_input['build_multiple_choice'] = None

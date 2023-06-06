@@ -44,8 +44,8 @@ button:active {
 }
 
 button:disabled:hover {
-    cursor: not-allowed;
-    color: black;
+    color: grey;
+    background-color: black;
 }
 
 
@@ -234,7 +234,7 @@ button:disabled:hover {
     height: 10%;
     background-color: black;
     font-size: 1.25em;
-    padding: 5px;
+    padding: 5px; 
 }
 
 #text-input-label {
@@ -246,18 +246,19 @@ button:disabled:hover {
 }
 
 #player-text-input {
-    font-size: 1.4em;
+    font-size: 1.25em;
     padding: 0.3125em;
     font-family: 'Courier New', monospace !important; 
     background-color: black !important;
     color: white;
     border-radius: 5px;
     vertical-align: middle;
+    border: grey 1px solid;
     
 }
 
 #player-text-input:focus {
-    outline: 1px white solid;
+    outline: 2px white solid;
 }
 
 #text-entry-enter-button {

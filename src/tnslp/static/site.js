@@ -5,18 +5,6 @@ const rate_of_header_fadein = 500;
 const quote_fadein_rate = 2000;
 let on_header_element = false;
 
-/*
-const form = document.getElementById('command_input_form');
-const game_display_div = document.getElementById("game-text-display");
-
-const text_entry_div = document.getElementById("text_entry_div");
-const text_entry = document.getElementById('command_input');
-const button_entry_div = document.getElementById("button_entry_div");
-
-const image_header = document.getElementById("image_header");
-const foreground_header_image = document.getElementById("foreground_image");
-*/
-
 function accept_entry_input() {
     const input_element = document.getElementById("player-text-input");
     const input_text = input_element.value
@@ -24,7 +12,7 @@ function accept_entry_input() {
     let data_values = {
         'input' : input_text,
     }
-    ajaxAcceptInput(data_values, '/game/accept-input-data');
+    fetchPostEndpoint(data_values, '/game/accept-data');
     input_element.value = "";
 }
 
@@ -33,7 +21,7 @@ function accept_button_input(display, button_index) {
     let data_values = {
         'input' : button_index,
     }
-    ajaxAcceptInput(data_values, '/game/accept-input-data');
+    fetchPostEndpoint(data_values, '/game/accept-data');
     const button_entry_div = document.getElementById("button-entry-div");
     button_entry_div.style.display = "none";
     while (button_entry_div.firstChild) {
@@ -41,35 +29,45 @@ function accept_button_input(display, button_index) {
     } 
 }
 
-function ajaxAcceptInput(data_values, route) {
-    $.ajax({
-        url: route,
-        data: data_values,
-        type: 'POST',
-        success: function(response) {
-            if ('print_all' in response) {
-                print_all.apply(null, [response['print_all'], response['build_multiple_choice'], response['rebuild_text_entry']])
+
+async function fetchPostEndpoint(data, route) {
+    //disable play button
+    document.getElementById("text-entry-enter-button").disabled = true;
+    try {
+        const request_options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }
+        const response = await fetch(route, request_options)
+        const response_data = await response.json()
+
+        if (response_data != null) {
+            if ('print_all' in response_data) {
+                print_all.apply(null, [response_data['print_all'], response_data['build_multiple_choice'], response_data['rebuild_text_entry']])
                 
-            } else if (('load_prints' in response)) {
-                load_prints(response['load_prints'], response['build_multiple_choice']);
+            } else if (('load_prints' in response_data)) {
+                load_prints(response_data['load_prints'], response_data['build_multiple_choice']);
             }
             
-            if (('update_inv_visual' in response) && (response['update_inv_visual'].length != 0)) {
-                update_inv_visual(response['update_inv_visual']);
+            if (('update_inv_visual' in response_data) && (response_data['update_inv_visual'].length != 0)) {
+                update_inv_visual(response_data['update_inv_visual']);
             }
 
-            if (('update_ui_values' in response) && (response['update_ui_values'].length != 0)) {
-                update_ui_values(response['update_ui_values']);
+            if (('update_ui_values' in response_data) && (response_data['update_ui_values'].length != 0)) {
+                update_ui_values(response_data['update_ui_values']);
             } 
-        },
-        error: function(request, response, errors){
-            if (route == "/game/loading-game") {
-                ajaxAcceptInput(data_values, "/game/loading-game")
-            } else {
-                printtk(`Error ${request.status}: see terminal for more information.` );
-            }
         }
-    }); 
+    } catch (error) {
+        console.log(error)
+        if (route == "/game/loading-game") {
+            //await fetchPostEndpoint(data, "/game/loading-game")
+        } else {
+            printtk(`Error ${request.status}: see terminal for more information.`);
+        }
+    }
 }
 
 function print_all(pars_list, bmc_list, rebuild_text){
@@ -77,8 +75,11 @@ function print_all(pars_list, bmc_list, rebuild_text){
         if (bmc_list.length > 0) {
             build_multiple_choice(bmc_list);
         } else {
+            //enable play button
+            document.getElementById("text-entry-enter-button").disabled = false;
             toggle_entry_divs("text");
         }
+    
     } else {
         printtk(pars_list[0]);
         if (pars_list[0] instanceof Array) {
