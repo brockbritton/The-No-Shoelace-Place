@@ -61,6 +61,7 @@ button:disabled:hover {
 #welcome-logo-container > img {
     width: 100%;
     height: auto;
+    margin-top: -40px;
 
 }
 
@@ -68,7 +69,7 @@ button:disabled:hover {
     width: 100%;
     background-color: none;
     position: absolute;
-    top: 50%;
+    top: 40%;
 }
 
 .extra-button-border {
