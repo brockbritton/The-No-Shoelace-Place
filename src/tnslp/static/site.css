@@ -53,20 +53,22 @@ button:disabled:hover {
 /* Title/Home Page */
 /* ############### */
 #welcome-logo-container {
-    width: 60%;
+    width: 75%;
+    height: auto;
     margin: auto;
 }
 
 #welcome-logo-container > img {
     width: 100%;
     height: auto;
+
 }
 
 #welcome-buttons-container {
     width: 100%;
     background-color: none;
     position: absolute;
-    top: 40%;
+    top: 50%;
 }
 
 .extra-button-border {
