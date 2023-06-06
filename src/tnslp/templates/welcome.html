@@ -12,28 +12,31 @@
     <title>Welcome</title>
 </head>
 <body>
-    <div id="center_welcome">
-        <img src="{{ url_for('static', filename='img/welcome-logo.png')}}" alt="Welcome to The No Shoelace Place" id="welcome_logo">
-        <div id="welcome_buttons">
-            <button class="large_bordered_button" 
+    <div id="welcome-logo-container">
+        <img src="{{ url_for('static', filename='img/welcome-logo.png')}}" alt="Welcome to The No Shoelace Place">
+    </div>
+    <div id="welcome-buttons-container">
+        <div class="extra-button-border">
+            <button class="large-bordered-button" 
                 type="button" 
                 onclick="location.href='/game/'">
                 Play Game
             </button>
-            <button class="regular_bordered_button" 
+        </div>
+        <div class="extra-button-border">
+            <button class="regular-bordered-button" 
                 type="button"
                 onclick="location.href='/game/instructions'">
                 How to Play
             </button>
-            <button class="regular_bordered_button" 
-            type="button"
-            onclick="location.href='/credits'">
+        </div>  
+        <div class="extra-button-border">
+            <button class="regular-bordered-button" 
+                type="button"
+                onclick="location.href='/credits'">
                 Credits
             </button>
         </div>
     </div>
-
-    
-    
 </body>
 </html>

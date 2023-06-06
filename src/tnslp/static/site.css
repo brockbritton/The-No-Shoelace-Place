@@ -52,44 +52,44 @@ button:disabled:hover {
 /* ############### */
 /* Title/Home Page */
 /* ############### */
-#center-welcome {
-    justify-content: center;
-    justify-items: center;
-    width: 100%;
+#welcome-logo-container {
+    width: 60%;
+    margin: auto;
 }
 
-#center-welcome #welcome-logo {
+#welcome-logo-container > img {
+    width: 100%;
     height: auto;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: -3.125em;
-    width: 50%;
 }
 
-#center-welcome #welcome-buttons {
-    background-color: none !important;
+#welcome-buttons-container {
     width: 100%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    background-color: none;
     position: absolute;
-    top: 55%;
-    bottom: 20%;
+    top: 40%;
+}
+
+.extra-button-border {
+    padding: 3px;
+    border-radius: 13px;
+    background-color: black;
+    width: max-content;
+    margin: auto;
+    margin-bottom: 10px;
 }
 
 /* ######### */
 /*  Buttons  */
 /* ######### */
 .large-bordered-button {
-    border: 0.125em solid white;
+    border: 3px solid white;
     padding: 0.9375em 1.875em;
     border-radius: 0.75em;
     text-align: center;
     text-decoration: none;
     display: block;
     font-size: 1.5em;
-    margin: 0.9375em auto;
+    margin: auto;
     filter: alpha(opacity=100);
 	opacity: 1 !important;
 }
@@ -106,7 +106,7 @@ button:disabled:hover {
     text-decoration: none;
     display: block;
     font-size: 1em;
-    margin: 0.625em auto;
+    margin: auto;
     filter: alpha(opacity=100);
 	opacity: 1 !important;
 }

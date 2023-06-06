@@ -85,7 +85,6 @@ def page_not_found(error):
 def page_not_found(error):
     return render_template('method_not_allowed.html'), 405
 
-
 if __name__ == '__main__':
     app.secret_key = "ihaveasecretkey5"
     app.run(host="localhost", port="5000")
