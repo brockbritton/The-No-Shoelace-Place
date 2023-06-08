@@ -46,6 +46,7 @@ button:active {
 button:disabled:hover {
     color: grey;
     background-color: black;
+    cursor: not-allowed;
 }
 
 
@@ -55,7 +56,7 @@ button:disabled:hover {
 #welcome-logo-container {
     width: 75%;
     height: auto;
-    margin: auto;
+    margin: 0 auto;
 }
 
 #welcome-logo-container > img {

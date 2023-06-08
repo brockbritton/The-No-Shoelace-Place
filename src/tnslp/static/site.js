@@ -77,6 +77,7 @@ function print_all(pars_list, bmc_list, rebuild_text){
         } else {
             //enable play button
             document.getElementById("text-entry-enter-button").disabled = false;
+            //alert("play button back on")
             toggle_entry_divs("text");
         }
     
@@ -87,7 +88,10 @@ function print_all(pars_list, bmc_list, rebuild_text){
                 setTimeout(print_all.bind(null, pars_list.slice(1), bmc_list, rebuild_text), quote_fadein_rate);
             }
         } else {
-            setTimeout(print_all.bind(null, pars_list.slice(1), bmc_list, rebuild_text), rate_of_letters*pars_list[0].length);
+            //this timeout isnt perfect. the next paragraph starts printing before its done.
+            //need to add some more time?
+            //+ (rate_of_letters*(pars_list[0].length/2.5)) ish
+            setTimeout(print_all.bind(null, pars_list.slice(1), bmc_list, rebuild_text), rate_of_letters*pars_list[0].length); //
         }
     }
 }

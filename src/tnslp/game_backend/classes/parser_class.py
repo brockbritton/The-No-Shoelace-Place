@@ -105,7 +105,7 @@ class Parser:
                 for door in door_or_doors:
                     if door != None and door.name.lower() in str_input.lower():
                         parsed_info["nearby_objects"].append(door)
-                    
+                     
                     if door != None and door_gen_bool:
                         parsed_info["nearby_gen_dict"] = self.update_gen_dict(parsed_info["nearby_gen_dict"], door)
             else:

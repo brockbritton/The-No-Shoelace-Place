@@ -85,7 +85,6 @@ class Game:
         
         return_tuple = self.player1.loc.enter_room(self.player1)
         self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-        print(actions)
         actions['update_inv_visual'] = self.player1.build_inv_str_list()
         
         if len(self.save_prints) == 0:
@@ -96,9 +95,8 @@ class Game:
             for id in actions['update_ui_values']:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
-            print(actions['update_ui_values'])
+            #print(actions['update_ui_values'])
         
-
         return actions
 
     def load_game(self):
@@ -128,8 +126,8 @@ class Game:
         if self.wait_for_frontend_input['build_multiple_choice'] != None:
             actions['build_multiple_choice'] = self.wait_for_frontend_input['build_multiple_choice'][0]
 
-        return actions
-
+        return actions 
+    
     def organize_raw_input(self, frontend_input):
         actions = {
             'print_all': [],

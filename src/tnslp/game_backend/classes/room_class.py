@@ -147,8 +147,13 @@ class Room:
         if not self.visited:
             # Updating XP for gui 
             actions['print_all'].append(f"New Room Discovered! +{player.xp_dict['new_room']}xp")
+            actions['print_all'].append(f"You are now in {self.name}.")
+            actions["print_all"].append(self.description)
             actions['update_ui_values'].append(player.earn_xp(10))
             self.visited = True
+        else:
+            actions['print_all'].append(f"You are now in {self.name}.")
+            actions['update_ui_values'].append("room-value")
 
         
         for direction in self.doors.values():
@@ -159,9 +164,6 @@ class Room:
             else:
                 if isinstance(direction, item_class.Lockable_Door) and not direction.visited:
                     direction.visited = True
-
-        actions['print_all'].append(f"You are now in {self.name}.")
-        actions['update_ui_values'].append("room-value")
 
         if not self.lights_on:
             #some check about having full battery flashlight
@@ -470,7 +472,7 @@ class Ward_Room(Room):
 class Starting_Ward_Room(Ward_Room):
     def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
         super().__init__(name, display_name, description, room_label, storage_units, floor_wall_items, doors)
-        self.visited = True
+        self.visited = False
         if self.has_doors:
             for direction in self.doors.values():
                 if isinstance(direction, list):
@@ -532,7 +534,7 @@ class Final_Room(Room):
             self.visited = True
 
         actions['print_all'].append(f"You have now encountered your demon of {self.demon.name}. ")
-        actions['print_all'].append(f"It has trapped you in this room. You cannot escape. It is time to face your demon!")
+        actions['print_all'].append("It has trapped you in this room. You cannot escape. It is time to face your demon!")
 
         player_avail_abilities = player.build_available_abilities_list()
         if len(player_avail_abilities) == 0:
@@ -546,7 +548,7 @@ class Final_Room(Room):
             return (enter_tuple[0], enter_tuple[1], actions)
             
         else:
-            actions['print_all'].append(f"Please choose a skill to use against your demon:")
+            actions['print_all'].append("Please choose a skill to use against your demon:")
             displays = []
             for ability in player_avail_abilities:
                 displays.append(ability.name)
