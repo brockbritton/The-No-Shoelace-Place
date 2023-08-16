@@ -9,8 +9,20 @@ class Item:
         self.gen_name = gen_name
         self.article = "the"
         self.item_actions = {
+            'help' : self.show_all_actions,
             'inspect': self.inspect_item,
         }
+    
+    def show_all_actions(self):
+        actions = {
+            'print_all': [],
+        }
+
+        actions['print_all'].append(f"Available actions for this {self.gen_name}:")
+        for key in self.item_actions:
+            actions['print_all'].append(f"- {key}")
+
+        return actions
 
     def inspect_item(self): 
         actions = {

@@ -28,10 +28,23 @@ class Room:
         self._all_rooms_registry.append(self)
         self.visited = False
         self.item_actions = {
+            'help' : self.show_all_actions,
             'inspect': self.inspect_room,
             'items': self.show_items,
             'rooms': self.show_directions,
         }
+
+    def show_all_actions(self):
+        actions = {
+            'print_all': [],
+        }
+
+        actions['print_all'].append("Available actions for this room:")
+        for key in self.item_actions:
+            actions['print_all'].append(f"- {key}")
+
+
+        return actions
 
     def inspect_room(self, player):
         actions = {
@@ -39,8 +52,6 @@ class Room:
         }
 
         actions['print_all'].append(self.description)
-        
-        actions['print_all'].append(self.print_directions(player, None))
 
         return actions
 

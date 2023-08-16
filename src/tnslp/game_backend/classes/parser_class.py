@@ -1,20 +1,23 @@
 
 import re
 
-
 class Parser:
     def __init__(self) -> None:
         self.player = None
-        pick_up_keys = {'pick up':["pick up", "pickup", "take", "retrieve", "get", "grab", "remove"]}
-        drop_keys = {'drop':["drop", "place", "put down", "put", "set", "move"]}
-        inspect_keys = {'inspect':["inspect", "look at", "examine", "read", "check out", "search"]}
-        open_keys = {'open':["open"]}
-        close_keys = {'close':["close", "shut"]}
-        unlock_keys = {'unlock':['unlock', 'unseal']}
-        lock_keys = {'lock':["lock", "seal"]}
-        break_keys = {'break':["break", "smash", "tear down", "rip off", "damage", "destroy"]}
-        move_keys = {'go':["go", "walk", "turn", "enter", "travel", "exit", "leave"]}
-        display_keys = {'display':["display", "view", "show", "reveal"]}
+
+        self.all_actions = {
+            'pick up' : ["pick up", "pickup", "take", "retrieve", "get", "grab", "remove"],
+            'drop' : ["drop", "place", "put down", "put", "set", "move"],
+            'inspect' : ["inspect", "look at", "examine", "read", "check out", "search"],
+            'open' : ["open"],
+            'close' : ["close", "shut"],
+            'unlock' : ['unlock', 'unseal'],
+            'lock' : ["lock", "seal"],
+            'break':["break", "smash", "tear down", "rip off", "damage", "destroy"],
+            'go':["go", "walk", "turn", "enter", "travel", "exit", "leave"],
+            'display':["display", "view", "show", "reveal"],
+            'help':["help", "?"]
+        }
         
         self.movement_dict = {
             "forward" : ["forward", "forwards", "straight", "front"],
@@ -22,12 +25,9 @@ class Parser:
             "left" : ["left"],
             "right" : ["right"]}
 
-        self.item_specific_actions = ["sleep", "sit"]
+        self.special_actions = ["sleep", "sit", "rooms", "items"]
 
-        self.all_actions = [pick_up_keys, drop_keys, inspect_keys, open_keys, unlock_keys,
-            close_keys, lock_keys, break_keys, move_keys, display_keys]
 
-        
         
     def parse_input(self, player, str_input):
         return self.id_action_object(player, str_input)
@@ -49,21 +49,22 @@ class Parser:
             "nearby_objects" : [],
             "nearby_gen_dict" : {},
             "directions" : [],
-            "special_actions" : [],
+            "cheats" : [],
             "original_input" : str_input,
         }
 
         # Loop over actions and store matches in action_list
-        for action in self.all_actions:
-            for key, val in action.items():
-                for phrase in val:
-                    if re.search(r'\b' + phrase + r'\b', str_input.lower()):
-                        parsed_info["action"].append(key)
+        
+        for key, val in self.all_actions.items():
+            for phrase in val:
+                # use regex here?
+                if phrase in str_input.lower():
+                    parsed_info["action"].append(key)
 
         # Loop over item specific actions and store matches in action_list
-        for action in self.item_specific_actions:
+        for action in self.special_actions:
             if re.search(r'\b' + action + r'\b', str_input.lower()):
-                parsed_info["special_actions"].append(action)
+                parsed_info["action"].append(action)
 
         # Build a dictionary of all items in the room and inventory and the room itself
         ## Items in storage units in the room
@@ -136,12 +137,10 @@ class Parser:
         # Check for special actions
         # xi : items in room
         # xd : directions
-        for special in ("xi", "xd", "cheatcode:Asher"):
-            if special in str_input.lower():
-                parsed_info["special_actions"].append(special)
+        for cheat in ("xi", "xd", "cheatcode:Asher"):
+            if cheat in str_input.lower():
+                parsed_info["cheats"].append(cheat)
         
-        
-
         # Return values
         return parsed_info
 

@@ -53,8 +53,12 @@ class Game:
             case "inspect":
                 if isinstance(object, room_class.Room):
                     return [self.player1]
-                else:
-                    return [] 
+                
+            case "help": return []
+            case "rooms":
+                if isinstance(object, room_class.Room):
+                    return [self.player1]
+
             
         return []
 
@@ -197,8 +201,9 @@ class Game:
             parsed_dict = self.parser.parse_input(self.player1, input_value)
 
             # Check the parsed dictionary for existing values
+            print(parsed_dict.values())
             for value in parsed_dict.values():
-                print(parsed_dict.values())
+                # If any value exists
                 if len(value) > 0:
                     return_tuple = self.evaluate_parsed_data(parsed_dict)
                     break
@@ -292,14 +297,16 @@ class Game:
         nearby_objects = list(parsed_dict["nearby_objects"]) #parsed objects : inv objects, storage containers, doors, room,
         nearby_gen_dict = dict(parsed_dict["nearby_gen_dict"]) #general object names and objects for each
         directions = list(parsed_dict["directions"]) #parsed directions
-        special_actions = list(parsed_dict["special_actions"]) #certain actions helpful for dev
         original_str = str(parsed_dict["original_input"]) #original input string by the user
 
+        # If general names of items were parsed
         if len(nearby_gen_dict) > 0:
+            # If there is 1 general name
             if len(nearby_gen_dict) == 1 and len(next(iter(nearby_gen_dict.items()))[1]) == 1:
                 only_gen_item = next(iter(nearby_gen_dict.items()))[1][0]
                 if only_gen_item not in nearby_objects:
                     nearby_objects.append(only_gen_item)
+            # If there is more than 1 general name 
             else:
                 print("checking for general name items")
                 low_index = len(original_str)
@@ -329,8 +336,9 @@ class Game:
                             if curr_gen_name not in check_str:
                                 gen_name_solved = True
                                 break
-
-                #request which object the user was referencing
+                
+                # if the general name is not in the nearby object name
+                # build mc - request which object the user was referencing
                 if not gen_name_solved:
                     if len(actions_list) == 1:
                         actions['print_all'].append(f"Which {curr_gen_name} would you like to {actions_list[0]}?")
@@ -344,7 +352,7 @@ class Game:
                     curr_gen_objects.append("c")
                     actions["build_multiple_choice"] = [displays, curr_gen_objects]
                     del parsed_dict["nearby_gen_dict"][curr_gen_name]
-                    return ("gen_name_request", [parsed_dict, curr_gen_name], actions) #more helpers?
+                    return ("gen_name_request", [parsed_dict, curr_gen_name], actions) 
 
             
         # If the parsed dictionary has an action
