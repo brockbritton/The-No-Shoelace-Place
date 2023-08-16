@@ -1,3 +1,11 @@
+[project]
+name = "The-No-Shoelace-Place"
+version = "0.1.0"
+description = "A text display choose your own adventure game"
+dependencies = [
+    "flask",
+]
+
 [build-system]
 requires = ["setuptools>=42.0", "wheel"]
 build-backend = "setuptools.build_meta"

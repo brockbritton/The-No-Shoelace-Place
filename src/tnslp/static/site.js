@@ -63,9 +63,9 @@ async function fetchPostEndpoint(data, route) {
     } catch (error) {
         console.log(error)
         if (route == "/game/loading-game") {
-            //await fetchPostEndpoint(data, "/game/loading-game")
+            await fetchPostEndpoint(data, "/game/loading-game")
         } else {
-            printtk(`Error ${request.status}: see terminal for more information.`);
+            printtk(`Error ${error.status}: see terminal for more information.`);
         }
     }
 }
@@ -75,9 +75,7 @@ function print_all(pars_list, bmc_list, rebuild_text){
         if (bmc_list.length > 0) {
             build_multiple_choice(bmc_list);
         } else {
-            //enable play button
             document.getElementById("text-entry-enter-button").disabled = false;
-            //alert("play button back on")
             toggle_entry_divs("text");
         }
     
@@ -102,7 +100,7 @@ function load_prints(list, bmc_list) {
         let par = document.createElement("p");
         if (list[text] instanceof Array) {
             if (list[text][1] == "quote") {
-                par.classList.add("quote_text");
+                par.classList.add("quote-text");
                 par.innerHTML = list[text][0];
             } 
         } else {
@@ -116,6 +114,7 @@ function load_prints(list, bmc_list) {
     if (bmc_list != undefined) {
         build_multiple_choice(bmc_list);
     } else {
+        document.getElementById("text-entry-enter-button").disabled = false;
         toggle_entry_divs("text");
     }
 }
@@ -129,7 +128,7 @@ function printtk(text) {
     const par = document.createElement("p");
     if (text instanceof Array) {
         if (text[1] == "quote") {
-            par.classList.add("quote_text");
+            par.classList.add("quote-text");
             par.innerHTML = text[0];
             par.style.opacity = 0;
             document.getElementById("game-text-display").appendChild(par);
@@ -155,7 +154,7 @@ function print_letter_by_letter(text, par_element) {
 
 const quote_opacity_rate = 0.01;
 function fade_in_quote_line(par_element) {
-    
+    const game_text_display = document.getElementById("game-text-display")
     if (par_element.style.opacity != 1) {
         if (parseFloat(par_element.style.opacity) + quote_opacity_rate >= 1) {
             par_element.style.opacity = 1;
@@ -164,7 +163,7 @@ function fade_in_quote_line(par_element) {
         }
         setTimeout(fade_in_quote_line.bind(null, par_element), quote_fadein_rate * quote_opacity_rate);
     } 
-    game_display_div.scrollTop = game_display_div.scrollHeight;
+    game_text_display.scrollTop = game_text_display.scrollHeight;
 }
 
 function build_multiple_choice(display_strings) {
@@ -189,7 +188,8 @@ function toggle_entry_divs(element_type) {
     } else if (element_type == "text") {
         button_entry_div.style.display = "none";
         text_entry_div.style.display = "block";
-    }
+        document.getElementById("player-text-input").focus()
+    }  
 }
 
 function update_inv_visual(inv_strings) {

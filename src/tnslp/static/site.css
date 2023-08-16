@@ -53,6 +53,7 @@ button:disabled:hover {
 /* ############### */
 /* Title/Home Page */
 /* ############### */
+
 #welcome-logo-container {
     width: 75%;
     height: auto;
@@ -231,7 +232,7 @@ button:disabled:hover {
     padding: 0.625em;
     font-size: 1.5em;
     z-index: 3;
-    background-color: none !important;
+    background-color: transparent !important;
 }
 
 #text-button-entry-widgets {
@@ -282,10 +283,9 @@ button:disabled:hover {
 
 .standard-display-text {
     font-size: 1em;
-    font-family: 'Courier New', monospace !important; 
+    font-family: 'Courier New', monospace !important;
     background-color: none !important;
 }
-
 
 .quote-text {
     font-size: 1em;
@@ -295,7 +295,10 @@ button:disabled:hover {
 }
 
 .riddle-text {
-
+    font-size: 1em;
+    font-family: 'Apple Chancery', cursive !important;
+    background-color: none !important;
+    text-align: center;
 }
 
 /* Right Panel - Player Stats, Inventory, Abilities, Menu Buttons */

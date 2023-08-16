@@ -6,7 +6,7 @@ import tnslp.game_backend.classes.parser_class as parser_class
 import tnslp.game_backend.classes.room_class as room_class
 import tnslp.game_backend.objects.rooms as rooms
 import tnslp.game_backend.gl_backend_functions as gl
-
+ 
 
 class Game:
 
@@ -54,8 +54,8 @@ class Game:
                 if isinstance(object, room_class.Room):
                     return [self.player1]
                 else:
-                    return []
-
+                    return [] 
+            
         return []
 
     def start_game(self):
@@ -95,7 +95,6 @@ class Game:
             for id in actions['update_ui_values']:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
-            #print(actions['update_ui_values'])
         
         return actions
 
@@ -199,6 +198,7 @@ class Game:
 
             # Check the parsed dictionary for existing values
             for value in parsed_dict.values():
+                print(parsed_dict.values())
                 if len(value) > 0:
                     return_tuple = self.evaluate_parsed_data(parsed_dict)
                     break

@@ -20,8 +20,6 @@ class Room:
             self.create_door_dict(doors)
         self._all_rooms_registry.append(self)
         self.storage_containers = [item_class.Storage_Spot("ground", "ground"), item_class.Storage_Wall("wall", "walls")]
-        #print(f"floor/wall: {floor_wall_items}")
-        #print(f"doors: {doors}")
         for i in range(0, len(floor_wall_items)):
             if floor_wall_items[i] != None:
                 self.storage_containers[i].set_items(floor_wall_items[i])
@@ -31,6 +29,8 @@ class Room:
         self.visited = False
         self.item_actions = {
             'inspect': self.inspect_room,
+            'items': self.show_items,
+            'rooms': self.show_directions,
         }
 
     def inspect_room(self, player):
@@ -40,8 +40,23 @@ class Room:
 
         actions['print_all'].append(self.description)
         
+        actions['print_all'].append(self.print_directions(player, None))
+
+        return actions
+
+    def show_items(self):
+        actions = {
+            'print_all': [],
+        }
         if len(self.storage_containers) > 0:
             actions['print_all'].append(self.look_storage_units())
+
+        return actions
+
+    def show_directions(self, player):
+        actions = {
+            'print_all': [],
+        }
         
         actions['print_all'].append(self.print_directions(player, None))
 

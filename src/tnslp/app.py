@@ -9,10 +9,13 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_COOKIE_SECURE"] = True
+app.debug = True
+
+
 Session(app)
 
 @app.before_first_request 
-def before_first_request():
+def before_first_request(): 
     session.clear() 
 
     session['current_js_actions'] = {
@@ -87,4 +90,8 @@ def page_not_found(error):
 
 if __name__ == '__main__':
     app.secret_key = "ihaveasecretkey5"
-    app.run(host="localhost", port="5000")
+    app.run(
+        host="localhost", port="5000"
+        )
+
+    
