@@ -221,7 +221,7 @@
                         </div>
                         <div class="ps-inv-elem-spacing">
                             <div id="health-out-of-100">
-                                <p id="health-value">65</p>
+                                <p class="ps-values" id="health-value">65</p>
                                 <p id="out-of-100">/100</p>
                             </div>
                         </div>
@@ -297,19 +297,19 @@
                     </div>
                     <div id="ability-right">
                         <div class="ability-str-lvl-div">
-                            <p class="inv-strings" id="meditation-lvl">0</p>
+                            <p class="player-skills-lvl" id="meditation-lvl">0</p>
                         </div>
                         <div class="ability-str-lvl-div">
-                            <p class="inv-strings" id="assertiveness-lvl">0</p>
+                            <p class="player-skills-lvl" id="assertiveness-lvl">0</p>
                         </div>
                         <div class="ability-str-lvl-div">
-                            <p class="inv-strings" id="pos-attitude-lvl">0</p>
+                            <p class="player-skills-lvl" id="pos-attitude-lvl">0</p>
                         </div>
                         <div class="ability-str-lvl-div">
-                            <p class="inv-strings" id="opp-action-lvl">0</p>
+                            <p class="player-skills-lvl" id="opp-action-lvl">0</p>
                         </div>
                         <div class="ability-str-lvl-div">
-                            <p class="inv-strings" id="catharsis-lvl">0</p>
+                            <p class="player-skills-lvl" id="catharsis-lvl">0</p>
                         </div>
                     </div>
                 </div>
@@ -332,6 +332,7 @@
         
         // Start the Game - text to the window \\
         fetchPostEndpoint(null, '/game/loading-game');
+        update_frontend_player_data()
 
         document.addEventListener("keydown", function(e) {
             //console.log(e.key)

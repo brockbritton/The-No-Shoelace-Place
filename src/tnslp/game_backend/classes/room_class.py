@@ -162,7 +162,6 @@ class Room:
     def enter_room(self, player):
         actions = {
             'print_all': [],
-            'update_ui_values': []
         }
         if self != player.loc:
             player.last_loc = player.loc
@@ -175,11 +174,10 @@ class Room:
             actions['print_all'].append(f"New Room Discovered! +{player.xp_dict['new_room']}xp")
             actions['print_all'].append(f"You are now in {self.name}.")
             actions["print_all"].append(self.description)
-            actions['update_ui_values'].append(player.earn_xp(10))
+            player.earn_xp(10)
             self.visited = True
         else:
             actions['print_all'].append(f"You are now in {self.name}.")
-            actions['update_ui_values'].append("room-value")
 
         
         for direction in self.doors.values():
@@ -196,7 +194,6 @@ class Room:
             stumble = random.randint(1,12)
             if stumble == 1:
                 actions['print_all'].append("In the dark, you stumbled and fell, scraping your hands on the rough ground.")
-                actions['update_ui_values'].append("health-value")
                 player.health -= 5
                 if player.health <= 0:
                     player.health = 0
@@ -549,14 +546,13 @@ class Final_Room(Room):
     def enter_room(self, player):
         actions = {
             'print_all': [],
-            'update_ui_values': [],
             'build_multiple_choice': []
         }
         
         if not self.visited:
             # Updating XP for gui 
             actions['print_all'].append(f"New Room Discovered! +{player.xp_dict['new_room']}xp")
-            actions['update_ui_values'].append(player.earn_xp(10))
+            player.earn_xp(10)
             self.visited = True
 
         actions['print_all'].append(f"You have now encountered your demon of {self.demon.name}. ")

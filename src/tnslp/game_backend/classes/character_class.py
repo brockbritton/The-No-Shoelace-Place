@@ -53,7 +53,6 @@ class Character:
 
     def earn_xp(self, amount):
         self.xp += amount
-        return "xp_value"
 
     def gain_health(self, hp):
         self.health += hp
@@ -133,7 +132,6 @@ class Character:
             'print_all': [],
             'ask_y_or_n': False,
             'build_multiple_choice': [],
-            'update_ui_values': []
         }
         invalid_direction_strs = ["You cannot go that way.", "There is a wall in that direction.", "It is not possible to go that way."]  
         
@@ -242,7 +240,6 @@ class Character:
             'print_all': [],
             'ask_y_or_n': False,
             'build_multiple_choice': [],
-            'update_ui_values': ["health_value"]
         }
 
         actions['print_all'].append(f"Your skill of {skill_used.name} has dealt {skill_used.damage} to your demon.")

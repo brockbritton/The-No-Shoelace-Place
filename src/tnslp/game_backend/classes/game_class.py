@@ -27,7 +27,7 @@ class Game:
 
     def __repr__(self) -> str:
         return f'Whole Game Object - player: {self.player1.name}'
-
+    
     def get_curr_ui_value(self, id):
         # must be called each time because the values change
         ## these can be added to in action  {option}_value
@@ -43,6 +43,17 @@ class Game:
             case "pos-attitude-lvl": return self.player1.abilities[2].lvl
             case "opp-action-lvl": return self.player1.abilities[3].lvl
             case "catharsis-lvl": return self.player1.abilities[4].lvl
+
+    def get_player_inventory(self):
+        
+        return self.player1.build_inv_str_list()
+    
+    def get_player_attr(self):
+        return [self.player1.xp, self.player1.calendar.days_list[-1].day_number, self.player1.calendar.days_list[-1].turns_left, self.player1.loc.display_name, self.player1.health, self.player1.diagnosis]
+
+    def get_player_skills_lvl(self):
+        return [self.player1.abilities[0].lvl, self.player1.abilities[1].lvl, self.player1.abilities[2].lvl, self.player1.abilities[3].lvl, self.player1.abilities[4].lvl]
+
 
     def get_item_action_params(self, action, object):
         # must be called each time because the values change
@@ -66,22 +77,8 @@ class Game:
     def start_game(self):
         actions = {
             'print_all': [],
-            'update_inv_visual': [],
             'build_multiple_choice': [],
             'rebuild_text_entry': False,
-            'update_ui_values': [
-                "xp-value", 
-                "day-value", 
-                "turns-value", 
-                "room-value", 
-                "health-value", 
-                "diagnosis-value", 
-                "meditation-lvl", 
-                "assertiveness-lvl", 
-                "pos-attitude-lvl", 
-                "opp-action-lvl", 
-                "catharsis-lvl"
-                ],
         }
 
         actions['print_all'].append("As you open your eyes, you find yourself laying on a bed in a non descript bedroom.") 
@@ -90,43 +87,16 @@ class Game:
         
         return_tuple = self.player1.loc.enter_room(self.player1)
         self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
-        actions['update_inv_visual'] = self.player1.build_inv_str_list()
         
         if len(self.save_prints) == 0:
             self.save_prints.extend(actions['print_all'])
-
-        if len(actions['update_ui_values']) > 0:
-            values_to_update = []
-            for id in actions['update_ui_values']:
-                values_to_update.append([id, str(self.get_curr_ui_value(id))])
-            actions['update_ui_values'] = values_to_update
-            print(actions['update_ui_values'])
         
         return actions
 
     def load_game(self):
         actions = {
             'load_prints': self.save_prints,
-            'update_inv_visual': self.player1.build_inv_str_list(),
-            'update_ui_values': [
-                "xp-value", 
-                "day-value", 
-                "turns-value", 
-                "room-value", 
-                "health-value", 
-                "diagnosis-value", 
-                "meditation-lvl", 
-                "assertiveness-lvl", 
-                "pos-attitude-lvl", 
-                "opp-action-lvl",
-                "catharsis-lvl"],
         }
-
-        if len(actions['update_ui_values']) > 0:
-            values_to_update = []
-            for id in actions['update_ui_values']:
-                values_to_update.append([id, str(self.get_curr_ui_value(id))])
-            actions['update_ui_values'] = values_to_update
 
         if self.wait_for_frontend_input['build_multiple_choice'] != None:
             actions['build_multiple_choice'] = self.wait_for_frontend_input['build_multiple_choice'][0]
@@ -139,8 +109,6 @@ class Game:
             'build_multiple_choice': [],
             'ask_y_or_n': False, 
             'rebuild_text_entry': False,
-            'update_inv_visual': [],
-            'update_ui_values': [] ###keep list empty 
         }
 
         # Set a default return tuple if nothing connects
@@ -235,15 +203,6 @@ class Game:
                 return_tuple = self.player1.calendar.calculate_next_activity().ask_event()
                 self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
                 
-        
-        # If there are frontend values to update, 
-        # access the data found the gui_ui_values dict 
-        # and add it to the actions dict being sent to the frontend
-        if len(actions['update_ui_values']) > 0:
-            values_to_update = []
-            for id in actions['update_ui_values']:
-                values_to_update.append([id, str(self.get_curr_ui_value(id))])
-            actions['update_ui_values'] = values_to_update
 
         # If there are values to build a multiple choice option,
         # take the underlying values and place the in the waiting for the next frontend input
@@ -289,8 +248,6 @@ class Game:
             'print_all': [],
             'ask_y_or_n': False,
             'build_multiple_choice': [],
-            'update_inv_visual': [],
-            'update_ui_values': []
         }
 
         # The parsed dictionary is as follows:

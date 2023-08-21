@@ -461,6 +461,8 @@ button:disabled:hover {
     margin-bottom: 0em;
     width: 100%;
     display: inline-block;
+    white-space: nowrap;
+    overflow-x: scroll;
 }
 
 .ability-strings {
@@ -478,4 +480,15 @@ button:disabled:hover {
     align-items: center;
     margin-top: 0em;
     margin-bottom: .5em;
+}
+
+.player-skills-lvl {
+    text-align: left;
+    font-family: 'Courier New', monospace !important;
+    font-size: 1.25em;
+    margin-top: 0em;
+    margin-bottom: 0em;
+    width: 100%;
+    display: inline-block;
+    overflow-x: scroll;
 }

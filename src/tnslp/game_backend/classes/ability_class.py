@@ -32,7 +32,6 @@ class Coping_Skill(Ability):
             'print_all': [],
             'build_multiple_choice': [],
             'ask_y_or_n': False,
-            'update_ui_values': [],
         }
         if y_or_no == "y":
             self.lvl += 1
@@ -48,7 +47,6 @@ class Coping_Skill(Ability):
                 actions['print_all'].append(f"You have learned {self.name}!")
             else:
                 actions['print_all'].append(f"You have leveled up {self.name} to level {self.lvl}!")
-            actions['update_ui_values'] = ["xp_value", self.lvl_ui_value]
         else:
             if self.lvl == 0:
                 actions['print_all'].append(f"You chose not learn {self.name}.")

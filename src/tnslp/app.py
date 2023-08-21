@@ -64,15 +64,15 @@ def accept_data():
 def request_map_data():
     return session['game'].return_map_data()
 
-@app.route("/game/request-ui-data-values", methods=['GET'])
-def request_map_data():
+@app.route("/game/request-player-data", methods=['GET'])
+def request_backend_player_data():
     ui_dict = {
-        #inventory
-        "inventory":session['game'].function(),
         #patient stats
-        "attributes":session['game'].function(),
+        "stats" : session['game'].get_player_attr(),
+        #inventory
+        "inventory" : session['game'].get_player_inventory(),
         #skills levels
-        "skills":session['game'].function()
+        "skills" : session['game'].get_player_skills_lvl()
     }
     return ui_dict
 

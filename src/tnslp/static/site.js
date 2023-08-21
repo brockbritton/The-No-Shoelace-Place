@@ -51,21 +51,15 @@ async function fetchPostEndpoint(data, route) {
             } else if (('load_prints' in response_data)) {
                 load_prints(response_data['load_prints'], response_data['build_multiple_choice']);
             }
-            
-            if (('update_inv_visual' in response_data) && (response_data['update_inv_visual'].length != 0)) {
-                update_inv_visual(response_data['update_inv_visual']);
-            }
 
-            if (('update_ui_values' in response_data) && (response_data['update_ui_values'].length != 0)) {
-                update_ui_values(response_data['update_ui_values']);
-            } 
+            update_frontend_player_data()
         }
     } catch (error) {
         console.log(error)
         if (route == "/game/loading-game") {
             await fetchPostEndpoint(data, "/game/loading-game")
         } else {
-            printtk(`Error ${error.status}: see terminal for more information.`);
+            printtk(`Post Error ${error.status}: see terminal for more information.`);
         }
     }
 }
@@ -86,7 +80,7 @@ function print_all(pars_list, bmc_list, rebuild_text){
                 setTimeout(print_all.bind(null, pars_list.slice(1), bmc_list, rebuild_text), quote_fadein_rate);
             }
         } else {
-            //this timeout isnt perfect. the next paragraph starts printing before its done.
+            //this timeout isnt perfect. the next paragraph starts printing before this is done.
             //need to add some more time?
             //+ (rate_of_letters*(pars_list[0].length/2.5)) ish
             setTimeout(print_all.bind(null, pars_list.slice(1), bmc_list, rebuild_text), rate_of_letters*pars_list[0].length); //
@@ -192,49 +186,57 @@ function toggle_entry_divs(element_type) {
     }  
 }
 
-function update_inv_visual(inv_strings) {
-    for (let i=0; i < 6; i++) {
-        let elem_id = "inv-slot-" + (i+1).toString();
-        if (document.getElementById(elem_id).innerHTML != inv_strings[i]) {
-            document.getElementById(elem_id).innerHTML = "";
-            build_inv_labels_letter_by_letter(elem_id, inv_strings[i]);
-        } 
-    }
-}
-
-function build_inv_labels_letter_by_letter(id, text_string) {
-    let elem = document.getElementById(id);
+function build_inv_labels(id, text_string) {
+    let html_elem = document.getElementById(id);
     if (text_string.length == 0) {
-        elem.innerHTML = "";
+        html_elem.innerHTML = "";
     } else {
         if (text_string.length == 1) {
-            elem.innerHTML += text_string
+            html_elem.innerHTML += text_string
         } else {
 
-            elem.innerHTML += text_string[0]
-            setTimeout(build_inv_labels_letter_by_letter.bind(null, id, text_string.slice(1)), rate_of_letters * (text_string.length)/4)
+            html_elem.innerHTML += text_string[0]
+            setTimeout(build_inv_labels.bind(null, id, text_string.slice(1)), rate_of_letters * (text_string.length)/4)
         } 
     }
 }
 
-function update_ui_values(list_pairs) {
-    for (let id_value_pair of list_pairs) {
-        
-        try {
-            console.log(id_value_pair[0], typeof id_value_pair[1], id_value_pair[1])
-            document.getElementById(id_value_pair[0]).innerHTML = id_value_pair[1];
-        } catch (error) {
-            console.log(id_value_pair[0], typeof id_value_pair[1], id_value_pair[1], "failed")
-            document.getElementById(id_value_pair[0]).innerHTML = "xx";
+
+function update_frontend_player_data() {
+    $.ajax({
+        url: '/game/request-player-data',
+        type: 'GET',
+        success: function(response) {
+
+            // Updating Section "Player Info"
+            const stats_html_elements = document.getElementsByClassName("ps-values")
+            for (let i = 0; i < response["stats"].length; i++) {
+                if (response["stats"][i] != null) {
+                    stats_html_elements[i].innerHTML = String(response["stats"][i]);
+                } else {
+                    stats_html_elements[i].innerHTML = "Unknown"; 
+                }
+            }
+
+            //Updating Section "Inventory"
+            for (let i=0; i < 6; i++) {
+                let elem_id = "inv-slot-" + (i+1).toString();
+                if (document.getElementById(elem_id).innerHTML != response["inventory"][i]) {
+                    document.getElementById(elem_id).innerHTML = "";
+                    build_inv_labels(elem_id, response["inventory"][i]);
+                } 
+            }
+
+            //Updating Section "Skills"
+            const skills_html_elements = document.getElementsByClassName("player-skills-lvl")
+            for (let i = 0; i < response["skills"].length; i++) {
+                skills_html_elements[i].innerHTML = String(response["skills"][i]);
+            }
+        },
+        error: function(request, response, errors) {
+            console.log(`Player Data Request: ${errors}`)
         }
-        
-        /*
-        if (typeof id_value_pair[1] == String) {
-            // cheat fix: hiding errors, not fixing issue
-            document.getElementById(id_value_pair[0]).innerHTML = id_value_pair[1];
-        }
-        */
-    }
+    });
 }
 
 
