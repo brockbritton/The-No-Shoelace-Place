@@ -2,6 +2,7 @@
 from flask import Flask, redirect, render_template, request, session, url_for
 from flask_session import Session
 import tnslp.game_backend.classes.game_class as game_class
+import re
 
 
 app = Flask(__name__)
@@ -9,7 +10,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_COOKIE_SECURE"] = True
-app.debug = True
+app.debug = True 
 
 
 Session(app)
@@ -63,9 +64,21 @@ def accept_data():
 def request_map_data():
     return session['game'].return_map_data()
 
+@app.route("/game/request-ui-data-values", methods=['GET'])
+def request_map_data():
+    ui_dict = {
+        #inventory
+        "inventory":session['game'].function(),
+        #patient stats
+        "attributes":session['game'].function(),
+        #skills levels
+        "skills":session['game'].function()
+    }
+    return ui_dict
+
 @app.route("/game/loading-game", methods=['POST'])
 def loading_game():
-    if len(session['game'].save_prints) == 0: 
+    if len(session['game'].save_prints) <= session['game'].starting_pars: 
         return_dict = session['game'].start_game()
     else:
         return_dict = session['game'].load_game() 
@@ -89,9 +102,8 @@ def page_not_found(error):
     return render_template('method_not_allowed.html'), 405
 
 if __name__ == '__main__':
-    app.secret_key = "ihaveasecretkey5"
-    app.run(
-        host="localhost", port="5000"
-        )
+    app.secret_key = "ihaveasecretkey5" 
+    app.run(host="localhost", port="5000")
+    
 
     

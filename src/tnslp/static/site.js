@@ -106,7 +106,7 @@ function load_prints(list, bmc_list) {
         } else {
             par.classList.add("standard-display-text");
             par.innerHTML = list[text];
-        }
+        } 
         game_text_display.appendChild(par);
     }
     game_text_display.scrollTop = game_text_display.scrollHeight;
@@ -213,15 +213,27 @@ function build_inv_labels_letter_by_letter(id, text_string) {
 
             elem.innerHTML += text_string[0]
             setTimeout(build_inv_labels_letter_by_letter.bind(null, id, text_string.slice(1)), rate_of_letters * (text_string.length)/4)
-        }
+        } 
     }
 }
 
 function update_ui_values(list_pairs) {
     for (let id_value_pair of list_pairs) {
-        if (document.getElementById(id_value_pair[0]).innerHTML != id_value_pair[1]) {
+        
+        try {
+            console.log(id_value_pair[0], typeof id_value_pair[1], id_value_pair[1])
             document.getElementById(id_value_pair[0]).innerHTML = id_value_pair[1];
-        } 
+        } catch (error) {
+            console.log(id_value_pair[0], typeof id_value_pair[1], id_value_pair[1], "failed")
+            document.getElementById(id_value_pair[0]).innerHTML = "xx";
+        }
+        
+        /*
+        if (typeof id_value_pair[1] == String) {
+            // cheat fix: hiding errors, not fixing issue
+            document.getElementById(id_value_pair[0]).innerHTML = id_value_pair[1];
+        }
+        */
     }
 }
 

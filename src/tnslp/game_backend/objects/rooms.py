@@ -10,7 +10,7 @@ game_exit = room_class.Ward_Room(
     "Game Exit", #room name #add article "the"
     "Game Exit", #display name
     "No Room Description", #description
-    "", #room label or none
+    None, #room label or none
     None, #extra storage units or none
     (None, None), #items for ground, walls - must be lists of items
     [None, item.admissions_exit_door, None, None] #doors or none

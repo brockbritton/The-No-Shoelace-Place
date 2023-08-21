@@ -17,6 +17,7 @@ class Game:
         self.save_prints = []
         self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
+        self.starting_pars = len(self.start_game()['print_all'])
         
         #Map collections
         self.ward_rooms = room_class.Ward_Room._ward_rooms_registry
@@ -99,6 +100,7 @@ class Game:
             for id in actions['update_ui_values']:
                 values_to_update.append([id, str(self.get_curr_ui_value(id))])
             actions['update_ui_values'] = values_to_update
+            print(actions['update_ui_values'])
         
         return actions
 
@@ -299,7 +301,16 @@ class Game:
         directions = list(parsed_dict["directions"]) #parsed directions
         original_str = str(parsed_dict["original_input"]) #original input string by the user
 
+
+        # First look at nearby objects 
+        # If there is one nearby object and if there is also a nearby dict key
+        # check if the key of the dict is in the name of the nearby object
+        # 
+
+        
+
         # If general names of items were parsed
+        print(nearby_gen_dict)
         if len(nearby_gen_dict) > 0:
             # If there is 1 general name
             if len(nearby_gen_dict) == 1 and len(next(iter(nearby_gen_dict.items()))[1]) == 1:
@@ -353,6 +364,14 @@ class Game:
                     actions["build_multiple_choice"] = [displays, curr_gen_objects]
                     del parsed_dict["nearby_gen_dict"][curr_gen_name]
                     return ("gen_name_request", [parsed_dict, curr_gen_name], actions) 
+
+
+
+
+
+        #############################
+
+
 
             
         # If the parsed dictionary has an action
@@ -449,6 +468,7 @@ class Game:
             else:
                 # Please refer to one object at a time
                 actions["print_all"].append("Please only refer to only one item at a time.")
+        '''
         # If the parsed dictionary does not have an action, or a direction, or a nearby object
         # but does have a special action
         elif len(special_actions) > 0:
@@ -456,7 +476,7 @@ class Game:
                 match action:
                     case "xd" : actions["print_all"].append(self.player1.loc.print_directions(self.player1, None))
                     case "xi" : actions["print_all"].append(self.player1.loc.xray_look_storage_units())
-
+        '''
         return (dest, helper, actions)
 
     def return_map_data(self):
