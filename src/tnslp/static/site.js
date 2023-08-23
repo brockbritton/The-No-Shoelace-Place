@@ -201,7 +201,6 @@ function build_inv_labels(id, text_string) {
     }
 }
 
-
 function update_frontend_player_data() {
     $.ajax({
         url: '/game/request-player-data',
@@ -241,7 +240,6 @@ function update_frontend_player_data() {
 
 
 // Frontend Map Functions \\
-
 function toggleGameMap() {
     const map_window = document.getElementById("game-map")
     const game_window = document.getElementById("game_gui")

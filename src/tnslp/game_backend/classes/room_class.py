@@ -6,6 +6,10 @@ import tnslp.game_backend.classes.item_class as item_class
 import tnslp.game_backend.classes.npc_class as npc_class
 import tnslp.game_backend.gl_backend_functions as gl
 
+class Storage_Node:
+    def __init__(self, container, items_list) -> None:
+        self.container = container
+        self.items = items_list
 
 class Room:
     _all_rooms_registry = []
@@ -19,7 +23,15 @@ class Room:
         if doors != None: 
             self.create_door_dict(doors)
         self._all_rooms_registry.append(self)
-        self.storage_containers = [item_class.Storage_Spot("ground", "ground"), item_class.Storage_Wall("wall", "walls")]
+        self.storage_tree = [
+            Storage_Node(item_class.Floor_Storage("floor", "ground"), floor_wall_items[0]),
+            Storage_Node(item_class.Wall_Storage("wall", "walls"), floor_wall_items[1])
+        ]
+
+        #self.storage_tree.forEach
+
+        ## to be replaced
+        self.storage_containers = [item_class.Floor_Storage("floor", "ground"), item_class.Wall_Storage("wall", "walls")] 
         for i in range(0, len(floor_wall_items)):
             if floor_wall_items[i] != None:
                 self.storage_containers[i].set_items(floor_wall_items[i])
@@ -81,6 +93,7 @@ class Room:
 
         for sc in self.storage_containers: 
             sc_dict[(len(sc.items) > 0)].append(sc)
+        print(sc_dict)
 
         full_sentence = ""
         for key, value in sc_dict.items():
@@ -480,12 +493,12 @@ class Room:
 class Ward_Room(Room):
     _ward_rooms_registry = []
     # room name, display name, description, room label, storage units, doors
-    def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
+    def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
         super().__init__(name, display_name, description, room_label, floor_wall_items, doors)
         self.lights_on = True
         self._ward_rooms_registry.append(self)
-        if storage_units != None:
-            self.add_storage_units(storage_units)
+        #if storage_units != None:
+        #    self.add_storage_units(storage_units)
         
         
     def __repr__(self) -> str:
@@ -493,8 +506,8 @@ class Ward_Room(Room):
 
 
 class Starting_Ward_Room(Ward_Room):
-    def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
-        super().__init__(name, display_name, description, room_label, storage_units, floor_wall_items, doors)
+    def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
+        super().__init__(name, display_name, description, room_label, floor_wall_items, doors)
         self.visited = False
         if self.has_doors:
             for direction in self.doors.values():
@@ -509,12 +522,12 @@ class Starting_Ward_Room(Ward_Room):
 
 class Basement_Room(Room):
     _basement_rooms_registry = []
-    def __init__(self, name, display_name, description, room_label, storage_units, floor_wall_items, doors) -> None:
+    def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
         super().__init__(name, display_name, description, room_label, floor_wall_items, doors)
         self.lights_on = False
         self._basement_rooms_registry.append(self)
-        if storage_units != None:
-            self.add_storage_units(storage_units)
+        #if storage_units != None:
+        #    self.add_storage_units(storage_units)
 
     
     def __repr__(self) -> str:

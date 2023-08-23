@@ -68,7 +68,7 @@ class Inv_Item(Item):
         if self not in player.inv:
             if (len(player.inv) < player.inv_cap):
                 actions['print_all'].append("You have added the " + self.name + " to your inventory.")
-                actions['update_inv_visual'] = player.add_inventory(self)
+                player.add_inventory(self)
                 for sc in player.loc.storage_containers:
                     contents = sc.build_flat_list_of_contents(True)
                     for item_loc in contents:
@@ -88,7 +88,7 @@ class Inv_Item(Item):
     def drop_item(self, loc, player):
         actions = {}
         if self in player.inv:
-            actions['update_inv_visual'] = player.sub_inventory(self)
+            player.sub_inventory(self)
             player.loc.add_item(self, loc)
             try:
                 actions['print_all'] = [f"You have dropped the {self.name} to the {loc.name}."] 
@@ -282,7 +282,6 @@ class Lockable_Interact(Openable_Interact):
             'build_multiple_choice': [],
             'ask_y_or_n': False
         }
-        print("hi")
         if not self.broken:
             actions["print_all"].append(f"You have broken the lock on the {self.name}, therefore permanently unlocking it.")
             self.broken = True
@@ -370,6 +369,14 @@ class Storage_Spot(Storage_Unit):
         return actions
 
 class Storage_Wall(Storage_Spot):
+    def __init__(self, name, gen_name) -> None:
+        super().__init__(name, gen_name)
+
+class Wall_Storage(Storage_Spot):
+    def __init__(self, name, gen_name) -> None:
+        super().__init__(name, gen_name)
+
+class Floor_Storage(Storage_Spot):
     def __init__(self, name, gen_name) -> None:
         super().__init__(name, gen_name)
     

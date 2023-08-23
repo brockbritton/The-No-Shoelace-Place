@@ -65,11 +65,9 @@ class Character:
 
     def add_inventory(self, item):
         self.inv.append(item)
-        return self.build_inv_str_list()
 
     def sub_inventory(self, item):
         self.inv.remove(item)
-        return self.build_inv_str_list()
         
     def full_inv_drop_items(self, choice, item_to_pick_up):
         actions = {
@@ -95,7 +93,6 @@ class Character:
         actions = {
             'print_all': [],
             'ask_y_or_n': False,
-            'update_inv_visual': [],
         }
         if item_to_drop != "cancel":
             return_tuple1 = item_to_drop.drop_item(None, self) 
@@ -114,7 +111,6 @@ class Character:
             actions = gl.combine_dicts(actions, return_tuple1[2])
             actions = gl.combine_dicts(actions, return_tuple2[2])
             # This solves the problem of two different lists being built and combined
-            actions["update_inv_visual"] = self.build_inv_str_list()
             
         else:
             actions['print_all'].append(f"You chose to not pick up the {item_to_pick_up.name}.")

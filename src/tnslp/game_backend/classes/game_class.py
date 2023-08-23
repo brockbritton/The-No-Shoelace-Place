@@ -45,7 +45,6 @@ class Game:
             case "catharsis-lvl": return self.player1.abilities[4].lvl
 
     def get_player_inventory(self):
-        
         return self.player1.build_inv_str_list()
     
     def get_player_attr(self):
@@ -171,7 +170,7 @@ class Game:
             parsed_dict = self.parser.parse_input(self.player1, input_value)
 
             # Check the parsed dictionary for existing values
-            print(parsed_dict.values())
+            #print(parsed_dict.values())
             for value in parsed_dict.values():
                 # If any value exists
                 if len(value) > 0:
@@ -223,7 +222,7 @@ class Game:
             actions['rebuild_text_entry'] = True
         # Remove this useless key that doesn't need to be sent to the frontend 
         actions.pop('ask_y_or_n')
-  
+        
         if len(actions['print_all']) > 0:
             # Due to some prints being duplicated for no discernable reason, 
             # this searches the print statements to make sure there are no duplicates
@@ -267,7 +266,7 @@ class Game:
         
 
         # If general names of items were parsed
-        print(nearby_gen_dict)
+        #print(nearby_gen_dict)
         if len(nearby_gen_dict) > 0:
             # If there is 1 general name
             if len(nearby_gen_dict) == 1 and len(next(iter(nearby_gen_dict.items()))[1]) == 1:
