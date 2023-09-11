@@ -4,15 +4,12 @@ from flask_session import Session
 import tnslp.game_backend.classes.game_class as game_class
 import re
 
-
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_COOKIE_SECURE"] = True
 app.debug = True 
-
-
 Session(app)
 
 @app.before_first_request 
@@ -27,11 +24,13 @@ def before_first_request():
         if session['game'] is not None:
             print("--- game already exists ---")
 
-    except KeyError:
+    except KeyError: 
         session['game'] = game_class.Game()
         print("--- game created ---")
 
     session.modified = True
+
+    return session
 
 @app.after_request
 def add_header(r):
@@ -94,7 +93,7 @@ def loading_game():
         return_dict = session['game'].start_game()
     else:
         return_dict = session['game'].load_game() 
-
+    
     return return_dict
 
 @app.route("/game/instructions")

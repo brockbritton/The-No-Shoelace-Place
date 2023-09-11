@@ -472,6 +472,16 @@ button:disabled:hover {
     margin-bottom: 0em;
     width: 100%;
     display: inline-block;
+    filter: blur(5px);
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+    transition: filter 2s ease-in-out;
+}
+
+.ability-strings.learned {
+    filter: none !important;
 }
 
 .ability-str-lvl-div {

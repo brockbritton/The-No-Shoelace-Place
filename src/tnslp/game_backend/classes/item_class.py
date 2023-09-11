@@ -58,7 +58,7 @@ class Inv_Item(Item):
         })
 
     def __repr__(self) -> str:
-        return f'{self.name}(inv item)'
+        return f'{self.name}(basic)'
 
     def pick_up_item(self, player):
         actions = {
@@ -154,7 +154,7 @@ class Interact(Item):
         super().__init__(name, gen_name)
         
     def __repr__(self) -> str:
-        return f'{self.name}(interact item)'
+        return f'{self.name}(interact)'
 
 class Openable_Interact(Interact):
     def __init__(self, name, gen_name) -> None:
@@ -164,6 +164,29 @@ class Openable_Interact(Interact):
             'open': self.open_item,
             'close': self.close_item,
         })
+
+    def inspect_item(self): 
+        actions = {
+            'print_all': [],
+        }
+        
+        if self.open:
+            if len(self.items) == 0:
+                sentence = f"There is nothing in the {self.name}."
+            elif len(self.items) == 1:
+                sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}."
+            elif len(self.items) == 2:
+                sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name} and {self.items[1].article} {self.items[1].name}."
+            else:
+                sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}, "
+                for i in range(1, len(self.items)-1):
+                    sentence += f"{self.items[i].article} {self.items[i].name}, "
+                sentence += f"and {self.items[-1].article} {self.items[-1].name}."
+
+            actions['print_all'].append(sentence)
+        else:
+            actions['print_all'].append(f"The {self.name} is closed.")
+        return actions 
 
 
     def open_item(self):
@@ -312,40 +335,47 @@ class Lockable_Interact(Openable_Interact):
         return super().close_item()
 
 class Storage_Unit(Interact):
-    def __init__(self, name, gen_name) -> None:
+    def __init__(self, name, gen_name, items_list) -> None:
         super().__init__(name, gen_name)
-        self.items = []
+        if items_list == None:
+            self.items = []
+        else:
+            self.items = items_list
+
+    def __repr__(self) -> str:
+        return f'{self.name}(storage unit)'
 
     def set_items(self, item_list):
-        for i in item_list:
-            self.items.append(i)
+        if item_list != None:
+            for i in item_list:
+                self.items.append(i)
 
     def add_item(self, item):
         self.items.append(item)
 
     def remove_item(self, item):
         self.items.remove(item)
+    
+    def build_contained_list(self):
+        node_items = []
+        node_items.append(self)
+        if len(self.items) > 0:
+            for i in range(0, len(self.items)):
+                if issubclass(type(self.items[i]), Storage_Unit):
+                    if (issubclass(type(self.items[i]), Openable_Interact) and self.items[i].open) or (not issubclass(type(self.items[i]), Openable_Interact)):
+                        sub_node_items = self.items[i].build_contained_list()
+                        for j in range(0, len(sub_node_items)):
+                            node_items.append(sub_node_items[j])
+                    else:
+                        node_items.append(self.items[i])
+                else:
+                    node_items.append(self.items[i])
 
-    def build_flat_list_of_contents(self, more_info):
-        flat_list = []
-        for item in self.items:
-            if more_info:
-                if isinstance(item, Storage_Unit):
-                    flat_list.append((item, self))
-                    flat_list.extend(item.build_flat_list_of_contents(more_info))
-                else:
-                    flat_list.append((item, self))
-            else:
-                if isinstance(item, Storage_Unit):
-                    flat_list.append(item)
-                    flat_list.extend(item.build_flat_list_of_contents(more_info))
-                else:
-                    flat_list.append(item)
-        return flat_list
+        return node_items
 
 class Storage_Spot(Storage_Unit):
-    def __init__(self, name, gen_name) -> None:
-        super().__init__(name, gen_name)
+    def __init__(self, name, gen_name, item_list) -> None:
+        super().__init__(name, gen_name, item_list)
         self.storage_type = "on"
 
     def inspect_item(self): 
@@ -369,26 +399,27 @@ class Storage_Spot(Storage_Unit):
         return actions
 
 class Storage_Wall(Storage_Spot):
-    def __init__(self, name, gen_name) -> None:
-        super().__init__(name, gen_name)
+    def __init__(self, name, gen_name, item_list) -> None:
+        super().__init__(name, gen_name, item_list)
 
 class Wall_Storage(Storage_Spot):
-    def __init__(self, name, gen_name) -> None:
-        super().__init__(name, gen_name)
+    def __init__(self, name, gen_name, item_list) -> None:
+        super().__init__(name, gen_name, item_list)
 
 class Floor_Storage(Storage_Spot):
-    def __init__(self, name, gen_name) -> None:
-        super().__init__(name, gen_name)
+    def __init__(self, name, gen_name, item_list) -> None:
+        super().__init__(name, gen_name, item_list)
     
 class Storage_Bin(Storage_Unit):
-    def __init__(self, name, gen_name) -> None:
-        super().__init__(name, gen_name)
+    def __init__(self, name, gen_name, item_list) -> None:
+        super().__init__(name, gen_name, item_list)
         self.storage_type = "in"
 
     def inspect_item(self): 
         actions = {
             'print_all': [],
         }
+
         if len(self.items) == 0:
             sentence = f"There is nothing in the {self.name}."
         elif len(self.items) == 1:
@@ -404,33 +435,14 @@ class Storage_Bin(Storage_Unit):
         actions['print_all'].append(sentence)
         return actions 
 
-class Storage_Box(Openable_Interact, Storage_Unit):
-    def __init__(self, name, gen_name) -> None:
-        super().__init__(name, gen_name)
-        self.storage_type = "in"
+class Storage_Box(Storage_Unit, Openable_Interact):
+    def __init__(self, name, gen_name, item_list) -> None:
+        super().__init__(name, gen_name, item_list)
+        self.open = False
     
-    def inspect_item(self): 
-        actions = {
-            'print_all': [], 
-        }
-        if len(self.items) == 0:
-            sentence = f"There is nothing in the {self.name}."
-        elif len(self.items) == 1:
-            sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}."
-        elif len(self.items) == 2:
-            sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name} and {self.items[1].article} {self.items[1].name}."
-        else:
-            sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}, "
-            for i in range(1, len(self.items)-1):
-                sentence += f"{self.items[i].article} {self.items[i].name}, "
-            sentence += f"and {self.items[-1].article} {self.items[-1].name}."
-
-        actions['print_all'].append(sentence)
-        return actions
-
 class Storage_LockBox(Lockable_Interact, Storage_Box):
-    def __init__(self, name, gen_name, locked_bool, keys_list) -> None:
-        super().__init__(name, gen_name, keys_list)
+    def __init__(self, name, gen_name, locked_bool, keys_list, item_list) -> None:
+        super().__init__(name, gen_name, keys_list, item_list)
         self.locked = locked_bool
 
     def inspect_item(self): 
@@ -439,14 +451,23 @@ class Storage_LockBox(Lockable_Interact, Storage_Box):
         }
         if self.open:
             if len(self.items) == 0:
-                actions['print_all'].append(f"There is nothing in the {self.name}.")
+                sentence = f"There is nothing in the {self.name}."
+            elif len(self.items) == 1:
+                sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}."
+            elif len(self.items) == 2:
+                sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name} and {self.items[1].article} {self.items[1].name}."
             else:
-                actions['print_all'].append(f"There is something in the {self.name}: {self.items}.")
+                sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}, "
+                for i in range(1, len(self.items)-1):
+                    sentence += f"{self.items[i].article} {self.items[i].name}, "
+                sentence += f"and {self.items[-1].article} {self.items[-1].name}."
+
+            actions['print_all'].append(sentence)
         else:
             if self.locked:
                 actions['print_all'].append(f"The {self.name} is closed and locked.")
             else:
-                actions['print_all'].append(f"The {self.name} is closed.")
+                actions['print_all'].append(f"The {self.name} is closed but unlocked.")
         return actions
           
 class Door(Openable_Interact):
@@ -484,7 +505,6 @@ class Electronic_Door(Lockable_Interact, Door):
     def close_item(self):
         #closing door also locks it again
         ...
-
 
 class Hanging_Wall_Item(Interact):
     def __init__(self, name, gen_name) -> None:
@@ -541,12 +561,14 @@ class ID_Bracelet(Inv_Item):
 
         
 
-class Deck_of_Cards(Inv_Item, Storage_Box):
+class Deck_of_Cards(Storage_Box, Inv_Item):
     def __init__(self, name, gen_name) -> None:
-        super().__init__(name, gen_name)
+        all_cards = []
         for i in (("\u2660", "spades"), ("\u2665", "hearts"), ("\u2666", "diamonds"), ("\u2663", "clubs")):
             for j in ("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"):
-                self.items.append(Suit_Card(j, i[1], i[0]))
+                all_cards.append(Suit_Card(j, i[1], i[0]))
+        super().__init__(name, gen_name, None)
+        
     
     def inspect_item(self):
         actions = {
@@ -602,13 +624,12 @@ class Power_Box(Interact):
 
 class Chess_Set(Storage_Box):
     def __init__(self, name, gen_name) -> None:
-        super().__init__(name, gen_name)
-        self.items = [
+        super().__init__(name, gen_name, [
             Quote_Note("chess note", 
                 "note", 
                 ["No one ever won a game by resigning."],
                 "Savielly Tartakower"),
             Basic_Item("chess board", "board"),
-        ]
+        ])
 
         

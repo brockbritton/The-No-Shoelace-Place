@@ -7,7 +7,7 @@ class Parser:
 
         self.all_actions = {
             'pick up' : ["pick up", "pickup", "take", "retrieve", "get", "grab", "remove"],
-            'drop' : ["drop", "place", "put down", "put", "set", "move"],
+            'drop' : ["drop", "place", "put down", "put", "move"], #set
             'inspect' : ["inspect", "look at", "examine", "read", "check out", "search"],
             'open' : ["open"],
             'close' : ["close", "shut"],
@@ -36,7 +36,7 @@ class Parser:
         try:
             dict[item.gen_name].append(item)
         except KeyError:
-            dict[item.gen_name] = [item]
+            dict[item.gen_name] = [item] 
 
         return dict 
 
@@ -70,22 +70,16 @@ class Parser:
 
 
         # Build a dictionary of all items in the room and inventory and the room itself
-        ## Items in storage units in the room
-        for sc in player.loc.storage_containers:
-            if self.regex_search(sc.name.lower(), str_input.lower()):
-                parsed_info["nearby_objects"].append(sc)
+        ## Items in the room
+        room_flat_tree = player.loc.build_storage_flat_list()
+        print(room_flat_tree)
+        for item in room_flat_tree:
+            if self.regex_search(item.name.lower(), str_input.lower()):
+                parsed_info["nearby_objects"].append(item)
             
-            if self.regex_search(sc.gen_name.lower(), str_input.lower()):
-                parsed_info["nearby_gen_dict"] = self.update_gen_dict(parsed_info["nearby_gen_dict"], sc)
-            
-            contents = sc.build_flat_list_of_contents(False)
-            for item in contents:
-                if self.regex_search(item.name.lower(), str_input.lower()):
-                    parsed_info["nearby_objects"].append(item)
-                
-                if self.regex_search(item.gen_name.lower(), str_input.lower()):
-                    parsed_info["nearby_gen_dict"] = self.update_gen_dict(parsed_info["nearby_gen_dict"], item)
-                
+            if self.regex_search(item.gen_name.lower(), str_input.lower()):
+                parsed_info["nearby_gen_dict"] = self.update_gen_dict(parsed_info["nearby_gen_dict"], item)
+        
         ## Items in inventory
         for item in player.inv:
             if self.regex_search(item.name.lower(), str_input.lower()):

@@ -228,8 +228,16 @@ function update_frontend_player_data() {
 
             //Updating Section "Skills"
             const skills_html_elements = document.getElementsByClassName("player-skills-lvl")
+            
             for (let i = 0; i < response["skills"].length; i++) {
                 skills_html_elements[i].innerHTML = String(response["skills"][i]);
+                
+                if (response["skills"][i] > 0) {
+                    //add class that takes away blur from name
+                    const skills_string = document.getElementById(`${skills_html_elements[i].id.slice(0, -4)}-string`)
+                    skills_string.classList.add("learned")
+                }
+                
             }
         },
         error: function(request, response, errors) {

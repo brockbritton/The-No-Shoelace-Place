@@ -6,6 +6,7 @@ import tnslp.game_backend.classes.parser_class as parser_class
 import tnslp.game_backend.classes.room_class as room_class
 import tnslp.game_backend.objects.rooms as rooms
 import tnslp.game_backend.gl_backend_functions as gl
+import sys
  
 
 class Game:
@@ -89,7 +90,7 @@ class Game:
         
         if len(self.save_prints) == 0:
             self.save_prints.extend(actions['print_all'])
-        
+
         return actions
 
     def load_game(self):
@@ -105,7 +106,7 @@ class Game:
     def organize_raw_input(self, frontend_input):
         actions = {
             'print_all': [],
-            'build_multiple_choice': [],
+            'build_multiple_choice': [], 
             'ask_y_or_n': False, 
             'rebuild_text_entry': False,
         }
@@ -261,10 +262,7 @@ class Game:
         # First look at nearby objects 
         # If there is one nearby object and if there is also a nearby dict key
         # check if the key of the dict is in the name of the nearby object
-        # 
-
         
-
         # If general names of items were parsed
         #print(nearby_gen_dict)
         if len(nearby_gen_dict) > 0:
@@ -321,22 +319,14 @@ class Game:
                     del parsed_dict["nearby_gen_dict"][curr_gen_name]
                     return ("gen_name_request", [parsed_dict, curr_gen_name], actions) 
 
-
-
-
-
         #############################
 
-
-
-            
         # If the parsed dictionary has an action
         if len(actions_list) > 0:
             if len(actions_list) == 1:
                 # If there is one action and one object
                 if len(nearby_objects) == 1:
                     if actions_list[0] in nearby_objects[0].item_actions:
-                        
                         function_params = self.get_item_action_params(actions_list[0], nearby_objects[0])
                         return_data = nearby_objects[0].item_actions[actions_list[0]](*function_params)
                         

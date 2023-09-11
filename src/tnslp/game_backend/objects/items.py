@@ -100,12 +100,11 @@ faucets_poster = item_class.Hanging_Quote_Note("faucets poster",
 
 # Common Room #
 deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
-chess_set = item_class.Chess_Set("chess box", "box")
+chess_set = item_class.Chess_Set("chess set", "box")
     # Storage Units
-cr_art_table = item_class.Storage_Spot("arts and crafts table", "table")
-cr_game_cabinets = item_class.Storage_Box("game cabinet", "cabinet")
-cr_game_cabinets.set_items([chess_set, deck_of_cards])
-cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table")
+cr_art_table = item_class.Storage_Spot("arts and crafts table", "table", [security_key])
+cr_game_cabinets = item_class.Storage_Box("game cabinet", "cabinet", [chess_set, deck_of_cards])
+cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table", None)
     # Doors
 common_room_and_ward_landing_door = item_class.Ward_Lockable_Door("Door W1-B", "door", None)
 common_room_and_staff_breakroom = item_class.Ward_Lockable_Door("Door W4", "door", None)
@@ -113,29 +112,29 @@ common_room_and_medications = item_class.Ward_Lockable_Door("Door W6", "door", N
 
 # Library #
     # Storage Units
-lib_nf_bookshelf = item_class.Storage_Spot("non-fiction bookshelf", "shelf")
-lib_fant_bookshelf = item_class.Storage_Spot("fantasy bookshelf", "shelf")
-lib_classic_bookshelf = item_class.Storage_Spot("classics bookshelf", "shelf")
-lib_help_bookshelf = item_class.Storage_Spot("self-help bookshelf", "shelf")
+lib_nf_bookshelf = item_class.Storage_Spot("non-fiction bookshelf", "shelf", None)
+lib_fant_bookshelf = item_class.Storage_Spot("fantasy bookshelf", "shelf", None)
+lib_classic_bookshelf = item_class.Storage_Spot("classics bookshelf", "shelf", None)
+lib_help_bookshelf = item_class.Storage_Spot("self-help bookshelf", "shelf", None)
 
 # TV Room #
     # Storage Units
-tv_coffee_table = item_class.Storage_Spot("coffee table", "table")
+tv_coffee_table = item_class.Storage_Spot("coffee table", "table", None)
 
 # Med Window #
     # Storage Units
-mw_trash_bin = item_class.Storage_Bin("trash bin", "bin")
-mw_recycle_bin = item_class.Storage_Bin("recycle bin", "bin")
+mw_trash_bin = item_class.Storage_Bin("trash bin", "bin", None)
+mw_recycle_bin = item_class.Storage_Bin("recycle bin", "bin", None)
 
 # Servery #
     # Storage Units
-serv_counter = item_class.Storage_Spot("servery counter", "counter")
-serv_tableware_bin = item_class.Storage_Box("tableware box", "box")
+serv_counter = item_class.Storage_Spot("servery counter", "counter", None)
+serv_tableware_bin = item_class.Storage_Box("tableware box", "box", None)
 
 # Linen Room #
     # Storage Units
-lr_towels_shelf = item_class.Storage_Spot("scrubs shelf", "shelf")
-lr_bedding_shelf = item_class.Storage_Spot("bedding shelf", "shelf")
+lr_towels_shelf = item_class.Storage_Spot("scrubs shelf", "shelf", None)
+lr_bedding_shelf = item_class.Storage_Spot("bedding shelf", "shelf", None)
 
 # Service Hallway #
     # Storage Units
@@ -150,13 +149,13 @@ security_and_service_hallway_door = item_class.Ward_Lockable_Door("Door S3", "do
 
 # Utility Closet #
     # Storage Units
-uc_cleaning_shelf = item_class.Storage_Spot("cleaning supplies shelf", "shelf")
-uc_hygiene_shelf = item_class.Storage_Spot("hygiene supplies shelf", "shelf")
+uc_cleaning_shelf = item_class.Storage_Spot("cleaning supplies shelf", "shelf", None)
+uc_hygiene_shelf = item_class.Storage_Spot("hygiene supplies shelf", "shelf", None)
 
 # Patient Courtyard #
     # Storage Units
-park_bench = item_class.Storage_Spot("park bench", "table")
-toys_bag = item_class.Storage_Bin("toys bin", "bin")
+park_bench = item_class.Storage_Spot("park bench", "table", None)
+toys_bag = item_class.Storage_Bin("toys bin", "bin", None)
     # Doors
 courtyard_and_service_hallway_door = item_class.Ward_Lockable_Door("Door S9", "door", None)
 

@@ -60,7 +60,7 @@ common_room = room_class.Starting_Ward_Room(
     "Common Room", 
     "A common area filled with tables and chairs, with cabinets lining a few walls.", 
     "",
-    ([item.cr_art_table, item.cr_game_cabinets, item.cr_ping_pong_table], [item.doors_poster]),
+    ([item.cr_art_table, item.cr_ping_pong_table], [item.cr_game_cabinets, item.doors_poster]),
     [[None, item.common_room_and_staff_breakroom, item.common_room_and_medications], [None, item.common_room_and_ward_landing_door], [None, None], item.service_hallway_and_common_room_door])
 
 tv_room = room_class.Ward_Room(

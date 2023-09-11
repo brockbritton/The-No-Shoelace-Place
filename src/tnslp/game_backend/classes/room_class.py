@@ -6,10 +6,41 @@ import tnslp.game_backend.classes.item_class as item_class
 import tnslp.game_backend.classes.npc_class as npc_class
 import tnslp.game_backend.gl_backend_functions as gl
 
-class Storage_Node:
+class SN:
     def __init__(self, container, items_list) -> None:
         self.container = container
-        self.items = items_list
+        if items_list == None:
+            self.items = []
+        else:
+            self.items = items_list
+
+        for i in range(0, len(self.items)):
+            if issubclass(type(self.items[i]), item_class.Storage_Unit):
+                self.items[i] = SN(self.items[i], self.items[i].items)
+
+    def inspect_node(self):
+        full_sentence = ""
+        if len(self.items) == 0:
+            full_sentence += f"There is nothing on/in the {self.container.name}."
+
+        else:
+            sentence = f"On/In the {self.container.name} is "
+            if len(self.items) == 1:
+                sentence += f"{self.items[0].article} {self.items[0].name}."
+            else:
+                for i in range(0, len(self.items)-1):
+                    try:
+                        sentence += f"{self.items[i].article} {self.items[i].name}, "
+
+                    except AttributeError:
+                        sentence += f"{self.items[i].container.article} {self.items[i].container.name}, "
+                try:
+                    sentence += f"and {self.items[-1].article} {self.items[-1].name}."
+                except AttributeError:   
+                    sentence += f"and {self.items[-1].container.article} {self.items[-1].container.name}."
+                
+            full_sentence += (sentence + " ")
+        return full_sentence
 
 class Room:
     _all_rooms_registry = []
@@ -23,18 +54,13 @@ class Room:
         if doors != None: 
             self.create_door_dict(doors)
         self._all_rooms_registry.append(self)
+
+        #self.room_floor = item_class.Floor_Storage("floor", "ground", floor_wall_items[0]),
+        #self.room_wall = item_class.Wall_Storage("wall", "walls", floor_wall_items[1]) 
         self.storage_tree = [
-            Storage_Node(item_class.Floor_Storage("floor", "ground"), floor_wall_items[0]),
-            Storage_Node(item_class.Wall_Storage("wall", "walls"), floor_wall_items[1])
+            item_class.Floor_Storage("floor", "ground", floor_wall_items[0]),
+            item_class.Wall_Storage("wall", "walls", floor_wall_items[1]) 
         ]
-
-        #self.storage_tree.forEach
-
-        ## to be replaced
-        self.storage_containers = [item_class.Floor_Storage("floor", "ground"), item_class.Wall_Storage("wall", "walls")] 
-        for i in range(0, len(floor_wall_items)):
-            if floor_wall_items[i] != None:
-                self.storage_containers[i].set_items(floor_wall_items[i])
         
         self.storage_dict = {}
         self._all_rooms_registry.append(self)
@@ -44,7 +70,7 @@ class Room:
             'inspect': self.inspect_room,
             'items': self.show_items,
             'rooms': self.show_directions,
-        }
+        } 
 
     def show_all_actions(self):
         actions = {
@@ -71,8 +97,9 @@ class Room:
         actions = {
             'print_all': [],
         }
-        if len(self.storage_containers) > 0:
-            actions['print_all'].append(self.look_storage_units())
+
+        for base_node in self.storage_tree:
+            actions['print_all'].append(base_node.inspect_node())
 
         return actions
 
@@ -85,45 +112,18 @@ class Room:
 
         return actions
 
-    def look_storage_units(self):
-        sc_dict = {
-            True: [],
-            False: []
-        }
+    def build_storage_flat_list(self):
+        all_items = []
+        for storage_unit in self.storage_tree:
+            for item in storage_unit.build_contained_list():
+                all_items.append(item)
+        
+        return all_items
 
-        for sc in self.storage_containers: 
-            sc_dict[(len(sc.items) > 0)].append(sc)
-        print(sc_dict)
-
-        full_sentence = ""
-        for key, value in sc_dict.items():
-            if len(value) > 0:
-                sentence = ""
-                if key:
-                    sentence += "There are items stored on or within "
-                    conjoiner = "and"
-                else:
-                    sentence += "There are no items stored on or within "
-                    conjoiner = "or"
-
-                if len(value) == 1:
-                    sentence += f"{value[0].article} {value[0].name}."
-                elif len(value) == 2:
-                    sentence += f"{value[0].article} {value[0].name} {conjoiner} {value[1].article} {value[1].name}."
-                else:
-                    for i in range(0, len(value)-1):
-                        sentence += f"{value[i].article} {value[i].name}, "
-                    sentence += f"{conjoiner} {value[-1].article} {value[-1].name}."
-                    
-                full_sentence += (sentence + " ")
-        return full_sentence
 
     def xray_look_storage_units(self):
         # Storage_Spot, Storage_Bin, Storage_Box, Storage_LockBox 
         sentences = ""
-        for sc in self.storage_containers:
-            sentences +=  (f"{sc.name}: {sc.items}. ")
-
         return sentences
 
     def set_coordinates(self, n, e, s, w):
@@ -142,10 +142,6 @@ class Room:
         elif string == "w":
             return self.west
 
-    def add_storage_units(self, list):
-        for i in list:
-            self.storage_containers.append(i)
-
     def set_interacts(self, list):
         for i in list:
             self.interacts.append(i)
@@ -158,7 +154,8 @@ class Room:
 
     def add_item(self, item, spot):
         if spot == None:
-            self.storage_containers[0].items.append(item)
+            #self.storage_containers[0].items.append(item)
+            x = 0
         else:
             spot.items.append(item)
 
@@ -169,8 +166,7 @@ class Room:
             self.lights_on = True
 
     def update_storage_dict(self):
-        for sc in self.storage_containers:
-            self.storage_dict[sc] = sc.items
+        x = 0
 
     def enter_room(self, player):
         actions = {
