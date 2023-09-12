@@ -13,14 +13,13 @@
 </head>
 <body>
     <div id="how_to_play_header">
-        <img id="how_to_play_img" src="{{ url_for('static', filename='img/how-to-play-header.png')}}" alt="image_header">
+        <img id="how_to_play_img" src="{{ url_for('static', filename='img/game-tips-header.png')}}" alt="image_header">
     </div>
-    
-    <div class="instruction_part">
-        <div class="instruction_text_left">
-            <h6 class="instruction_header_left">
-                Exploration
-            </h6>
+    <div class="instructions-row">
+        <div>
+            <p>
+                Map Exploration
+            </p>
             <p>
                 The goal of the game is to leave The No-Shoelace Place. 
                 To leave you must explore the ward and other areas to find items and objects 
@@ -30,19 +29,18 @@
                 which will be important as you progress through the game.
             </p>
         </div>
-        <div class="instruction_image_right">
-            <img src="{{ url_for('static', filename='img/square-holder.png') }}" alt="holder_image">
+        <div>
+            <p>
+                Game Context
+            </p>
+            <p>
+                Lorem Ipsum...
+            </p>
         </div>
-    </div>
-
-    <div class="instruction_part">
-        <div class="instruction_image_left">
-            <img src="{{ url_for('static', filename='img/square-holder.png') }}" alt="holder_image">
-        </div>
-        <div class="instruction_text_right">
-            <h6 class="instruction_header_right">
+        <div>
+            <p>
                 Interaction with the Environment
-            </h6>
+            </p>
             <p>
                 The environment is made up of interconnected rooms built on a grid, meaning each room has rooms 
                 branching off from it in up to four directions. Movement between each room is dependent on the 
@@ -52,10 +50,9 @@
             </p>
         </div>
     </div>
-
-    <div class="instruction_part">
-        <div class="instruction_text_left">
-            <h6 class="instruction_header_left">
+    <div class="instructions-row">
+        <div>
+            <p>
                 Player Stats Panel
             </h6>
             <p>
@@ -66,19 +63,10 @@
                 of the patient. Finally, the status value shows the diagnosis that the patient received on arrival.
             </p>
         </div>
-        <div class="instruction_image_right">
-            <img src="{{ url_for('static', filename='img/square-holder.png') }}" alt="holder_image">
-        </div>
-    </div>
-
-    <div class="instruction_part">
-        <div class="instruction_image_left">
-            <img src="{{ url_for('static', filename='img/square-holder.png') }}" alt="holder_image">
-        </div>
-        <div class="instruction_text_right">
-            <h6 class="instruction_header_right">
+        <div>
+            <p>
                 Player Abilities
-            </h6>
+            </p>
             <p>
                 There are 5 abilities available to the patient over the course of one's stay in The No-Shoelace Place: meditation, 
                 assertiveness, positive attitude, opposite action, and catharsis. Each day, coping skills groups are offered for 
@@ -87,11 +75,11 @@
             </p>
         </div>
     </div>
-
+    
     <div>
         <button class="large_bordered_button" 
         type="button" 
-        onclick="location.href=''"> Go to Something </button>
+        onclick="location.href='/game/'"> Back to Game </button>
     </div>
 
 </body>

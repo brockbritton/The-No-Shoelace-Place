@@ -50,9 +50,9 @@ button:disabled:hover {
 }
 
 
-/* ############### */
-/* Title/Home Page */
-/* ############### */
+/* ################# */
+/* Title / Home Page */
+/* ################# */
 
 #welcome-logo-container {
     width: 75%;
@@ -134,6 +134,7 @@ button:disabled:hover {
 }
 
 .game-menu-buttons {
+    font-family: 'Courier New', monospace !important; 
     border: 0.125em solid white;
     padding: 0.3125em 0.625em;
     float: right;
@@ -144,6 +145,8 @@ button:disabled:hover {
     font-size: 1.25em;
     margin: 0.3125em 0.625em 0.3125em 0em;
 }
+
+
 
 /* ######### */
 /* Game Page */
@@ -501,4 +504,40 @@ button:disabled:hover {
     width: 100%;
     display: inline-block;
     overflow-x: scroll;
+}
+
+/* Instructions Page Styles */
+
+#how_to_play_header {
+    margin: auto;
+    width: max-content;
+    height: 425px;
+    z-index: 2;
+}
+
+#how_to_play_img {
+    position: relative;
+    width: 60vw;
+    z-index: 2;
+    
+}
+
+.instructions-row {
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+    margin: auto;
+
+}
+
+.instructions-row > div {
+    background-color: black;
+    width: 28vw;
+    height: 250px;
+    text-align: center;
+    margin: 1vw;
+    padding: 1vw;
+    border: 2px solid white;
+    border-radius: 25px;
+    z-index: 0;
 }
