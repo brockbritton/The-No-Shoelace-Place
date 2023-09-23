@@ -62,6 +62,7 @@ class Game:
             case "drop": return [None, self.player1]
             case "unlock": return [self.player1]
             case "lock": return [self.player1]
+            case "break": return [self.player1]
             case "inspect":
                 if isinstance(object, room_class.Room):
                     return [self.player1]
@@ -155,7 +156,7 @@ class Game:
                         return_tuple = (None, None, actions)
                 case "ask_break_item":
                     if input_value == "y":
-                        break_actions = self.master_helper.break_lock()
+                        break_actions = self.master_helper.break_lock(self.player1)
                         return_tuple = (None, None, break_actions)
                     else:
                         actions["print_all"].append(f"You chose not to break the {self.master_helper.name}.")

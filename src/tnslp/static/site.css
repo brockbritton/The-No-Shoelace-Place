@@ -471,6 +471,7 @@ button:disabled:hover {
 .ability-strings {
     text-align: left;
     font-size: 1.25em;
+    font-family: 'Courier New', monospace !important;
     margin-top: 0em;
     margin-bottom: 0em;
     width: 100%;
@@ -480,7 +481,11 @@ button:disabled:hover {
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none;
-    transition: filter 2s ease-in-out;
+    transition: filter 1s ease-in-out;
+}
+
+.ability-strings:hover {
+    filter: none !important;
 }
 
 .ability-strings.learned {
@@ -497,7 +502,6 @@ button:disabled:hover {
 
 .player-skills-lvl {
     text-align: left;
-    font-family: 'Courier New', monospace !important;
     font-size: 1.25em;
     margin-top: 0em;
     margin-bottom: 0em;

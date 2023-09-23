@@ -225,7 +225,10 @@ class Lockable_Interact(Openable_Interact):
         super().__init__(name, gen_name)
         self.locked = True
         self.broken = False
-        self.compatible_keys = keys_list # list keys in most general effectiveness to most specific effectiveness
+        if keys_list == None:
+            self.compatible_keys = []
+        else:
+            self.compatible_keys = keys_list # list keys in most general effectiveness to most specific effectiveness
         self.key_unlock = True
         self.crowbar_unlock = True
         self.electronic_unlock = False 
@@ -244,22 +247,23 @@ class Lockable_Interact(Openable_Interact):
         }
         if self.locked:
             unlocking_item = None
-            for item in self.compatible_keys:
-                if item in player.inv:
-                    unlocking_item = item
-                    break
-            if unlocking_item == None and self.crowbar_unlock:
-                for item in player.inv:
-                    if isinstance(item, Crowbar):
+            crowbar_item = None
+            for item in player.inv:
+                if isinstance(item, Key):
+                    if item in self.compatible_keys or item.name == "master key":
                         unlocking_item = item
+                        break
+                elif isinstance(item, Crowbar):
+                    crowbar_item = item
+
+            # Keep this after the loop because there may be a key in inv after crowbar
+            if self.crowbar_unlock and crowbar_item != None:
+                actions['print_all'].append(f"Do you want to break the lock on this {self.gen_name}? You will be unable to lock this {self.gen_name} again.")
+                actions["ask_y_or_n"] = True
+                return ("ask_break_item", self, actions)
             
             if unlocking_item != None:
-                if isinstance(unlocking_item, Crowbar):
-                    actions['print_all'].append(f"Do you want to break the lock on this {self.gen_name}? You will be unable to lock this {self.gen_name} again.")
-                    actions["ask_y_or_n"] = True
-                    return ("ask_break_item", self, actions)
-                else:
-                    actions['print_all'].append(f"You have unlocked the {self.name} with the {unlocking_item.name}.")
+                actions['print_all'].append(f"You have unlocked the {self.name} with the {unlocking_item.name}.")
                 self.locked = False
             else:
                 actions['print_all'].append(f"You do not have anything that can unlock the {self.name}.")
@@ -277,10 +281,11 @@ class Lockable_Interact(Openable_Interact):
         if not self.broken:
             if not self.locked:
                 locking_item = None
-                for item in self.compatible_keys:
-                    if item in player.inv:
-                        locking_item = item
-                        break
+                for item in player.inv:
+                    if isinstance(item, Key):
+                        if item in self.compatible_keys or item.name == "master key":
+                            locking_item = item
+                            break
 
                 if locking_item != None:
                     if self.open:
@@ -299,19 +304,24 @@ class Lockable_Interact(Openable_Interact):
 
         return actions
 
-    def break_lock(self):
+    def break_lock(self, player):
         actions = {
             'print_all': [],
             'build_multiple_choice': [],
             'ask_y_or_n': False
         }
-        if not self.broken:
-            actions["print_all"].append(f"You have broken the lock on the {self.name}, therefore permanently unlocking it.")
-            self.broken = True
-            self.locked = False
-        else:
-            actions["print_all"].append(f"The lock is already broken on this {self.gen_name}. You cannot break it again.")
+
+        for item in player.inv:
+            if isinstance(item, Crowbar):
+                if not self.broken:
+                    actions["print_all"].append(f"You have broken the lock on the {self.name}, therefore permanently unlocking it.")
+                    self.broken = True
+                    self.locked = False
+                else:
+                    actions["print_all"].append(f"The lock is already broken on this {self.gen_name}. You cannot break it again.")
+                return actions
         
+        actions["print_all"].append(f"You do not have anything that can break this {self.gen_name}.")   
         return actions
 
 

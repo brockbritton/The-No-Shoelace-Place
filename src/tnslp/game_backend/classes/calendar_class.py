@@ -7,7 +7,7 @@ import tnslp.game_backend.objects.rooms as room
 class Calendar:
     def __init__(self, player) -> None:
         self.days_list = []
-        self.max_turns_daily = 30
+        self.max_turns_daily = 12 #30
         self.activities_offered = []
         self.next_day(player)
 
