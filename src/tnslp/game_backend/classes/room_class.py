@@ -97,9 +97,8 @@ class Room:
         actions = {
             'print_all': [],
         }
-
-        for base_node in self.storage_tree:
-            actions['print_all'].append(base_node.inspect_node())
+        for base_storage in self.storage_tree:
+            actions = gl.combine_dicts(actions, base_storage.inspect_item())
 
         return actions
 
@@ -112,10 +111,10 @@ class Room:
 
         return actions
 
-    def build_storage_flat_list(self):
+    def build_storage_flat_list(self, complex_bool):
         all_items = []
         for storage_unit in self.storage_tree:
-            for item in storage_unit.build_contained_list():
+            for item in storage_unit.build_contained_list(complex_bool):
                 all_items.append(item)
         
         return all_items

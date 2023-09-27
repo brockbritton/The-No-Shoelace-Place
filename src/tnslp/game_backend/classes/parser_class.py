@@ -71,7 +71,7 @@ class Parser:
 
         # Build a dictionary of all items in the room and inventory and the room itself
         ## Items in the room
-        room_flat_tree = player.loc.build_storage_flat_list()
+        room_flat_tree = player.loc.build_storage_flat_list(False)
         print(room_flat_tree)
         for item in room_flat_tree:
             if self.regex_search(item.name.lower(), str_input.lower()):

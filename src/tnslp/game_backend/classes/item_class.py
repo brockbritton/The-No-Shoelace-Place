@@ -66,15 +66,19 @@ class Inv_Item(Item):
             'ask_y_or_n': False
         }
         if self not in player.inv:
-            if (len(player.inv) < player.inv_cap):
-                actions['print_all'].append("You have added the " + self.name + " to your inventory.")
-                player.add_inventory(self)
-                for sc in player.loc.storage_containers:
-                    contents = sc.build_flat_list_of_contents(True)
-                    for item_loc in contents:
-                        if item_loc[0] == self:
-                            item_loc[1].items.remove(self)
-                            break
+            if (len(player.inv) < player.inv_cap):               
+                all_items_complex = []
+                for base_storage in player.loc.storage_tree:
+                    all_items_complex.extend(base_storage.build_contained_list(True))
+                
+                for item_loc in all_items_complex:
+                    if isinstance(item_loc, tuple) and item_loc[0] == self:
+                        item_loc[1].items.remove(self)
+                        player.add_inventory(self)
+                        actions['print_all'].append(f"You have taken the {item_loc[0].name} from the {item_loc[1].name} and added it to your inventory.")
+                        return (None, None, actions)
+                    
+                actions['print_all'].append(f"You did not match anything ***")
                 return (None, None, actions)
             else:
                 actions['print_all'].append("Your inventory is full.")
@@ -366,20 +370,20 @@ class Storage_Unit(Interact):
     def remove_item(self, item):
         self.items.remove(item)
     
-    def build_contained_list(self):
+    def build_contained_list(self, complex_bool):
         node_items = []
         node_items.append(self)
         if len(self.items) > 0:
             for i in range(0, len(self.items)):
                 if issubclass(type(self.items[i]), Storage_Unit):
                     if (issubclass(type(self.items[i]), Openable_Interact) and self.items[i].open) or (not issubclass(type(self.items[i]), Openable_Interact)):
-                        sub_node_items = self.items[i].build_contained_list()
+                        sub_node_items = self.items[i].build_contained_list(complex_bool)
                         for j in range(0, len(sub_node_items)):
                             node_items.append(sub_node_items[j])
                     else:
-                        node_items.append(self.items[i])
+                        node_items.append((self.items[i], self)) if complex_bool else node_items.append(self.items[i])
                 else:
-                    node_items.append(self.items[i])
+                    node_items.append((self.items[i], self)) if complex_bool else node_items.append(self.items[i])
 
         return node_items
 

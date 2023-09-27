@@ -485,7 +485,7 @@ button:disabled:hover {
 }
 
 .ability-strings:hover {
-    filter: none !important;
+    filter: blur(1px) !important;
 }
 
 .ability-strings.learned {
