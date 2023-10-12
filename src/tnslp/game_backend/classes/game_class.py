@@ -6,7 +6,6 @@ import tnslp.game_backend.classes.parser_class as parser_class
 import tnslp.game_backend.classes.room_class as room_class
 import tnslp.game_backend.objects.rooms as rooms
 import tnslp.game_backend.gl_backend_functions as gl
-import sys
  
 
 class Game:
@@ -112,13 +111,14 @@ class Game:
             'rebuild_text_entry': False,
         }
 
+        print(self.master_dest)
+
         # Set a default return tuple if nothing connects
         return_tuple = (None, None, {})
 
-        # waiting vars = self.wait_for_frontend_input['build_multiple_choice']
         # If there is a list of variables in waiting vars and the input is numeric, 
         # convert to integer so that the correct variable from waiting vars is accessed
-        if type(frontend_input) == int and self.wait_for_frontend_input['build_multiple_choice'] != None:
+        if isinstance(frontend_input, int) and self.wait_for_frontend_input['build_multiple_choice'] != None:
             input_value = self.wait_for_frontend_input['build_multiple_choice'][1][int(frontend_input)]
             self.save_prints.append("> " + self.wait_for_frontend_input['build_multiple_choice'][0][int(frontend_input)]) 
             self.wait_for_frontend_input['build_multiple_choice'] = None
@@ -145,8 +145,6 @@ class Game:
                         if ability.name == self.master_helper[0].name:
                             index = self.player1.abilities.index(ability)
                     return_tuple = self.player1.abilities[index].upgrade_ability(input_value, self.master_helper[1:], self.player1)
-                case "face_demon":
-                    return_tuple = self.player1.face_demon(input_value) ############
                 case "gen_name_request":
                     if input_value != "c":
                         self.master_helper[0]["nearby_objects"].append(input_value)
@@ -154,14 +152,19 @@ class Game:
                     else:  
                         actions["print_all"].append(f"You did not choose a {self.master_helper[1]} to specify.")
                         return_tuple = (None, None, actions)
-                case "ask_break_item":
+                case "ask_solve_riddle":
                     if input_value == "y":
-                        break_actions = self.master_helper.break_lock(self.player1)
-                        return_tuple = (None, None, break_actions)
+                        actions["print_all"].append("Please type your guess below:")
+                        actions['rebuild_text_entry'] = True
+                        return_tuple = ("solve_riddle", self.master_helper, actions)
                     else:
-                        actions["print_all"].append(f"You chose not to break the {self.master_helper.name}.")
+                        actions["print_all"].append("You chose not solve this riddle.")
                         return_tuple = (None, None, actions)
-                    
+        # For when there is a fill in answer to a question
+        elif isinstance(frontend_input, str) and self.master_dest != None: 
+            match self.master_dest:
+                case "solve_riddle":
+                    return_tuple = self.master_helper.solve_item(frontend_input)
         # Otherwise, just use the input as it was given
         else:
             # Save the player input as part as the saved prints
@@ -340,7 +343,8 @@ class Game:
                     
                 # For if there are cases when an action and multiple objects need to be parsed
                 elif len(nearby_objects) > 1:
-                    # If one is a storage unit and one is an inv_item
+                    
+                    # If one is a storage unit and one is an inv_item 
                     if actions_list[0] == "drop" and len(nearby_objects) == 2:
                         # Check for if one is a storage unit and one is an inv_item
                         if isinstance(nearby_objects[0], item_class.Storage_Unit) and isinstance(nearby_objects[1], item_class.Inv_Item):
@@ -348,8 +352,9 @@ class Game:
                         elif isinstance(nearby_objects[1], item_class.Storage_Unit) and isinstance(nearby_objects[0], item_class.Inv_Item):
                             move_item, storage_unit = nearby_objects[0], nearby_objects[1]
                         
+                        ##print(type(move_item), type(storage_unit))
                         # Depending on the storage unit, check necessary item attributes and add to it if possible
-                        if isinstance(storage_unit, item_class.Storage_Wall):
+                        if isinstance(storage_unit, item_class.Wall_Storage):
                             if move_item.can_hang:
                                 if move_item in self.player1.inv:
                                     return_tuple = move_item.drop_item(storage_unit, self.player1) 

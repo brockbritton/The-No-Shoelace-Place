@@ -55,8 +55,7 @@ class Room:
             self.create_door_dict(doors)
         self._all_rooms_registry.append(self)
 
-        #self.room_floor = item_class.Floor_Storage("floor", "ground", floor_wall_items[0]),
-        #self.room_wall = item_class.Wall_Storage("wall", "walls", floor_wall_items[1]) 
+        #used for active game storage
         self.storage_tree = [
             item_class.Floor_Storage("floor", "ground", floor_wall_items[0]),
             item_class.Wall_Storage("wall", "walls", floor_wall_items[1]) 
@@ -153,8 +152,7 @@ class Room:
 
     def add_item(self, item, spot):
         if spot == None:
-            #self.storage_containers[0].items.append(item)
-            x = 0
+            self.storage_tree[0].items.append(item)
         else:
             spot.items.append(item)
 
@@ -492,8 +490,6 @@ class Ward_Room(Room):
         super().__init__(name, display_name, description, room_label, floor_wall_items, doors)
         self.lights_on = True
         self._ward_rooms_registry.append(self)
-        #if storage_units != None:
-        #    self.add_storage_units(storage_units)
         
         
     def __repr__(self) -> str:
@@ -521,8 +517,7 @@ class Basement_Room(Room):
         super().__init__(name, display_name, description, room_label, floor_wall_items, doors)
         self.lights_on = False
         self._basement_rooms_registry.append(self)
-        #if storage_units != None:
-        #    self.add_storage_units(storage_units)
+        
 
     
     def __repr__(self) -> str:

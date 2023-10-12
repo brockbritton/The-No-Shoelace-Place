@@ -29,7 +29,6 @@ function accept_button_input(display, button_index) {
     } 
 }
 
-
 async function fetchPostEndpoint(data, route) {
     //disable play button
     document.getElementById("text-entry-enter-button").disabled = true;
@@ -78,6 +77,8 @@ function print_all(pars_list, bmc_list, rebuild_text){
         if (pars_list[0] instanceof Array) {
             if (pars_list[0][1] == "quote") {
                 setTimeout(print_all.bind(null, pars_list.slice(1), bmc_list, rebuild_text), quote_fadein_rate);
+            } else if (pars_list[0][1] == "riddle") {
+                setTimeout(print_all.bind(null, pars_list.slice(1), bmc_list, rebuild_text), quote_fadein_rate);
             }
         } else {
             //this timeout isnt perfect. the next paragraph starts printing before this is done.
@@ -93,10 +94,8 @@ function load_prints(list, bmc_list) {
     for (let text in list) {
         let par = document.createElement("p");
         if (list[text] instanceof Array) {
-            if (list[text][1] == "quote") {
-                par.classList.add("quote-text");
-                par.innerHTML = list[text][0];
-            } 
+            par.classList.add(`${list[text][1]}-text`);
+            par.innerHTML = list[text][0];
         } else {
             par.classList.add("standard-display-text");
             par.innerHTML = list[text];
@@ -123,6 +122,12 @@ function printtk(text) {
     if (text instanceof Array) {
         if (text[1] == "quote") {
             par.classList.add("quote-text");
+            par.innerHTML = text[0];
+            par.style.opacity = 0;
+            document.getElementById("game-text-display").appendChild(par);
+            fade_in_quote_line(par);
+        } else if (text[1] == "riddle") {
+            par.classList.add("riddle-text");
             par.innerHTML = text[0];
             par.style.opacity = 0;
             document.getElementById("game-text-display").appendChild(par);
@@ -186,22 +191,11 @@ function toggle_entry_divs(element_type) {
     }  
 }
 
-function build_inv_labels(id, text_string) {
-    let html_elem = document.getElementById(id);
-    if (text_string.length == 0) {
-        html_elem.innerHTML = "";
-    } else {
-        if (text_string.length == 1) {
-            html_elem.innerHTML += text_string
-        } else {
-
-            html_elem.innerHTML += text_string[0]
-            setTimeout(build_inv_labels.bind(null, id, text_string.slice(1)), rate_of_letters * (text_string.length)/4)
-        } 
-    }
+function build_inv_labels(html_element, text_string) {
+    
 }
 
-function update_frontend_player_data() {
+async function update_frontend_player_data() {
     $.ajax({
         url: '/game/request-player-data',
         type: 'GET',
@@ -216,15 +210,30 @@ function update_frontend_player_data() {
                     stats_html_elements[i].innerHTML = "Unknown"; 
                 }
             }
-
+            
             //Updating Section "Inventory"
-            for (let i=0; i < 6; i++) {
-                let elem_id = "inv-slot-" + (i+1).toString();
-                if (document.getElementById(elem_id).innerHTML != response["inventory"][i]) {
-                    document.getElementById(elem_id).innerHTML = "";
-                    build_inv_labels(elem_id, response["inventory"][i]);
+            for (let i = 0; i < 6; i++) {
+                const inv_label = document.getElementById(`inv-slot-${(i+1).toString()}`)
+                if (inv_label.innerHTML != response["inventory"][i]) {
+                    inv_label.innerHTML = ""
+                    if (response["inventory"][i].length != 0) {
+                        //let curr_step = -1;
+                        const label_array = response["inventory"][i].split("") 
+                        for (let j = 0; j < label_array.length; j++) {
+                            
+                            inv_label.innerHTML += label_array[j] 
+                            /*
+                            setTimeout(function() { 
+                                inv_label.innerHTML += label_array[j] 
+                                console.log(j, inv_label.innerHTML)
+                                
+                            }, i*1000 + 200);
+                            */
+                        }    
+                    }
                 } 
             }
+            
 
             //Updating Section "Skills"
             const skills_html_elements = document.getElementsByClassName("player-skills-lvl")

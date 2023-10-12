@@ -292,14 +292,14 @@ button:disabled:hover {
 
 .quote-text {
     font-size: 1em;
-    font-family: 'Courier New', monospace !important; 
+    font-family: 'Apple Chancery', cursive !important; 
     background-color: none !important;
     text-align: center;
 }
 
 .riddle-text {
     font-size: 1em;
-    font-family: 'Apple Chancery', cursive !important;
+    font-family: "Papyrus", fantasy !important;
     background-color: none !important;
     text-align: center;
 }

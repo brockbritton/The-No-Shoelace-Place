@@ -8,7 +8,7 @@ class Parser:
         self.all_actions = {
             'pick up' : ["pick up", "pickup", "take", "retrieve", "get", "grab", "remove"],
             'drop' : ["drop", "place", "put down", "put", "move"], #set
-            'inspect' : ["inspect", "look at", "examine", "read", "check out", "search"],
+            'inspect' : ["inspect", "look at", "examine", "check out", "search"],
             'open' : ["open"],
             'close' : ["close", "shut"],
             'unlock' : ['unlock', 'unseal'],
@@ -16,7 +16,7 @@ class Parser:
             'break':["break", "smash", "tear down", "rip off", "damage", "destroy"],
             'go':["go", "walk", "turn", "enter", "travel", "exit", "leave"],
             'display':["display", "view", "show", "reveal"],
-            'help':["help"]
+            'help':["help"] 
         }
         
         self.movement_dict = {
@@ -25,7 +25,7 @@ class Parser:
             "left" : ["left"],
             "right" : ["right"]}
 
-        self.special_actions = ["sleep", "sit", "rooms", "items"]
+        self.special_actions = ["sleep", "sit", "rooms", "items", "read"]
 
 
         

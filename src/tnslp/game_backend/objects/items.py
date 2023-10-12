@@ -93,6 +93,24 @@ faucets_poster = item_class.Hanging_Quote_Note("faucets poster",
     "you can turn on and off."],
     "Richard Lessor")
 
+## All Riddle Containers ##
+friendship_note = item_class.Quote_Note(
+    "chess note", 
+    "note", 
+    ["No one ever won a game by resigning."],
+    "Savielly Tartakower"),
+friendship_riddle = item_class.Riddle_Box(
+    "Riddle 1", 
+    "Riddle", 
+    [friendship_note], 
+    ["In adventures and journeys, we make our way,",
+    "Side by side, we seize each day.",
+    "A loyal partner through thick and thin,",
+    "Together we conquer, never giving in.",
+    "A steadfast companion, a source of elation.",
+    "What am I, this trusted relation?"],
+    ["friend", "friends", "friendship"]
+)
 
 ################################
 ##### Ward Rooms and Items #####

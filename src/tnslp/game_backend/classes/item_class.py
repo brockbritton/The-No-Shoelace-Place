@@ -8,6 +8,7 @@ class Item:
         self.name = name
         self.gen_name = gen_name
         self.article = "the"
+        self.can_hang = False
         self.item_actions = {
             'help' : self.show_all_actions,
             'inspect': self.inspect_item,
@@ -232,7 +233,7 @@ class Lockable_Interact(Openable_Interact):
         if keys_list == None:
             self.compatible_keys = []
         else:
-            self.compatible_keys = keys_list # list keys in most general effectiveness to most specific effectiveness
+            self.compatible_keys = keys_list 
         self.key_unlock = True
         self.crowbar_unlock = True
         self.electronic_unlock = False 
@@ -261,10 +262,9 @@ class Lockable_Interact(Openable_Interact):
                     crowbar_item = item
 
             # Keep this after the loop because there may be a key in inv after crowbar
-            if self.crowbar_unlock and crowbar_item != None:
-                actions['print_all'].append(f"Do you want to break the lock on this {self.gen_name}? You will be unable to lock this {self.gen_name} again.")
-                actions["ask_y_or_n"] = True
-                return ("ask_break_item", self, actions)
+            if unlocking_item == None and self.crowbar_unlock and crowbar_item != None:
+                actions['print_all'].append(f"You do not have anything that can unlock this item. Alternatively you could use your {crowbar_item.name} to break this {self.gen_name}. If you do so, you will be unable to lock {self.name} again.")
+                return actions
             
             if unlocking_item != None:
                 actions['print_all'].append(f"You have unlocked the {self.name} with the {unlocking_item.name}.")
@@ -274,7 +274,7 @@ class Lockable_Interact(Openable_Interact):
         else:
             actions['print_all'].append(f"The {self.name} is already unlocked.")
 
-        return (None, None, actions)
+        return actions
 
     def lock_item(self, player):
         actions = {
@@ -377,9 +377,7 @@ class Storage_Unit(Interact):
             for i in range(0, len(self.items)):
                 if issubclass(type(self.items[i]), Storage_Unit):
                     if (issubclass(type(self.items[i]), Openable_Interact) and self.items[i].open) or (not issubclass(type(self.items[i]), Openable_Interact)):
-                        sub_node_items = self.items[i].build_contained_list(complex_bool)
-                        for j in range(0, len(sub_node_items)):
-                            node_items.append(sub_node_items[j])
+                        node_items.extend(self.items[i].build_contained_list(complex_bool))
                     else:
                         node_items.append((self.items[i], self)) if complex_bool else node_items.append(self.items[i])
                 else:
@@ -411,10 +409,6 @@ class Storage_Spot(Storage_Unit):
 
         actions['print_all'].append(sentence)
         return actions
-
-class Storage_Wall(Storage_Spot):
-    def __init__(self, name, gen_name, item_list) -> None:
-        super().__init__(name, gen_name, item_list)
 
 class Wall_Storage(Storage_Spot):
     def __init__(self, name, gen_name, item_list) -> None:
@@ -456,7 +450,8 @@ class Storage_Box(Storage_Unit, Openable_Interact):
     
 class Storage_LockBox(Lockable_Interact, Storage_Box):
     def __init__(self, name, gen_name, locked_bool, keys_list, item_list) -> None:
-        super().__init__(name, gen_name, keys_list, item_list)
+        super(Lockable_Interact, self).__init__(name, gen_name, keys_list)
+        super(Storage_Box, self).__init__(name, gen_name, item_list)
         self.locked = locked_bool
 
     def inspect_item(self): 
@@ -525,6 +520,72 @@ class Hanging_Wall_Item(Interact):
         super().__init__(name, gen_name)
         self.can_hang = True
 
+class Riddle_Box(Storage_LockBox):
+    def __init__(self, name, gen_name, item_list, riddle_lines, answer_array) -> None:
+        super().__init__(name, gen_name, True, [], item_list)
+        self.riddle = riddle_lines
+        self.answers = answer_array
+        self.item_actions.update({
+            'solve': self.solve_item,
+        })
+
+    def inspect_item(self):
+        actions = {
+            'print_all': [],
+            'ask_y_or_n': False
+        } 
+        if self.open:
+            actions["print_all"].append(f"{self.name} is solved. To read the riddle again, 'read {self.name}'")
+            if len(self.items) == 0:
+                sentence = f"There is nothing in the {self.name}."
+            elif len(self.items) == 1:
+                sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}."
+            elif len(self.items) == 2:
+                sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name} and {self.items[1].article} {self.items[1].name}."
+            else:
+                sentence = f"In the {self.name} is {self.items[0].article} {self.items[0].name}, "
+                for i in range(1, len(self.items)-1):
+                    sentence += f"{self.items[i].article} {self.items[i].name}, "
+                sentence += f"and {self.items[-1].article} {self.items[-1].name}."
+
+            actions['print_all'].append(sentence)
+            return (None, None, actions)
+        else:
+            actions["print_all"].append(f"{self.name} goes as follows:")
+            for line in self.riddle:
+                actions["print_all"].append([line, "riddle"])
+            actions["print_all"].append("Would you like to solve the riddle?")
+            actions['ask_y_or_n'] = True
+            return ("ask_solve_riddle", self, actions)
+            
+
+    def solve_item(self, guess_str):
+        actions = {
+            'print_all': [],
+            'ask_y_or_n': False
+        } 
+        if guess_str in self.answers:
+            actions['print_all'].append(f"Correct! You have solved {self.name}!")
+            actions['print_all'].append("With a hiss, a small hatch opens, revealing a box in the wall.")
+            self.locked = False
+            self.open = True
+            return (None, None, actions)
+        else:
+            actions['print_all'].append(f"Incorrect. You have not yet solved {self.name}!")
+            actions['print_all'].append(f"Would you like to try again?")
+            actions['ask_y_or_n'] = True
+            return ("ask_solve_riddle", self, actions)
+
+class Riddle_Door(Interact):
+    def __init__(self, name, gen_name, item_list, riddle_lines, answer_array) -> None:
+        super().__init__(name, gen_name, True, None, item_list)
+        self.riddle = riddle_lines
+        self.answers = answer_array
+        self.item_actions.update({
+            'solve': self.solve_item,
+        })
+        del self.item_actions['break']
+
 
 #############################################
 ##### Individual Inventory Item Classes #####
@@ -574,7 +635,6 @@ class ID_Bracelet(Inv_Item):
         return actions
 
         
-
 class Deck_of_Cards(Storage_Box, Inv_Item):
     def __init__(self, name, gen_name) -> None:
         all_cards = []
