@@ -526,7 +526,7 @@ class Riddle_Box(Storage_LockBox):
         self.riddle = riddle_lines
         self.answers = answer_array
         self.item_actions.update({
-            'solve': self.solve_item,
+            'solve': self.prompt_solve_item,
         })
 
     def inspect_item(self):
@@ -557,7 +557,12 @@ class Riddle_Box(Storage_LockBox):
             actions["print_all"].append("Would you like to solve the riddle?")
             actions['ask_y_or_n'] = True
             return ("ask_solve_riddle", self, actions)
-            
+
+
+    def prompt_solve_item(self):
+        actions = {
+            'print_all': []
+        }  
 
     def solve_item(self, guess_str):
         actions = {

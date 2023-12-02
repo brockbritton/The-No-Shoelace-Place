@@ -55,7 +55,7 @@ outside_time = room_class.Ward_Room(
     ([item.park_bench, item.toys_bag], None),
     [item.courtyard_and_service_hallway_door, None, None, None]) 
 
-common_room = room_class.Starting_Ward_Room(
+common_room = room_class.Ward_Room(
     "Common Room", #add article "the"
     "Common Room", 
     "A common area filled with tables and chairs, with cabinets lining a few walls.", 
@@ -144,7 +144,7 @@ red_hallway = room_class.Ward_Room(
     (None, None),
     [[None, None], None, [None, None, None], item.security_and_red_hallway_door])
 
-pat_room_101 = room_class.Ward_Room(
+pat_room_101 = room_class.Starting_Ward_Room(
     "Patient Room 101", 
     "Room 101", 
     "A common patient room with two beds.", 
@@ -336,13 +336,13 @@ ward_landing = room_class.Ward_Room(
     (None, None),
     [None, None, None, item.common_room_and_ward_landing_door])
 
-basement_landing = room_class.Basement_Room(
+basement_landing = room_class.First_Basement_Room(
     "Basement Landing", #room name #add article "the"
     "Stairs B", #display name
     "No Room Description", #description
     "", #room label or none
     (None, None),
-    None #doors or none
+    [None, None, None, item.build_end_door] #doors or none
     ) 
 
 basement_to_ward_stairs = room_class.Stairwell("Stairs Up", "Stairs Up", "", ward_landing)
@@ -353,7 +353,7 @@ ward_to_basement_stairs = room_class.Stairwell("Stairs Down", "Stairs Down", "",
 basement_landing.set_coordinates(0, 0, basement_to_ward_stairs, basement_lobby)
 ward_landing.set_coordinates(0, 0, ward_to_basement_stairs, common_room)
 
-## Ward Coordinates ##
+## Ward Coordinates ## 
 
 admissions.set_coordinates(0, service_hallway, 0, game_exit)
 service_hallway.set_coordinates(security_room, common_room, outside_time, [utility_closet, admissions])
