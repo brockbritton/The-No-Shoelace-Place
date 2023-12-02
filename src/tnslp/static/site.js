@@ -54,9 +54,9 @@ async function fetchPostEndpoint(data, route) {
             update_frontend_player_data()
         }
     } catch (error) {
-        //console.log(error)
+        console.log(error)
         if (route == "/game/loading-game") {
-            //await fetchPostEndpoint(data, "/game/loading-game")
+            await fetchPostEndpoint(data, "/game/loading-game")
         } else {
             printtk(`Post Error ${error.status}: see terminal for more information.`);
         }

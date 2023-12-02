@@ -15,7 +15,7 @@ class Game:
         self.master_helper = None
         self.wait_for_frontend_input = {'build_multiple_choice': None}
         self.save_prints = []
-        self.player1 = character_class.Character("John Doe")
+        self.player1 = character_class.Character("Jay Doe")
         self.parser = parser_class.Parser()
         self.starting_pars = len(self.start_game()['print_all'])
         
@@ -67,7 +67,7 @@ class Game:
                     return [self.player1]
                 
             case "help": return []
-            case "directions":
+            case "rooms":
                 if isinstance(object, room_class.Room):
                     return [self.player1]
 
@@ -110,6 +110,8 @@ class Game:
             'ask_y_or_n': False, 
             'rebuild_text_entry': False,
         }
+
+        print(self.master_dest)
 
         # Set a default return tuple if nothing connects
         return_tuple = (None, None, {})
@@ -326,12 +328,12 @@ class Game:
         # If the parsed dictionary has an action
         if len(actions_list) > 0:
             if len(actions_list) == 1:
-                
                 # If there is one action and one object
                 if len(nearby_objects) == 1:
                     if actions_list[0] in nearby_objects[0].item_actions:
                         function_params = self.get_item_action_params(actions_list[0], nearby_objects[0])
                         return_data = nearby_objects[0].item_actions[actions_list[0]](*function_params)
+                        
                         if isinstance(return_data, tuple):
                             dest, helper, actions = gl.parse_tuples(return_data, actions)
                         elif isinstance(return_data, dict):
@@ -374,12 +376,11 @@ class Game:
                 # When there are no objects, and only a direction
                 elif len(directions) == 1:
                     if actions_list[0] == "go":
-                        
                         if directions[0] == "cardinal":
                             actions["print_all"].append("You don't know your cardinal directions in here.")
                         else: 
                             if isinstance(directions[0], room_class.Room):
-                                # move to room by name -- not set up
+                                # move to this room 
                                 pass
                             else:
                                 i = ["backward", "left", "right", "forward"].index(directions[0])

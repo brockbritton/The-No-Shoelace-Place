@@ -25,7 +25,7 @@ class Parser:
             "left" : ["left"],
             "right" : ["right"]}
 
-        self.item_actions = ["sleep", "sit", "directions", "items", "read"]
+        self.special_actions = ["sleep", "sit", "rooms", "items", "read"]
 
 
         
@@ -64,7 +64,7 @@ class Parser:
                     parsed_info["action"].append(key)
 
         # Loop over item specific actions and store matches in action_list
-        for action in self.item_actions:
+        for action in self.special_actions:
             if self.regex_search(action, str_input.lower()):
                 parsed_info["action"].append(action)
 

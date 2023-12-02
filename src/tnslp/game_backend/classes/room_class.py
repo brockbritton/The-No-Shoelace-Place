@@ -6,6 +6,42 @@ import tnslp.game_backend.classes.item_class as item_class
 import tnslp.game_backend.classes.npc_class as npc_class
 import tnslp.game_backend.gl_backend_functions as gl
 
+class SN:
+    def __init__(self, container, items_list) -> None:
+        self.container = container
+        if items_list == None:
+            self.items = []
+        else:
+            self.items = items_list
+
+        for i in range(0, len(self.items)):
+            if issubclass(type(self.items[i]), item_class.Storage_Unit):
+                self.items[i] = SN(self.items[i], self.items[i].items)
+
+    def inspect_node(self):
+        full_sentence = ""
+        if len(self.items) == 0:
+            full_sentence += f"There is nothing on/in the {self.container.name}."
+
+        else:
+            sentence = f"On/In the {self.container.name} is "
+            if len(self.items) == 1:
+                sentence += f"{self.items[0].article} {self.items[0].name}."
+            else:
+                for i in range(0, len(self.items)-1):
+                    try:
+                        sentence += f"{self.items[i].article} {self.items[i].name}, "
+
+                    except AttributeError:
+                        sentence += f"{self.items[i].container.article} {self.items[i].container.name}, "
+                try:
+                    sentence += f"and {self.items[-1].article} {self.items[-1].name}."
+                except AttributeError:   
+                    sentence += f"and {self.items[-1].container.article} {self.items[-1].container.name}."
+                
+            full_sentence += (sentence + " ")
+        return full_sentence
+
 class Room:
     _all_rooms_registry = []
     def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
@@ -32,7 +68,7 @@ class Room:
             'help' : self.show_all_actions,
             'inspect': self.inspect_room,
             'items': self.show_items,
-            'directions': self.show_directions,
+            'rooms': self.show_directions,
         } 
 
     def show_all_actions(self):
@@ -459,6 +495,7 @@ class Ward_Room(Room):
     def __repr__(self) -> str:
         return f'{self.name}(ward room)'
 
+
 class Starting_Ward_Room(Ward_Room):
     def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
         super().__init__(name, display_name, description, room_label, floor_wall_items, doors)
@@ -473,6 +510,7 @@ class Starting_Ward_Room(Ward_Room):
                     if isinstance(direction, item_class.Lockable_Door) and not direction.visited:
                         direction.visited = True
 
+
 class Basement_Room(Room):
     _basement_rooms_registry = []
     def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
@@ -485,6 +523,7 @@ class Basement_Room(Room):
     def __repr__(self) -> str:
         return f'{self.name}(basement room)'
 
+
 class Stairwell(Room):
     #self, name, display_name, description, room_label, floor_wall_items, doors
     def __init__(self, name, display_name, room_label, to_room) -> None:
@@ -495,6 +534,7 @@ class Stairwell(Room):
     def enter_room(self, player):
         return self.to_room.enter_room(player)
     
+
 class Final_Room(Room):
     #self, name, display_name, description, room_label, floor_wall_items, doors
     def __init__(self, name, display_name, description, room_label, doors) -> None:
@@ -543,53 +583,3 @@ class Final_Room(Room):
 class Maze_Room(Room):
     def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
         super().__init__(name, display_name, description, room_label, floor_wall_items, doors)
-
-# Specific Room Classes #
-class First_Basement_Room(Basement_Room):
-    def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
-        super().__init__(name, display_name, description, room_label, floor_wall_items, doors)
-
-    def enter_room(self, player):
-        actions = {
-            'print_all': [],
-        }
-        if self != player.loc:
-            player.last_loc = player.loc
-        else:
-            player.last_loc = None
-        player.loc = self
-
-        if not self.visited:
-            actions['print_all'].append(f"Basement Discovered! +{500}xp")
-            player.earn_xp(500) 
-            actions['print_all'].append(["It appears", "quote"])
-            actions['print_all'].append(["that rock bottom", "quote"])
-            actions['print_all'].append(["has a basement.", "quote"])
-            self.visited = True
-            actions['print_all'].append("Congratulations! By reaching the basement you have reached the end of this game build.")
-            actions['print_all'].append("You can continue to explore the ward level or wait for the next version which will include many more riddles, puzzles, and rooms to explore.")
-
-        else:
-            actions['print_all'].append(f"You are now in {self.name}.")
-
-        
-        for direction in self.doors.values():
-            if isinstance(direction, list):
-                for door in direction:
-                    if isinstance(door, item_class.Lockable_Door) and not door.visited:
-                        door.visited = True
-            else:
-                if isinstance(direction, item_class.Lockable_Door) and not direction.visited:
-                    direction.visited = True
-
-        if not self.lights_on:
-            #some check about having full battery flashlight
-            stumble = random.randint(1,12)
-            if stumble == 1:
-                actions['print_all'].append("In the dark, you stumbled and fell, scraping your hands on the rough ground.")
-                player.health -= 5
-                if player.health <= 0:
-                    player.health = 0
-                    return (None, "dead", actions)
-                
-        return (None, None, actions)
