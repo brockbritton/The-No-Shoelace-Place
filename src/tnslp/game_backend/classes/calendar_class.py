@@ -18,9 +18,7 @@ class Calendar:
         # Player stats values are updated on initialized Day object
         new_day = _Day(self.max_turns_daily, len(self.days_list) + 1)
         self.days_list.append(new_day)
-        #player.loc = room.pat_room_201
-        player.loc = room.common_room
-        #player.loc = room.high_security_area
+        player.loc = player.home_room
 
     def _get_curr_day_data(self):
         #return current day, turns left

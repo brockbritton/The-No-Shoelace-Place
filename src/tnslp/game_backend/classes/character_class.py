@@ -15,7 +15,9 @@ class Character:
         self.name = name
         self.loc = None
         self.last_loc = None
-        self.personal_room = room.common_room
+        #self.home_room = room.pat_room_101
+        self.home_room = room.common_room
+
 
         self.inv = [item.id_bracelet] # item.master_key
         #self.inv = []
@@ -26,7 +28,7 @@ class Character:
         self.full_health = 100 #maximum player health
         self.diagnosis = None
 
-        self.xp = 900
+        self.xp = 900 #starting xp
         self.xp_dict = {
             'new_room': 10,
             'new_item': 5,
@@ -37,7 +39,7 @@ class Character:
         self.calendar = calendar_class.Calendar(self)
         self.abilities = [ability.meditation, ability.assertiveness, ability.pos_attitude, ability.opposite_action, ability.catharsis]
 
-        self.guided = False #for outside time or from admissions to common room
+        
 
     def __repr__(self) -> str:
         return f'{self.name}(character)'
@@ -130,10 +132,6 @@ class Character:
             'build_multiple_choice': [],
         }
         invalid_direction_strs = ["You cannot go that way.", "There is a wall in that direction.", "It is not possible to go that way."]  
-        
-        if self.guided:
-            actions['print_all'].append("You are currently being guided by hospital staff. You cannot move freely.")
-            return (None, None, actions)
 
         if isinstance(next_room, list):
             actions['print_all'].append("Please choose a room below:")
@@ -178,6 +176,7 @@ class Character:
                 else:
                     if next_room == 0:
                         actions['print_all'].append(invalid_direction_strs[random.randint(0, len(invalid_direction_strs)-1)])
+                        return (None, None, actions)
                     else: 
                         enter_room_tuple = next_room.enter_room(self)
                         actions = gl.combine_dicts(actions, enter_room_tuple[2])

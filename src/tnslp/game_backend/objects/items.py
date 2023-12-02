@@ -182,6 +182,8 @@ courtyard_and_service_hallway_door = item_class.Ward_Lockable_Door("Door S9", "d
 admissions_exit_door = item_class.Ward_Lockable_Door("Door M7", "door", None) 
 
 
+
+
 ##########################
 ##### Basement Items #####
 ##########################
@@ -199,6 +201,7 @@ power_box = item_class.Power_Box("fuse box", "fuse box")
 # Basement Doors
 power_room_door = item_class.Basement_Lockable_Door("Power Room Door", "door", [power_room_key])
 high_security_door = item_class.Basement_Lockable_Door("Door J331", "door", [keycard, "2525"])
+build_end_door = item_class.Basement_Lockable_Door("Build 1.0 End Door", "door", None)
 
 # Storage Containers
 # Cabinets

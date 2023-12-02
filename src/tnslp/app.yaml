@@ -1,0 +1,4 @@
+
+runtime: python310
+entrypoint: gunicorn -b :$8080 -w 1 app:app
+

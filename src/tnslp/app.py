@@ -2,35 +2,26 @@
 from flask import Flask, redirect, render_template, request, session, url_for
 from flask_session import Session
 import tnslp.game_backend.classes.game_class as game_class
-import re
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_COOKIE_SECURE"] = True
+app.config['SECRET_KEY'] = "very super secret key"
 app.debug = True 
 Session(app)
 
+full_game = None
+
 @app.before_first_request 
-def before_first_request(): 
-    session.clear() 
-
-    session['current_js_actions'] = {
-        'build_multiple_choice': None,
-    }
-
-    try:
-        if session['game'] is not None:
-            print("--- game already exists ---")
-
-    except KeyError: 
-        session['game'] = game_class.Game()
+def before_first_request():
+    global full_game
+    if full_game is not None:
+        print("--- game already exists ---")
+    else:
+        full_game = game_class.Game()
         print("--- game created ---")
-
-    session.modified = True
-
-    return session
 
 @app.after_request
 def add_header(r):
@@ -67,32 +58,37 @@ def play_game():
 
 @app.route("/game/accept-data", methods=['POST'])
 def accept_data():
+    global full_game
     input_data = request.json['input']
     print("frontend input ", input_data)
-    return session['game'].organize_raw_input(input_data)
+    return full_game.organize_raw_input(input_data)
     
 @app.route("/game/request-map-data", methods=['GET'])
 def request_map_data():
-    return session['game'].return_map_data()
+    global full_game
+    return full_game.return_map_data()
 
 @app.route("/game/request-player-data", methods=['GET'])
 def request_backend_player_data():
+    global full_game
     ui_dict = {
         #patient stats
-        "stats" : session['game'].get_player_attr(),
+        "stats" : full_game.get_player_attr(),
         #inventory
-        "inventory" : session['game'].get_player_inventory(),
+        "inventory" : full_game.get_player_inventory(),
         #skills levels
-        "skills" : session['game'].get_player_skills_lvl()
+        "skills" : full_game.get_player_skills_lvl()
     }
     return ui_dict
 
 @app.route("/game/loading-game", methods=['POST'])
 def loading_game():
-    if len(session['game'].save_prints) <= session['game'].starting_pars: 
-        return_dict = session['game'].start_game()
+    print("*******************")
+    global full_game
+    if len(full_game.save_prints) <= full_game.starting_pars: 
+        return_dict = full_game.start_game()
     else:
-        return_dict = session['game'].load_game() 
+        return_dict = full_game.load_game() 
     
     return return_dict
 
@@ -114,7 +110,7 @@ def page_not_found(error):
 
 if __name__ == '__main__':
     app.secret_key = "ihaveasecretkey5" 
-    app.run(host="localhost", port="5000")
+    app.run(host="localhost", port="5000", debug=True)
     
 
     
