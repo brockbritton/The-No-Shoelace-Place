@@ -1,5 +1,5 @@
 
-import tnslp.game_backend.classes.ability_class as ability_class
+import game_backend.classes.ability_class as ability_class
 
 #### Conditions for Abilities ####
 negate_stat_changes = 0

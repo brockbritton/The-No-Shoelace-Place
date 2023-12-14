@@ -2,11 +2,11 @@
 
 import random
 
-import tnslp.game_backend.classes.calendar_class as calendar_class
-import tnslp.game_backend.gl_backend_functions as gl
-import tnslp.game_backend.objects.abilities as ability
-import tnslp.game_backend.objects.items as item
-import tnslp.game_backend.objects.rooms as room
+import game_backend.classes.calendar_class as calendar_class
+import game_backend.gl_backend_functions as gl
+import game_backend.objects.abilities as ability
+import game_backend.objects.items as item
+import game_backend.objects.rooms as room
 
 
 class Character:

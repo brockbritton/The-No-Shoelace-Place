@@ -6,15 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='site.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile-site.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='game-map.css')}}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png')}}">
     <link rel="icon" href="data:;base64,=">
     <script type="text/javascript" src="{{url_for('static', filename='site.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- needed? just use async -->
-    <title>The No-Shoelace Place</title>
+    <title>The No-Shoelace Place</title> 
 </head>
 <body>
-    <div id="image-header-container">
+    <div id="image-header-container" onclick="toggleGameMenu()">
+        <div id="menu-button">
+            <p id="menu-label"> MENU </p>
+        </div>
+        <div id="menu-options-container">
+            <div class="menu-option" onclick="toggleGameMap()">
+                Game Map
+            </div>
+            <div class="menu-option">
+                How to Play
+            </div>
+        </div>
         <div id="cursor-space"></div>
         <img id="line-header" class="game-header-image" src="{{ url_for('static', filename='img/line-header.png')}}" alt="">
         <img id="fill-header" class="game-header-image" src="{{ url_for('static', filename='img/filled-header.png')}}" alt="">
@@ -221,7 +233,7 @@
                         </div>
                         <div class="ps-inv-elem-spacing">
                             <div id="health-out-of-100">
-                                <p class="ps-values" id="health-value">65</p>
+                                <p class="ps-values" id="health-value"></p>
                                 <p id="out-of-100">/100</p>
                             </div>
                         </div>
@@ -276,6 +288,40 @@
             </div>  
 
             <div id="bottom-panel" class="panel-rows">
+                <div id="player-stats" class="panel-cols">
+                    <p class="panel-titles"> Exploration </p> <!-- no title for this section -->       
+                    <div id="explore-left">
+                        <div class="ps-opt-obj-spacing">
+                            <p class="right-panel-text">Rooms Discovered:</p>
+                        </div>
+                        <div class="ps-opt-obj-spacing">
+                            <p class="right-panel-text">Quotes Read:</p>
+                        </div>
+                        <div class="ps-opt-obj-spacing">
+                            <p class="right-panel-text">Riddles Solved:</p>
+                        </div>
+                    </div>
+                    <div id="explore-right">
+                        <div class="ps-opt-obj-spacing">
+                            <div class="found-out-of-all" id="found-rooms">
+                                <p class="explore-values" id="">0</p>
+                                <p id="out-of-100">/24</p>
+                            </div>
+                        </div>
+                        <div class="ps-opt-obj-spacing">
+                            <div class="found-out-of-all" id="found-quotes">
+                                <p class="explore-values" id="">0</p>
+                                <p id="out-of-100">/50</p>
+                            </div>
+                        </div>
+                        <div class="ps-opt-obj-spacing">
+                            <div class="found-out-of-all" id="solved-riddle">
+                                <p class="explore-values" id="">0</p>
+                                <p id="out-of-100">/10</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="abilities" class="panel-cols">
                     <p class="panel-titles"> Skills </p>
                     <div id="ability-left">
@@ -313,17 +359,6 @@
                         </div>
                     </div>
                 </div>
-                <div id="game-buttons" class="panel-cols">
-                    <p class="panel-titles"></p> <!-- no title for this section -->
-                    <div id="bottom-right">
-                        <button class="game-menu-buttons" onclick="toggleGameMap()">
-                            Game Map
-                        </button>
-                        <button class="game-menu-buttons" onclick="location.href='/game/instructions'">
-                            Gameplay Help
-                        </button>
-                    </div> 
-                </div>
             </div>  
         </div>
 
@@ -332,8 +367,8 @@
         
         // Start the Game - text to the window \\
         fetchPostEndpoint(null, '/game/loading-game');
-        //update_frontend_player_data()
-
+        update_frontend_player_data()
+        
         document.addEventListener("keydown", function(e) {
             //console.log(e.key)
             if (e.key == "Enter") {

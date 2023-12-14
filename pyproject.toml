@@ -1,10 +1,20 @@
 [project]
 name = "The-No-Shoelace-Place"
-version = "0.1.0"
+authors = [
+    { name = "Brock Britton", email = "brockbritton@outlook.com" },
+]
+version = "1.0.0"
 description = "A text display choose your own adventure game"
+license = {file = "LICENSE"}
 dependencies = [
     "flask",
 ]
+
+requires-python = '>=3.10'
+classifiers = ['Framework :: Flask', 'Programming Language :: Python :: 3']
+
+[project.optional-dependencies]
+testing = ['pytest>=6.0', 'pytest-cov>=2.0', 'tox>=3.24']
 
 [build-system]
 requires = ["setuptools>=42.0", "wheel"]

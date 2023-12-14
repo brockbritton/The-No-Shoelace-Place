@@ -1,0 +1,15 @@
+
+@media (orientation: portrait) {
+    #welcome-logo-container {
+        width: 100%;
+        margin: 20% auto 0;
+    }
+
+    #welcome-buttons-container {
+        width: max-content;
+        position: relative;
+        background-color: none;
+        margin: -45% auto;
+
+    }
+}

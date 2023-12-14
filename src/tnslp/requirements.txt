@@ -1,9 +1,0 @@
-
-Flask==2.2.5
-Flask-Session
-itsdangerous
-Jinja2
-MarkupSafe
-num2words
-gunicorn
-gevent

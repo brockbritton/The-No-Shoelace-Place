@@ -2,9 +2,9 @@
 
 import random
 import num2words as n2w
-import tnslp.game_backend.classes.item_class as item_class
-import tnslp.game_backend.classes.npc_class as npc_class
-import tnslp.game_backend.gl_backend_functions as gl
+import game_backend.classes.item_class as item_class
+import game_backend.classes.npc_class as npc_class
+import game_backend.gl_backend_functions as gl
 
 class Room:
     _all_rooms_registry = []

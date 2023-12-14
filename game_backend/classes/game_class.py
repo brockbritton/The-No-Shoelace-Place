@@ -1,11 +1,11 @@
 
 
-import tnslp.game_backend.classes.character_class as character_class
-import tnslp.game_backend.classes.item_class as item_class
-import tnslp.game_backend.classes.parser_class as parser_class
-import tnslp.game_backend.classes.room_class as room_class
-import tnslp.game_backend.objects.rooms as rooms
-import tnslp.game_backend.gl_backend_functions as gl
+import game_backend.classes.character_class as character_class
+import game_backend.classes.item_class as item_class
+import game_backend.classes.parser_class as parser_class
+import game_backend.classes.room_class as room_class
+import game_backend.objects.rooms as rooms
+import game_backend.gl_backend_functions as gl
  
 
 class Game:
@@ -81,9 +81,9 @@ class Game:
             'rebuild_text_entry': False,
         }
 
-        actions['print_all'].append("As you open your eyes, you find yourself laying on a bed in a non descript bedroom.") 
-        actions['print_all'].append("A person on the bed next to you welcomes you to this new place, and suggests that you spend some time exploring as there's a lot to find.")
-        actions['print_all'].append("For help playing, use the game help button in the bottom right corner.")
+        actions['print_all'].append("Welcome to The No-Shoelace Place!") 
+        actions['print_all'].append("This new place, also known as the Ward, is small but there is a lot to find, so I suggest that you spend some time exploring.")
+        actions['print_all'].append("For help playing, click the menu button in the top right.")
         
         return_tuple = self.player1.loc.enter_room(self.player1)
         self.master_dest, self.master_helper, actions = gl.parse_tuples(return_tuple, actions)
@@ -393,7 +393,10 @@ class Game:
                                 actions = gl.combine_dicts(actions, return_tuple[2])
 
                 else:
-                    actions['print_all'].append(f"There is nothing by that name to {actions_list[0]}.")
+                    if actions_list[0] == "go":
+                        actions['print_all'].append(f"Where do you want to {actions_list[0]}?")
+                    else:
+                        actions['print_all'].append(f"What do you want to {actions_list[0]}?")
             else:
                 # Print error message if there are multiple actions
                 actions["print_all"].append("Please only use one action at a time.")

@@ -301,3 +301,18 @@ function get_map_data() {
 function update_map_objects(bool_list) {
 
 }
+
+function toggleGameMenu() {
+    const menu_button = document.getElementById("menu-button")
+    const menu_container = document.getElementById("menu-options-container")
+    console.log("clicked")
+    if (!menu_button.classList.contains("clicked")) {
+        //show the menu
+        menu_button.classList.add("clicked")
+        menu_container.classList.add("show")
+    } else {
+        //hide the menu
+        menu_button.classList.remove("clicked")
+        menu_container.classList.remove("show")
+    }
+}

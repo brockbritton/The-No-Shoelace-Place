@@ -1,6 +1,6 @@
 
 import random
-import tnslp.game_backend.objects.abilities as ability
+import game_backend.objects.abilities as ability
 
 
 class NPC:

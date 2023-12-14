@@ -1,7 +1,7 @@
 
 import random
-import tnslp.game_backend.objects.events as event
-import tnslp.game_backend.objects.rooms as room
+import game_backend.objects.events as event
+import game_backend.objects.rooms as room
 
 
 class Calendar:

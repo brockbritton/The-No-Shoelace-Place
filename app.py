@@ -1,7 +1,7 @@
 
 from flask import Flask, redirect, render_template, request, session, url_for
 from flask_session import Session
-import tnslp.game_backend.classes.game_class as game_class
+import game_backend.classes.game_class as game_class
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -83,7 +83,6 @@ def request_backend_player_data():
 
 @app.route("/game/loading-game", methods=['POST'])
 def loading_game():
-    print("*******************")
     global full_game
     if len(full_game.save_prints) <= full_game.starting_pars: 
         return_dict = full_game.start_game()
