@@ -122,10 +122,12 @@ class Inv_Item(Item):
         return (None, None, actions)
 
 class Quote_Note(Inv_Item):
+    _all_quotes_registry = []
     def __init__(self, name, gen_name, lines_list, author) -> None:
         super().__init__(name, gen_name)
         self.quote = lines_list
         self.author = author
+        self._all_quotes_registry.append(self)
     
     def format_quote(self):
         formatted_quote = []
@@ -521,8 +523,11 @@ class Hanging_Wall_Item(Interact):
         self.can_hang = True
 
 class Riddle_Box(Storage_LockBox):
+    _all_riddles_registry = []
+    _solved_riddles = []
     def __init__(self, name, gen_name, item_list, riddle_lines, answer_array) -> None:
         super().__init__(name, gen_name, True, [], item_list)
+        self._all_riddles_registry.append(self)
         self.riddle = riddle_lines
         self.answers = answer_array
         self.item_actions.update({
@@ -572,6 +577,7 @@ class Riddle_Box(Storage_LockBox):
         if guess_str in self.answers:
             actions['print_all'].append(f"Correct! You have solved {self.name}!")
             actions['print_all'].append("With a hiss, a small hatch opens, revealing a box in the wall.")
+            self._solved_riddles.append(self)
             self.locked = False
             self.open = True
             return (None, None, actions)

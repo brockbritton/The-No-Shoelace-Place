@@ -77,7 +77,9 @@ def request_backend_player_data():
         #inventory
         "inventory" : full_game.get_player_inventory(),
         #skills levels
-        "skills" : full_game.get_player_skills_lvl()
+        "skills" : full_game.get_player_skills_lvl(),
+        #exploration some out of all values
+        "exploration" : full_game.get_player_exploration_values()
     }
     return ui_dict
 

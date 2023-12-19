@@ -186,7 +186,7 @@
                     <button id="text-entry-enter-button" 
                         class="gameplay-buttons" 
                         onclick="accept_entry_input()"> 
-                        play <!-- text on button -->
+                        play 
                     </button>
                 </div>
                 <div id="button-entry-div">
@@ -234,7 +234,7 @@
                         <div class="ps-inv-elem-spacing">
                             <div id="health-out-of-100">
                                 <p class="ps-values" id="health-value"></p>
-                                <p id="out-of-100">/100</p>
+                                <p class="out-of-100">/100</p>
                             </div>
                         </div>
                         <div class="ps-inv-elem-spacing">
@@ -305,19 +305,19 @@
                         <div class="ps-opt-obj-spacing">
                             <div class="found-out-of-all" id="found-rooms">
                                 <p class="explore-values" id="">0</p>
-                                <p id="out-of-100">/24</p>
+                                <p class="out-of-100">/<span class="explore-out-of">.</span></p>
                             </div>
                         </div>
                         <div class="ps-opt-obj-spacing">
                             <div class="found-out-of-all" id="found-quotes">
                                 <p class="explore-values" id="">0</p>
-                                <p id="out-of-100">/50</p>
+                                <p class="out-of-100">/<span class="explore-out-of">.</span></p>
                             </div>
                         </div>
                         <div class="ps-opt-obj-spacing">
                             <div class="found-out-of-all" id="solved-riddle">
                                 <p class="explore-values" id="">0</p>
-                                <p id="out-of-100">/10</p>
+                                <p class="out-of-100">/<span class="explore-out-of">.</span></p>
                             </div>
                         </div>
                     </div>
@@ -366,9 +366,9 @@
     <script>
         
         // Start the Game - text to the window \\
-        fetchPostEndpoint(null, '/game/loading-game');
         update_frontend_player_data()
-        
+        fetchPostEndpoint(null, '/game/loading-game');
+        //toggleGameMap()
         document.addEventListener("keydown", function(e) {
             //console.log(e.key)
             if (e.key == "Enter") {

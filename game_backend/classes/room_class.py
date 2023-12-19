@@ -8,6 +8,7 @@ import game_backend.gl_backend_functions as gl
 
 class Room:
     _all_rooms_registry = []
+    _visited_rooms = []
     def __init__(self, name, display_name, description, room_label, floor_wall_items, doors) -> None:
         self.name = name
         self.display_name = display_name
@@ -145,6 +146,7 @@ class Room:
             actions['print_all'].append(f"You are now in {self.name}.")
             actions["print_all"].append(self.description)
             player.earn_xp(10)
+            self._visited_rooms.append(self)
             self.visited = True
         else:
             actions['print_all'].append(f"You are now in {self.name}.")

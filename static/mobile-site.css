@@ -12,4 +12,107 @@
         margin: -45% auto;
 
     }
+
+    .large-bordered-button {
+        font-size: 4vw;
+    }
+
+    .regular-bordered-button {
+        font-size: 3vw;
+    }
+
+    /* Game Page */
+
+    #image-header-container {
+        margin: 0;
+    }
+
+    #cursor-space {
+        display: none;
+    }
+
+    .game-header-image {
+        position: absolute !important;
+        width: 100vw;
+        top: 14vh;
+        left: 0;
+        /* top range: 7vh - 16vh */
+        background-color: none;
+    }
+
+    #fill-header {
+        z-index: 2;
+        
+    }
+    
+    #line-header {
+        z-index: 1;
+        
+    }
+
+    #menu-button {
+        position: relative;
+        margin: auto;
+        left: auto;
+        top: 12vh;
+        z-index: 3 !important;
+        
+    }
+
+    #menu-options-container {
+        position: relative;
+        width: max-content;
+        margin: auto;
+        right: auto;
+        top: 20.5vh;
+    }
+
+    .menu-option {
+        width: max-content;
+        margin: 5px auto;
+    }
+
+    #game-gui {
+
+    }
+
+    #display-entry-container {
+        width: 100vw;
+        height: calc(max-content + 100px);
+    }
+    
+    #game-text-display {
+        width: 85vw;
+        height: 65vh;
+        margin: auto;
+    }
+
+    #text-entry-div {
+        width: 95vw;
+    }
+
+    #player-text-input {
+        width: 45vw;
+    }
+
+    #right-panel {
+        display: none;
+    }
+
+    /* Map */
+    #game-map {
+        position: relative;
+        margin: auto;
+        left: 5vw !important;
+        top: 20vh;
+        height: 70vh; /* 80wh */
+        width: 90vw !important; /* 80vw */
+        overflow-x: scroll;
+    }
+
+    #map-close-button {
+        position: fixed;
+        
+    }
+    
 }

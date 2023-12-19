@@ -233,11 +233,19 @@ async function update_frontend_player_data() {
                     }
                 } 
             }
-            
+
+            //Updating Section "Exploration"
+            const explore_values = document.getElementsByClassName("explore-values")
+            const explore_out_of_values = document.getElementsByClassName("explore-out-of")
+            for (let i = 0; i < response["exploration"].length; i++) {
+                explore_values[i].innerHTML = response["exploration"][i][0]
+                if (explore_out_of_values[i].innerHTML != response["exploration"][i][1]) {
+                    explore_out_of_values[i].innerHTML = response["exploration"][i][1]
+                }
+            } 
 
             //Updating Section "Skills"
             const skills_html_elements = document.getElementsByClassName("player-skills-lvl")
-            
             for (let i = 0; i < response["skills"].length; i++) {
                 skills_html_elements[i].innerHTML = String(response["skills"][i]);
                 

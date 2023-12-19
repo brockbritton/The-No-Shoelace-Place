@@ -213,7 +213,9 @@ button:disabled:hover {
     background-color: none;
     overflow: hidden;
     transition: height 2s;
+    text-align: right;
 }
+
 
 #menu-options-container.show {
     height: max-content;
@@ -267,8 +269,7 @@ button:disabled:hover {
 }
 
 #line-header {
-    position: relative;
-    opacity: 1;
+    opacity: 2;
     z-index: -1;
 }
 
@@ -526,7 +527,7 @@ button:disabled:hover {
     display: inline-block;
 }
 
-#out-of-100 {
+.out-of-100 {
     height: 1.25em;
     width: 2em;
     margin-left: auto; 
