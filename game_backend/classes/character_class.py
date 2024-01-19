@@ -19,7 +19,7 @@ class Character:
         self.home_room = room.common_room
 
 
-        self.inv = [item.id_bracelet] # item.master_key
+        self.inv = [item.id_bracelet, item.master_key, item.book_charlottes_web, item.book_catch22] # item.master_key
         #self.inv = []
         self.inv_cap = 6 #current inventory capacity - maybe just keep it set
         self.inv_cap_start = 6 #starting inventory capacity

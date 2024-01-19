@@ -15,7 +15,7 @@ class Item:
         }
     
     def show_all_actions(self):
-        actions = {
+        actions = { 
             'print_all': [],
         }
 
@@ -123,10 +123,12 @@ class Inv_Item(Item):
 
 class Quote_Note(Inv_Item):
     _all_quotes_registry = []
+    _read_quotes = []
     def __init__(self, name, gen_name, lines_list, author) -> None:
         super().__init__(name, gen_name)
         self.quote = lines_list
         self.author = author
+        self.read = False
         self._all_quotes_registry.append(self)
     
     def format_quote(self):
@@ -142,6 +144,9 @@ class Quote_Note(Inv_Item):
         actions = {
             'print_all': [],
         }
+        if not self.read:
+            self.read = True
+            self._read_quotes.append(self)
         actions["print_all"].append(f"The {self.gen_name} reads:")
         actions["print_all"].extend(self.format_quote()) 
         return actions 
@@ -597,6 +602,15 @@ class Riddle_Door(Interact):
         })
         del self.item_actions['break']
 
+class Television(Interact):
+    def __init__(self, name, gen_name) -> None:
+        super().__init__(name, gen_name)
+        self.item_actions.update({
+            'turn on': self.open_item,
+            'turn off': self.close_item,
+        })
+
+
 
 #############################################
 ##### Individual Inventory Item Classes #####
@@ -614,13 +628,57 @@ class Keycard(Inv_Item):
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
 
+class Book(Quote_Note, Openable_Interact):
+    def __init__(self, name, author, page, lines_list) -> None:
+        super().__init__(name, "book", lines_list, author)
+        self.page_num = page
+
+    def format_quote(self):
+        formatted_quote = []
+        # length of text box: 52 characters
+        for line in self.quote:
+            formatted_quote.append([line, "quote"])
+        
+        return formatted_quote
+
+    def inspect_item(self):
+        actions = {
+            'print_all': [],
+        }
+        actions['print_all'].append(f"{self.name} by {self.author}")
+        if self.open:
+            if not self.read:
+                self.read = True
+                self._read_quotes.append(self)
+            actions['print_all'].append(f"The book is open to page {self.page_num}. Highlighted on the page is the following quote:")
+            actions['print_all'].extend(self.format_quote())
+        else:
+            actions['print_all'].append("The book is closed, but there appears to be a bookmarked page.")
+        return actions
+    
+    def open_item(self):
+        actions = {
+            'print_all': [],
+        }
+
+        if self.open:
+            actions['print_all'].append("This book is already opened to the bookmarked page.")
+        else:
+            self.open = True
+            actions['print_all'].append(f"You have opened {self.name} to the bookmarked page.")
+            actions['print_all'].append("There is something highlighted on the page.")
+
+        return actions
+        
+
+
 class Flashlight(Inv_Item):
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
         self.full_power = False
 
 class Crowbar(Inv_Item):
-    # Necessary to be able to use the crowbar to open/close doors
+    # Necessary to be able to use the crowbar class checker to open/close doors
     def __init__(self, name, gen_name):
         super().__init__(name, gen_name)
 

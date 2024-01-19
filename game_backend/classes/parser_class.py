@@ -8,15 +8,14 @@ class Parser:
         self.all_actions = {
             'pick up' : ["pick up", "pickup", "take", "retrieve", "get", "grab", "remove"],
             'drop' : ["drop", "place", "put down", "put", "move"], #set
-            'inspect' : ["inspect", "look at", "examine", "check out", "search"],
+            'inspect' : ["inspect", "look at", "examine", "check out", "search", "read"],
             'open' : ["open"],
             'close' : ["close", "shut"],
             'unlock' : ['unlock', 'unseal'],
             'lock' : ["lock", "seal"],
-            'break':["break", "smash", "tear down", "rip off", "damage", "destroy"],
-            'go':["go", "walk", "turn", "enter", "travel", "exit", "leave"],
+            'break':["break", "smash", "tear down", "destroy"],
+            'go':["go", "walk", "enter", "travel", "exit", "leave"],
             'display':["display", "view", "show", "reveal"],
-            'help':["help"] 
         }
         
         self.movement_dict = {
@@ -25,7 +24,7 @@ class Parser:
             "left" : ["left"],
             "right" : ["right"]}
 
-        self.item_actions = ["sleep", "sit", "directions", "items", "read"]
+        self.item_actions = ["help", "turn on", "turn off"] #"directions", "items", 
 
 
         
@@ -93,6 +92,10 @@ class Parser:
         if self.regex_search(player.loc.name.lower(), str_input.lower()) or self.regex_search("room", str_input.lower()):
             parsed_info["nearby_objects"].append(player.loc)
 
+        for action in ["directions", "items"]:
+            if self.regex_search(action, str_input.lower()):
+                parsed_info["action"].append(action)
+
         ## Doors adjacent to the room
         door_gen_bool = False
         if self.regex_search("door", str_input.lower()):
@@ -131,14 +134,8 @@ class Parser:
                     if self.regex_search(direction.name.lower(), str_input.lower()):
                         parsed_info["directions"].append(direction)
 
-        # Check for special actions
-        # xi : items in room
-        # xd : directions
-        for cheat in ("xi", "xd", "cheatcode:Asher"):
-            if cheat in str_input.lower():
-                parsed_info["cheats"].append(cheat)
-        
         # Return values
+        print(parsed_info)
         return parsed_info
 
 

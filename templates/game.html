@@ -15,353 +15,354 @@
     <title>The No-Shoelace Place</title> 
 </head>
 <body>
-    <div id="image-header-container" onclick="toggleGameMenu()">
-        <div id="menu-button">
-            <p id="menu-label"> MENU </p>
-        </div>
-        <div id="menu-options-container">
-            <div class="menu-option" onclick="toggleGameMap()">
-                Game Map
+    <div id="all-game-visuals">
+        <div id="image-header-container" onclick="toggleGameMenu()">
+            <div id="menu-button">
+                <p id="menu-label"> MENU </p>
             </div>
-            <div class="menu-option">
-                How to Play
+            <div id="menu-options-container">
+                <div class="menu-option" onclick="toggleGameMap()">
+                    Game Map
+                </div>
+                <div class="menu-option">
+                    How to Play
+                </div>
             </div>
+            <div id="cursor-space"></div>
+            <img id="line-header" class="game-header-image" src="{{ url_for('static', filename='img/line-header.png')}}" alt="">
+            <img id="fill-header" class="game-header-image" src="{{ url_for('static', filename='img/filled-header.png')}}" alt="">
         </div>
-        <div id="cursor-space"></div>
-        <img id="line-header" class="game-header-image" src="{{ url_for('static', filename='img/line-header.png')}}" alt="">
-        <img id="fill-header" class="game-header-image" src="{{ url_for('static', filename='img/filled-header.png')}}" alt="">
-    </div>
-    <div id="game-map">
-        <button id="map-close-button" onclick="toggleGameMap()">X</button>
-        <div id="ward-level-map">
-            <div id="ward-rooms-map">
-                <div id="game-exit-room" class="map-room">
-                    <p id="exit-text"> EXIT </p>
+        <div id="game-map">
+            <button id="map-close-button" onclick="toggleGameMap()">X</button>
+            <div id="ward-level-map">
+                <div id="ward-rooms-map">
+                    <div id="game-exit-room" class="map-room">
+                        <p id="exit-text"> EXIT </p>
+                    </div>
+                    <div id="admissions-room" class="map-room">
+                        <p> admissions</p>
+                    </div>
+                    <div id="service-hallway-room" class="map-room">
+                        <p class="vertical-text"> service hallway </p>
+                    </div>
+                    <div id="utility-closet-room" class="map-room">
+                        <p> utility </p>
+                    </div>
+                    <div id="security-room" class="map-room">
+                        <p> security </p>
+                    </div>
+                    <div id="outside-time-room" class="map-room">
+                        <p> courtyard </p>
+                    </div>
+                    <div id="common-room" class="map-room">
+                        <p> common room</p>
+                    </div>
+                    <div id="tv-room" class="map-room">
+                        <p> tv </p>
+                    </div>
+                    <div id="staff-breakroom" class="map-room">
+                        <p> staff break</p>
+                    </div>
+                    <div id="med-station-room" class="map-room">
+                        <p> meds </p>
+                    </div>
+                    <div id="common-room-bathroom" class="map-room">
+                        <p>BR</p>
+                    </div>
+                    <div id="library-room" class="map-room">
+                        <p> library </p>
+                    </div>
+                    <div id="blue-hallway-room" class="map-room">
+                        <p class="vertical-text"> blue hallway </p>
+                    </div>
+                    <div id="kitchen-room" class="map-room">
+                        <p> kitchen </p>
+                    </div>
+                    <div id="sensory-room" class="map-room">
+                        <p> sensory </p>
+                    </div>
+                    <div id="linen-closet-room" class="map-room">
+                        <p> linen </p>
+                    </div>
+                    <div id="red-hallway-room" class="map-room">
+                        <p> red hallway </p>
+                    </div> 
+                    <div id="patient-room-101" class="map-room patient-room">
+                        <p> P101 </p>
+                    </div>
+                    <div id="patient-room-103" class="map-room patient-room">
+                        <p> P103 </p>
+                    </div>
+                    <div id="patient-bathroom" class="map-room">
+                        <p> BR</p>
+                    </div>
+                    <div id="patient-room-102" class="map-room patient-room">
+                        <p> P102 </p>
+                    </div>
+                    <div id="patient-room-104" class="map-room patient-room">
+                        <p> P104 </p>
+                    </div>
+                    <div id="ward-stairs-room" class="map-room">
+                        <p> ward landing </p>
+                    </div>
                 </div>
-                <div id="admissions-room" class="map-room">
-                    <p> admissions</p>
-                </div>
-                <div id="service-hallway-room" class="map-room">
-                    <p class="vertical-text"> service hallway </p>
-                </div>
-                <div id="utility-closet-room" class="map-room">
-                    <p> utility </p>
-                </div>
-                <div id="security-room" class="map-room">
-                    <p> security </p>
-                </div>
-                <div id="outside-time-room" class="map-room">
-                    <p> courtyard </p>
-                </div>
-                <div id="common-room" class="map-room">
-                    <p> common room</p>
-                </div>
-                <div id="tv-room" class="map-room">
-                    <p> tv </p>
-                </div>
-                <div id="staff-breakroom" class="map-room">
-                    <p> staff break</p>
-                </div>
-                <div id="med-station-room" class="map-room">
-                    <p> meds </p>
-                </div>
-                <div id="common-room-bathroom" class="map-room">
-                    <p>BR</p>
-                </div>
-                <div id="library-room" class="map-room">
-                    <p> library </p>
-                </div>
-                <div id="blue-hallway-room" class="map-room">
-                    <p class="vertical-text"> blue hallway </p>
-                </div>
-                <div id="kitchen-room" class="map-room">
-                    <p> kitchen </p>
-                </div>
-                <div id="sensory-room" class="map-room">
-                    <p> sensory </p>
-                </div>
-                <div id="linen-closet-room" class="map-room">
-                    <p> linen </p>
-                </div>
-                <div id="red-hallway-room" class="map-room">
-                    <p> red hallway </p>
+                <div id="ward-doors-map">
+                    <!-- locked doors -->
+                    <div class="doorway map-door-container" id="door-w1-b">
+                        <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+                        <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+                        <p class="map-door-label"> W1-B </p>
+                    </div>
+                    <div class="doorway map-door-container" id="door-w4">
+                        <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+                        <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+                        <p class="map-door-label"> W4: locked </p>
+                    </div>
+                    <div class="doorway map-door-container" id="door-w6">
+                        <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+                        <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+                        <p class="map-door-label"> W6: locked </p>
+                    </div>
+                    <div class="doorway map-door-container" id="door-s4">
+                        <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+                        <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+                        <p class="map-door-label"> S4: locked </p>
+                    </div>
+                    <div class="doorway map-door-container" id="door-s6">
+                        <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+                        <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+                        <p class="map-door-label"> S6: locked </p>
+                    </div>
+                    <div class="doorway map-door-container" id="door-s3">
+                        <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+                        <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+                        <p class="map-door-label"> S3: locked </p>
+                    </div>
+                    <div class="doorway map-door-container" id="door-s9">
+                        <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+                        <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+                        <p class="map-door-label"> S9: locked </p>
+                    </div>
+                    <div class="doorway map-door-container" id="door-m7">
+                        <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
+                        <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
+                        <p class="map-door-label"> M7: locked </p>
+                    </div>
                 </div> 
-                <div id="patient-room-101" class="map-room patient-room">
-                    <p> P101 </p>
-                </div>
-                <div id="patient-room-103" class="map-room patient-room">
-                    <p> P103 </p>
-                </div>
-                <div id="patient-bathroom" class="map-room">
-                    <p> BR</p>
-                </div>
-                <div id="patient-room-102" class="map-room patient-room">
-                    <p> P102 </p>
-                </div>
-                <div id="patient-room-104" class="map-room patient-room">
-                    <p> P104 </p>
-                </div>
-                <div id="ward-stairs-room" class="map-room">
-                    <p> ward landing </p>
-                </div>
-            </div>
-            <div id="ward-doors-map">
-                <!-- locked doors -->
-                <div class="doorway map-door-container" id="door-w1-b">
-                    <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-                    <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-                    <p class="map-door-label"> W1-B </p>
-                </div>
-                <div class="doorway map-door-container" id="door-w4">
-                    <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-                    <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-                    <p class="map-door-label"> W4: locked </p>
-                </div>
-                <div class="doorway map-door-container" id="door-w6">
-                    <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-                    <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-                    <p class="map-door-label"> W6: locked </p>
-                </div>
-                <div class="doorway map-door-container" id="door-s4">
-                    <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-                    <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-                    <p class="map-door-label"> S4: locked </p>
-                </div>
-                <div class="doorway map-door-container" id="door-s6">
-                    <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-                    <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-                    <p class="map-door-label"> S6: locked </p>
-                </div>
-                <div class="doorway map-door-container" id="door-s3">
-                    <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-                    <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-                    <p class="map-door-label"> S3: locked </p>
-                </div>
-                <div class="doorway map-door-container" id="door-s9">
-                    <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-                    <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-                    <p class="map-door-label"> S9: locked </p>
-                </div>
-                <div class="doorway map-door-container" id="door-m7">
-                    <img class="door-locked" src="{{ url_for('static', filename='img/locked.png')}}" alt="">
-                    <img class="door-unlocked" src="{{ url_for('static', filename='img/unlocked.png')}}" alt="">
-                    <p class="map-door-label"> M7: locked </p>
-                </div>
-            </div> 
-            
-            <div id="ward-doorways-map"> 
-                <!-- no lock doorways -->
-                <div class="doorway" id="p101-south"></div>
-                <div class="doorway" id="p103-south"></div>
-                <div class="doorway" id="p102-north"></div>
-                <div class="doorway" id="p104-north"></div>
-                <div class="doorway" id="pBR-north"></div>
-                <div class="doorway-ew" id="red-blue-hallway"></div>
-                <div class="doorway-ew" id="linen-west"></div>
-                <div class="doorway-ew" id="sensory-west"></div>
-                <div class="doorway-ew" id="kitchen-west"></div>
-                <div class="doorway-ew" id="cr-blue-hallway"></div>
-                <div class="doorway" id="tv-south"></div>
-                <div class="doorway-ew" id="staff-meds"></div>
-                <div class="doorway" id="crBR-north"></div>
-                <div class="doorway" id="library-north"></div>
-                <div class="doorway-ew" id="utility-east"></div>
-                <div class="doorway-ew" id="admissions-east"></div>
-            </div>
-        </div>
-    </div>
-    <div id="game-gui">
-        <div id="display-entry-container">
-            <div id="game-text-display">
-                <!-- The game text paragraphs will be placed here --> 
-            </div>
-            <div id="text-button-entry-widgets">
-                <div id="text-entry-div">
-                    <label id="text-input-label" for="player-text-input"><strong> > </strong></label>
-                    <input id="player-text-input" 
-                        type="text" 
-                        autocomplete="off"
-                        placeholder="direct patient">
-                    </input>
-                    <button id="text-entry-enter-button" 
-                        class="gameplay-buttons" 
-                        onclick="accept_entry_input()"> 
-                        play 
-                    </button>
-                </div>
-                <div id="button-entry-div">
-                    <!-- Multiple Choice button entry elements will be placed here -->
+                
+                <div id="ward-doorways-map"> 
+                    <!-- no lock doorways -->
+                    <div class="doorway" id="p101-south"></div>
+                    <div class="doorway" id="p103-south"></div>
+                    <div class="doorway" id="p102-north"></div>
+                    <div class="doorway" id="p104-north"></div>
+                    <div class="doorway" id="pBR-north"></div>
+                    <div class="doorway-ew" id="red-blue-hallway"></div>
+                    <div class="doorway-ew" id="linen-west"></div>
+                    <div class="doorway-ew" id="sensory-west"></div>
+                    <div class="doorway-ew" id="kitchen-west"></div>
+                    <div class="doorway-ew" id="cr-blue-hallway"></div>
+                    <div class="doorway" id="tv-south"></div>
+                    <div class="doorway-ew" id="staff-meds"></div>
+                    <div class="doorway" id="crBR-north"></div>
+                    <div class="doorway" id="library-north"></div>
+                    <div class="doorway-ew" id="utility-east"></div>
+                    <div class="doorway-ew" id="admissions-east"></div>
                 </div>
             </div>
         </div>
-        <div id="right-panel">
-            <div id="top-panel" class="panel-rows">
-                <div id="player-stats" class="panel-cols">
-                    <p class="panel-titles"> Patient Info</p>
-                    <div id="ps-left">
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">Experience:</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">Day:</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">Turns:</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">Room:</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">Health:</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">Status:</p>
-                        </div>
+        <div id="game-gui">
+            <div id="display-entry-container">
+                <div id="game-text-display">
+                    <!-- The game text paragraphs will be placed here --> 
+                </div>
+                <div id="text-button-entry-widgets">
+                    <div id="text-entry-div">
+                        <label id="text-input-label" for="player-text-input"><strong> > </strong></label>
+                        <input id="player-text-input" 
+                            type="text" 
+                            autocomplete="off"
+                            placeholder="direct patient">
+                        </input>
+                        <button id="text-entry-enter-button" 
+                            class="gameplay-buttons" 
+                            onclick="accept_entry_input()"> 
+                            play 
+                        </button>
                     </div>
-                    <div id="ps-right">
-                        <div class="ps-inv-elem-spacing">
-                            <p class="ps-values" id="xp-value">0</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="ps-values" id="day-value">0</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="ps-values" id="turns-value"></p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="ps-values" id="room-value"></p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <div id="health-out-of-100">
-                                <p class="ps-values" id="health-value"></p>
-                                <p class="out-of-100">/100</p>
+                    <div id="button-entry-div">
+                        <!-- Multiple Choice button entry elements will be placed here -->
+                    </div>
+                </div>
+            </div>
+            <div id="right-panel">
+                <div id="top-panel" class="panel-rows">
+                    <div id="player-stats" class="panel-cols">
+                        <p class="panel-titles"> Patient Info</p>
+                        <div id="ps-left">
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">Experience:</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">Day:</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">Turns:</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">Room:</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">Health:</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">Status:</p>
                             </div>
                         </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="ps-values" id="diagnosis-value">Unknown</p>
+                        <div id="ps-right">
+                            <div class="ps-inv-elem-spacing">
+                                <p class="ps-values" id="xp-value">0</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="ps-values" id="day-value">0</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="ps-values" id="turns-value"></p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="ps-values" id="room-value"></p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <div id="health-out-of-100">
+                                    <p class="ps-values" id="health-value"></p>
+                                    <p class="out-of-100">/100</p>
+                                </div>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="ps-values" id="diagnosis-value">Unknown</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="inventory" class="panel-cols">
-                    <p class="panel-titles"> Inventory</p>
-                    <div id="inv-left">
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">1.</p>
+                    <div id="inventory" class="panel-cols">
+                        <p class="panel-titles"> Inventory</p>
+                        <div id="inv-left">
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">1.</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">2.</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">3.</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">4.</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">5.</p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="right-panel-text">6.</p>
+                            </div>
                         </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">2.</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">3.</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">4.</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">5.</p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="right-panel-text">6.</p>
+                        <div id="inv-right">
+                            <div class="ps-inv-elem-spacing">
+                                <p class="inv-strings" id="inv-slot-1"></p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="inv-strings" id="inv-slot-2"></p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="inv-strings" id="inv-slot-3"></p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="inv-strings" id="inv-slot-4"></p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="inv-strings" id="inv-slot-5"></p>
+                            </div>
+                            <div class="ps-inv-elem-spacing">
+                                <p class="inv-strings" id="inv-slot-6"></p>
+                            </div>
                         </div>
                     </div>
-                    <div id="inv-right">
-                        <div class="ps-inv-elem-spacing">
-                            <p class="inv-strings" id="inv-slot-1"></p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="inv-strings" id="inv-slot-2"></p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="inv-strings" id="inv-slot-3"></p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="inv-strings" id="inv-slot-4"></p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="inv-strings" id="inv-slot-5"></p>
-                        </div>
-                        <div class="ps-inv-elem-spacing">
-                            <p class="inv-strings" id="inv-slot-6"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>  
+                </div>  
 
-            <div id="bottom-panel" class="panel-rows">
-                <div id="player-stats" class="panel-cols">
-                    <p class="panel-titles"> Exploration </p> <!-- no title for this section -->       
-                    <div id="explore-left">
-                        <div class="ps-opt-obj-spacing">
-                            <p class="right-panel-text">Rooms Discovered:</p>
-                        </div>
-                        <div class="ps-opt-obj-spacing">
-                            <p class="right-panel-text">Quotes Read:</p>
-                        </div>
-                        <div class="ps-opt-obj-spacing">
-                            <p class="right-panel-text">Riddles Solved:</p>
-                        </div>
-                    </div>
-                    <div id="explore-right">
-                        <div class="ps-opt-obj-spacing">
-                            <div class="found-out-of-all" id="found-rooms">
-                                <p class="explore-values" id="">0</p>
-                                <p class="out-of-100">/<span class="explore-out-of">.</span></p>
+                <div id="bottom-panel" class="panel-rows">
+                    <div id="player-stats" class="panel-cols">
+                        <p class="panel-titles"> Exploration </p> <!-- no title for this section -->       
+                        <div id="explore-left">
+                            <div class="ps-opt-obj-spacing">
+                                <p class="right-panel-text">Rooms Discovered:</p>
+                            </div>
+                            <div class="ps-opt-obj-spacing">
+                                <p class="right-panel-text">Quotes Read:</p>
+                            </div>
+                            <div class="ps-opt-obj-spacing">
+                                <p class="right-panel-text">Riddles Solved:</p>
                             </div>
                         </div>
-                        <div class="ps-opt-obj-spacing">
-                            <div class="found-out-of-all" id="found-quotes">
-                                <p class="explore-values" id="">0</p>
-                                <p class="out-of-100">/<span class="explore-out-of">.</span></p>
+                        <div id="explore-right">
+                            <div class="ps-opt-obj-spacing">
+                                <div class="found-out-of-all" id="found-rooms">
+                                    <p class="explore-values" id="">0</p>
+                                    <p class="out-of-100">/<span class="explore-out-of">.</span></p>
+                                </div>
+                            </div>
+                            <div class="ps-opt-obj-spacing">
+                                <div class="found-out-of-all" id="found-quotes">
+                                    <p class="explore-values" id="">0</p>
+                                    <p class="out-of-100">/<span class="explore-out-of">.</span></p>
+                                </div>
+                            </div>
+                            <div class="ps-opt-obj-spacing">
+                                <div class="found-out-of-all" id="solved-riddle">
+                                    <p class="explore-values" id="">0</p>
+                                    <p class="out-of-100">/<span class="explore-out-of">.</span></p>
+                                </div>
                             </div>
                         </div>
-                        <div class="ps-opt-obj-spacing">
-                            <div class="found-out-of-all" id="solved-riddle">
-                                <p class="explore-values" id="">0</p>
-                                <p class="out-of-100">/<span class="explore-out-of">.</span></p>
+                    </div>
+                    <div id="abilities" class="panel-cols">
+                        <p class="panel-titles"> Skills </p>
+                        <div id="ability-left">
+                            <div class="ability-str-lvl-div">
+                                <p class="ability-strings" id="meditation-string">Meditation</p>
+                            </div>
+                            <div class="ability-str-lvl-div">
+                                <p class="ability-strings" id="assertiveness-string">Assertiveness</p>
+                            </div>
+                            <div class="ability-str-lvl-div">
+                                <p class="ability-strings" id="pos-attitude-string">Positive Attitude</p>
+                            </div>
+                            <div class="ability-str-lvl-div">
+                                <p class="ability-strings" id="opp-action-string">Opposite Action</p>
+                            </div>
+                            <div class="ability-str-lvl-div">
+                                <p class="ability-strings" id="catharsis-string">Catharsis</p>
+                            </div>
+                        </div>
+                        <div id="ability-right">
+                            <div class="ability-str-lvl-div">
+                                <p class="player-skills-lvl" id="meditation-lvl">0</p>
+                            </div>
+                            <div class="ability-str-lvl-div">
+                                <p class="player-skills-lvl" id="assertiveness-lvl">0</p>
+                            </div>
+                            <div class="ability-str-lvl-div">
+                                <p class="player-skills-lvl" id="pos-attitude-lvl">0</p>
+                            </div>
+                            <div class="ability-str-lvl-div">
+                                <p class="player-skills-lvl" id="opp-action-lvl">0</p>
+                            </div>
+                            <div class="ability-str-lvl-div">
+                                <p class="player-skills-lvl" id="catharsis-lvl">0</p>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div id="abilities" class="panel-cols">
-                    <p class="panel-titles"> Skills </p>
-                    <div id="ability-left">
-                        <div class="ability-str-lvl-div">
-                            <p class="ability-strings" id="meditation-string">Meditation</p>
-                        </div>
-                        <div class="ability-str-lvl-div">
-                            <p class="ability-strings" id="assertiveness-string">Assertiveness</p>
-                        </div>
-                        <div class="ability-str-lvl-div">
-                            <p class="ability-strings" id="pos-attitude-string">Positive Attitude</p>
-                        </div>
-                        <div class="ability-str-lvl-div">
-                            <p class="ability-strings" id="opp-action-string">Opposite Action</p>
-                        </div>
-                        <div class="ability-str-lvl-div">
-                            <p class="ability-strings" id="catharsis-string">Catharsis</p>
-                        </div>
-                    </div>
-                    <div id="ability-right">
-                        <div class="ability-str-lvl-div">
-                            <p class="player-skills-lvl" id="meditation-lvl">0</p>
-                        </div>
-                        <div class="ability-str-lvl-div">
-                            <p class="player-skills-lvl" id="assertiveness-lvl">0</p>
-                        </div>
-                        <div class="ability-str-lvl-div">
-                            <p class="player-skills-lvl" id="pos-attitude-lvl">0</p>
-                        </div>
-                        <div class="ability-str-lvl-div">
-                            <p class="player-skills-lvl" id="opp-action-lvl">0</p>
-                        </div>
-                        <div class="ability-str-lvl-div">
-                            <p class="player-skills-lvl" id="catharsis-lvl">0</p>
-                        </div>
-                    </div>
-                </div>
-            </div>  
+                </div>  
+            </div>
         </div>
-
     </div>
     <script>
         
@@ -370,7 +371,6 @@
         fetchPostEndpoint(null, '/game/loading-game');
         //toggleGameMap()
         document.addEventListener("keydown", function(e) {
-            //console.log(e.key)
             if (e.key == "Enter") {
                 document.getElementById("text-entry-enter-button").click()  
             }

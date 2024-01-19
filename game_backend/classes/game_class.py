@@ -54,7 +54,7 @@ class Game:
         return [self.player1.abilities[0].lvl, self.player1.abilities[1].lvl, self.player1.abilities[2].lvl, self.player1.abilities[3].lvl, self.player1.abilities[4].lvl]
 
     def get_player_exploration_values(self):
-        return [[len(room_class.Room._visited_rooms), len(room_class.Room._all_rooms_registry)], [99, len(item_class.Quote_Note._all_quotes_registry)], [len(item_class.Riddle_Box._solved_riddles), len(item_class.Riddle_Box._all_riddles_registry)]]
+        return [[len(room_class.Room._visited_rooms), len(room_class.Ward_Room._ward_rooms_registry)], [len(item_class.Quote_Note._read_quotes), len(item_class.Quote_Note._all_quotes_registry)], [len(item_class.Riddle_Box._solved_riddles), len(item_class.Riddle_Box._all_riddles_registry)]]
 
     def get_item_action_params(self, action, object):
         # must be called each time because the values change
@@ -93,8 +93,10 @@ class Game:
         if len(self.save_prints) == 0:
             self.save_prints.extend(actions['print_all'])
 
-        return actions
+        #print(self.player1.loc.storage_tree[0].items)
 
+        return actions 
+ 
     def load_game(self):
         actions = {
             'load_prints': self.save_prints,

@@ -26,23 +26,15 @@ patient_key = item_class.Key("patient key", "key")
 rec_key = item_class.Key("rec key", "key")
 
 ### All Posters ###
-friends_poster = item_class.Hanging_Quote_Note("friends poster", 
-    "poster", 
-    ["\"Why did you do all this for me?\"",
-        "he asked. \"I don't deserve it.\"",
-        "\"I've never done anything for you.\"",
-        "\"You have been my friend\", replied Charlotte.",
-        "\"That in itself is a tremendous thing.\""],
-    "E.B. White, Charlotte's Web")
 
 stories_poster = item_class.Hanging_Quote_Note("stories poster",
     "poster",
-    ["\"Do you have a magic spell to return someone to life?\" she said.",
-        "\"No,\" the witch said, \"I'm sorry.\"",
-        "\"Oh.\"",
-        "\"Why don't you tell me about them?\"",
-        "\"Will that bring them back?\"",
-        "\"For us. For a little while. Stories are a different kind of magic.\""],
+    ["Do you have a magic spell to return someone to life? she said.",
+        "No, the witch said, I'm sorry.",
+        "Oh.",
+        "Why don't you tell me about them?",
+        "Will that bring them back?",
+        "For us. For a little while. Stories are a different kind of magic."],
     "James Miller, A Small Fiction")
 
 doors_poster = item_class.Hanging_Quote_Note("doors poster",
@@ -116,11 +108,21 @@ friendship_riddle = item_class.Riddle_Box(
 ##### Ward Rooms and Items #####
 ################################
 
+book_charlottes_web = item_class.Book("Charlotte's Web", "E. B. White", "164", 
+        ["\'Why did you do all this for me?\'",
+        "he asked. \'I don't deserve it.",
+        "I've never done anything for you.\'",
+        "\'You have been my friend\', replied Charlotte.",
+        "\'That in itself is a tremendous thing.\'"])
+
+book_catch22 = item_class.Book("Catch-22", "Joseph Heller", "00",
+        ["Anything worth dying for is certainly worth living for."])
+
 # Common Room #
 deck_of_cards = item_class.Deck_of_Cards("deck of cards", "box")
 chess_set = item_class.Chess_Set("chess set", "box")
     # Storage Units
-cr_art_table = item_class.Storage_Spot("arts and crafts table", "table", [security_key])
+cr_art_table = item_class.Storage_Spot("arts and crafts table", "table", None)
 cr_game_cabinets = item_class.Storage_Box("game cabinet", "cabinet", [chess_set, deck_of_cards])
 cr_ping_pong_table = item_class.Storage_Spot("ping pong table", "table", None)
     # Doors
@@ -136,6 +138,7 @@ lib_classic_bookshelf = item_class.Storage_Spot("classics bookshelf", "shelf", N
 lib_help_bookshelf = item_class.Storage_Spot("self-help bookshelf", "shelf", None)
 
 # TV Room #
+tv_television = item_class.Interact("Television", "TV",)
     # Storage Units
 tv_coffee_table = item_class.Storage_Spot("coffee table", "table", None)
 
@@ -179,9 +182,8 @@ courtyard_and_service_hallway_door = item_class.Ward_Lockable_Door("Door S9", "d
 
 # Admissions Office #
     # Storage Units
+    # Doors
 admissions_exit_door = item_class.Ward_Lockable_Door("Door M7", "door", None) 
-
-
 
 
 ##########################
